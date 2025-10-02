@@ -1,7 +1,7 @@
 import '/src/config/colors.dart';
 import '/src/modules/grades/actions/grade_actions.dart';
 import '/src/modules/grades/data/model/grade_model.dart';
-import '/src/views/custom/custom_text.dart';
+import '/src/presentation/custom/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class GradeListTile extends StatelessWidget {

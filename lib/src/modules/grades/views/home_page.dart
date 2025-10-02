@@ -1,7 +1,7 @@
-
+import '../data/model/grade_model.dart';
 import '/src/modules/grades/controllers/grade_view_model.dart';
 import '/src/modules/grades/views/widgets/grades_grid_view.dart';
-import '/src/views/custom/customs.dart';
+import '/src/presentation/custom/customs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,10 +17,11 @@ class HomePage extends StatelessWidget {
           ListView(
             children: [
               GetX<GradeViewModel>(
-                builder: (controller) => ApiHandler(
+                builder: (controller) => ApiHandler<List<GradeModel>>(
                   tryAgain: controller.refreshData,
-                  apiResponse: controller.grades,
-                  onSuccess: GradesGridView(grades: controller.grades.data ?? []),
+                  response: controller.grades,
+                  isEmpty: (items) => items.isEmpty,
+                  successBuilder: (items) => GradesGridView(grades: items),
                 ),
               ),
             ],

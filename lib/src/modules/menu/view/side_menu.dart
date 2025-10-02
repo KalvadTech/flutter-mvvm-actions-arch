@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import '/src/views/custom/custom_text.dart';
+import '/src/presentation/custom/custom_text.dart';
 import '/src/config/config.dart';
 import '/src/modules/menu/menu.dart';
-import '/src/views/custom/customs.dart';
+import '/src/presentation/custom/customs.dart';
 
 class SideMenu extends GetWidget<MenuViewModel> {
   const SideMenu({Key? key}) : super(key: key);

@@ -1,4 +1,4 @@
-import '/src/essentials/config/api_response.dart';
+import '../../../core/presentation/api_response.dart';
 import '/src/modules/grades/data/model/grade_model.dart';
 import '/src/modules/grades/data/service/grade_service.dart';
 import 'package:get/get.dart';
@@ -31,7 +31,7 @@ class GradeViewModel extends GetxController {
 
   /// Fetches grades data from the API and updates the observable state.
   void _fetchGrades() async {
-    apiFetch(_gradeService.fetchGrades()).listen((value) => _grades.value = value);
+    apiFetch(_gradeService.fetchGrades).listen((value) => _grades.value = value);
   }
 
   /// Refreshes the grades data, useful for pull-to-refresh or manual reload actions.

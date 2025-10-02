@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/src/utils/utils.dart';
 import '/src/config/config.dart';
-import '/src/views/custom/customs.dart';
+import '/src/presentation/custom/customs.dart';
 import '../controllers/localization_view_model.dart';
 
 /// A dialog widget to allow the user to select a language from a dropdown list.

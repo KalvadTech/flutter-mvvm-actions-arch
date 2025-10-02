@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '/src/views/custom/custom_text.dart';
+import '/src/presentation/custom/custom_text.dart';
 
 class Page1 extends StatelessWidget {
   const Page1({Key? key}) : super(key: key);

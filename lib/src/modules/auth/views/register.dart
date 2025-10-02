@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '/src/config/config.dart';
 import '/src/utils/validator.dart';
-import '/src/views/custom/customs.dart';
+import '/src/presentation/custom/customs.dart';
 import '/src/modules/auth/auth.dart';
 
 class RegisterPage extends GetWidget<AuthViewModel> {

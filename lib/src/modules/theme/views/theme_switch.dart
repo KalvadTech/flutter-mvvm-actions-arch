@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../views/custom/custom_text.dart';
+import '/src/presentation/custom/custom_text.dart';
 import '../theme.dart';
 
 /// A widget to provide a switch for toggling between light and dark themes using GetX.
 class ThemeSwitch extends GetWidget<ThemeViewModel> {
   /// Constructor for `ThemeSwitch`.
-  const ThemeSwitch({Key? key}) : super(key: key);
+  const ThemeSwitch({super.key});
 
   /// Builds the switch with an observer to detect theme changes.
   @override

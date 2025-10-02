@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/src/config/config.dart';
 import '/src/utils/utils.dart';
-import '/src/views/custom/customs.dart';
+import '/src/presentation/custom/customs.dart';
 import '../connection.dart';
 
 /// A widget that overlays a child widget with a connection status indicator.

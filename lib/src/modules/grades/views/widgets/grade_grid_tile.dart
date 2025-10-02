@@ -1,8 +1,8 @@
 import '/src/config/config.dart';
 import '/src/modules/grades/actions/grade_actions.dart';
 import '/src/modules/grades/data/model/grade_model.dart';
-import '/src/views/custom/custom_container.dart';
-import '/src/views/custom/custom_text.dart';
+import '/src/presentation/custom/custom_container.dart';
+import '/src/presentation/custom/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
