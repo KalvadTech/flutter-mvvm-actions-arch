@@ -4,6 +4,8 @@ A Flutter application template using getX for state management with pre defined 
 
 See also: docs/architecture/coding_guidelines.md for naming and coding standards used by this template.
 
+For a full log of changes, migrations, and deprecations, see: CHANGELOG.md
+
 
 ## Getting Started
 
