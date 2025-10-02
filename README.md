@@ -2,6 +2,8 @@
 
 A Flutter application template using getX for state management with pre defined modules and widgets for authentication, connection, localization and theme.
 
+See also: docs/architecture/coding_guidelines.md for naming and coding standards used by this template.
+
 
 ## Getting Started
 
@@ -48,19 +50,21 @@ now you can use template in every flutter project from your command line. create
 mason make get_x_template
 ```
 
-#### packages
-remembers to add these packages to your pubspec.yaml file.
+#### Packages
+Remember to add these packages to your pubspec.yaml file (versions indicative; prefer keeping them in sync with this template's pubspec):
 
-```sh
-
-  get: ^4.5.1
-  loader_overlay: ^2.0.4+3
-  flutter_spinkit: ^5.1.0
-  connectivity: ^3.0.6
-  flutter_svg: ^1.0.0
-  get_storage: ^2.0.3
-  google_fonts: ^2.1.0
-  
+```yaml
+  get: ^4.6.6
+  loader_overlay: ^4.0.3
+  flutter_spinkit: ^5.2.1
+  connectivity_plus: ^6.1.0
+  flutter_svg: ^2.0.13
+  get_storage: ^2.1.1
+  google_fonts: ^6.2.1
+  intl: ^0.19.0
+  jwt_decoder: ^2.0.1
+  path_provider: ^2.1.5
+  flutter_secure_storage: ^9.2.2
 ```
 
 
@@ -69,6 +73,38 @@ remembers to add these packages to your pubspec.yaml file.
 
 ### Modules
 you can find all pre defined modules inside the modules directory.
+
+### Infrastructure Overview
+This template splits cross-cutting concerns into clear layers:
+- core/: primitives and errors (e.g., src/core/errors/app_exception.dart)
+- infrastructure/: concrete adapters
+  - http/: ApiService centralizes headers, retry-after-refresh, error mapping, logging, and optional caching.
+  - cache/: strategy-based caching (CacheStore, CacheKeyStrategy, CachePolicy, CacheManager). Disabled when not configured; enable at startup.
+  - storage/: PreferencesStorage (GetStorage), SecureTokenStorage (Keychain/Keystore), and AppStorageService facade.
+
+Initialize storage and enable caching in main():
+```
+await AppStorageService.instance.initialize();
+final store = await GetStorageCacheStorage.create(container: AppStorageService.container);
+final cache = CacheManager(
+  store,
+  const DefaultCacheKeyStrategy(),
+  SimpleTimeToLiveCachePolicy(timeToLive: Duration(hours: 6)),
+);
+ApiService.configureCache(cache);
+```
+
+### Storage facade and deprecation
+- Use AppStorageService as the unified facade for device-local storage (preferences + secure tokens).
+- MemoryService is deprecated. Do not use it in new code. Migrate existing references to AppStorageService.
+
+### Caching
+- ApiService.get uses cache by default; writes (post/put/delete) do not cache unless opted in.
+- Cache stores raw response text and decoding happens in ApiService using the provided decoder.
+- Disable globally by calling `ApiService.configureCache(null)`.
+
+### File downloads
+The ApiService.downloadFile method reuses GetConnect.get with `ResponseType.bytes` for uniform behavior and headers (including retry-after-refresh). It honors ApiService’s timeout and logging, then writes the received bytes to disk. Because GetConnect returns the full body, the optional progress callback reports completion once bytes are written. If you need true streaming progress or proxy/certificate customization, you can implement a specialized downloader as needed.
 
 
 #### Authentication

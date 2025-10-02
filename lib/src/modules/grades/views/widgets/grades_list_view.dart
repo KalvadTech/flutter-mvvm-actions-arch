@@ -1,4 +1,4 @@
-import 'package:alakhtabut/src/modules/grades/data/model/grade_model.dart';
+import '/src/modules/grades/data/model/grade_model.dart';
 import 'package:flutter/material.dart';
 import 'grade_list_tile.dart';
 

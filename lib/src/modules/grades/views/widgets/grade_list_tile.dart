@@ -1,7 +1,7 @@
-import 'package:alakhtabut/src/config/colors.dart';
-import 'package:alakhtabut/src/modules/grades/actions/grade_actions.dart';
-import 'package:alakhtabut/src/modules/grades/data/model/grade_model.dart';
-import 'package:alakhtabut/src/views/custom/custom_text.dart';
+import '/src/config/colors.dart';
+import '/src/modules/grades/actions/grade_actions.dart';
+import '/src/modules/grades/data/model/grade_model.dart';
+import '/src/views/custom/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class GradeListTile extends StatelessWidget {

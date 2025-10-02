@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '/src/core/errors/app_exception.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:sentry/sentry.dart';
 import '/src/config/config.dart';

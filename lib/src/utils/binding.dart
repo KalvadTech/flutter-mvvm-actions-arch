@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:getx_starter/src/modules/grades/grade_bindings.dart';
 import '/src/modules/menu/menu.dart';
 import '/src/modules/auth/auth.dart';
 import '/src/modules/connections/connection.dart';
@@ -24,5 +25,7 @@ class InitialBindings extends Bindings {
 
     // Registers the dependencies related to menu functionality.
     MenuBindings().dependencies();
+
+    GradeBindings().dependencies();
   }
 }

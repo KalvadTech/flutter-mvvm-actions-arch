@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
-import '/src/modules/auth/data/models/user.dart';
-import '/src/config/app_exception.dart';
-import '/src/essentials/services/memory_service.dart';
-import '/src/essentials/config/api_config.dart';
-import '/src/essentials/services/api_service.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import '/src/infrastructure/storage/app_storage_service.dart';
+import '/src/modules/auth/data/models/user.dart';
+import '/src/core/errors/app_exception.dart';
+import '/src/infrastructure/storage/secure_token_storage.dart';
+import '/src/config/api_config.dart';
+import '/src/infrastructure/http/api_service.dart';
 
 
 /// The `AuthService` class is responsible for handling all authentication-related
@@ -23,8 +24,8 @@ class AuthService extends ApiService {
       headers: getUnauthorizedHeader(), // Uses header without authorization
       body,
     );
-    MemoryService.instance.accessToken = response.body['access']; // Save access token
-    MemoryService.instance.refreshToken = response.body['refresh']; // Save refresh token
+    await AppStorageService.instance.setAccessToken(response.body['access']); // Save access token
+    await AppStorageService.instance.setRefreshToken(response.body['refresh']); // Save refresh token
     return true;
   }
 
@@ -42,21 +43,20 @@ class AuthService extends ApiService {
 
   // Handles user sign-out by clearing tokens and selected venue/zone from MemoryService.
   Future<bool> signOut() async {
-    MemoryService.instance.accessToken = null; // Clear access token
-    MemoryService.instance.refreshToken = null; // Clear refresh token
+    await SecureTokenStorage.instance.clearTokens(); // Clear tokens securely
     return true;
   }
 
   // Checks if the user is logged in by verifying if an access token is present in MemoryService.
   Future<bool> isLoggedIn() async {
-    String? token = MemoryService.instance.accessToken;
+    String? token = SecureTokenStorage.instance.readAccessTokenSync;
     return token != null; // Returns true if the token is not null
   }
 
   // Checks if the access token is expired by decoding and analyzing the token.
   // Throws an AppException if the token is null (no session).
   Future<bool> isAccessTokenExpired() async {
-    String? token = MemoryService.instance.accessToken;
+    String? token = SecureTokenStorage.instance.readAccessTokenSync;
     if (token == null) {
       throw AuthException('No Session'); // Throw exception if no token found
     }
@@ -66,7 +66,7 @@ class AuthService extends ApiService {
   // Checks if the refresh token is expired in a similar way to the access token.
   // Throws an AppException if the refresh token is null (no session).
   Future<bool> isRefreshTokenExpired() async {
-    String? token = MemoryService.instance.refreshToken;
+    String? token = SecureTokenStorage.instance.readRefreshTokenSync;
     if (token == null) {
       throw AppException('No Session'); // Throw exception if no refresh token found
     }

@@ -1,5 +1,5 @@
-import 'package:alakhtabut/src/modules/grades/controllers/grade_view_model.dart';
-import 'package:alakhtabut/src/modules/grades/data/service/grade_service.dart';
+import '/src/modules/grades/controllers/grade_view_model.dart';
+import '/src/modules/grades/data/service/grade_service.dart';
 import 'package:get/get.dart';
 
 /// The `GradeBindings` class sets up the dependencies required for the grades module.

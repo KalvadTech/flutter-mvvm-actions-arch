@@ -1,4 +1,4 @@
-import 'cache_policy.dart';
+import 'contracts/cache_policy.dart';
 
 /// **SimpleTimeToLiveCachePolicy**
 ///

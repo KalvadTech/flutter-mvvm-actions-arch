@@ -1,6 +1,6 @@
-import 'package:alakhtabut/src/essentials/config/api_response.dart';
-import 'package:alakhtabut/src/modules/grades/data/model/grade_model.dart';
-import 'package:alakhtabut/src/modules/grades/data/service/grade_service.dart';
+import '/src/essentials/config/api_response.dart';
+import '/src/modules/grades/data/model/grade_model.dart';
+import '/src/modules/grades/data/service/grade_service.dart';
 import 'package:get/get.dart';
 
 /// ViewModel class to manage grades' state and business logic.

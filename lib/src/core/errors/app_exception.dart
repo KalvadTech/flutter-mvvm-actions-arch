@@ -1,4 +1,4 @@
-import '../modules/locale/data/keys.dart';
+import '../../modules/locale/data/keys.dart';
 
 /// Base class for all custom exceptions in the app.
 class AppException implements Exception {

@@ -3,4 +3,5 @@ export 'colors.dart';
 export '../modules/locale/data/keys.dart';
 export 'themes.dart';
 export 'styles.dart';
-export 'app_exception.dart';
+export 'config.dart';
+

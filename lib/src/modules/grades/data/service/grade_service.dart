@@ -1,6 +1,6 @@
-import 'package:alakhtabut/src/essentials/config/api_config.dart';
-import 'package:alakhtabut/src/essentials/services/api_service.dart';
-import 'package:alakhtabut/src/modules/grades/data/model/grade_model.dart';
+import '../../../../config/api_config.dart';
+import '/src/infrastructure/http/api_service.dart';
+import '/src/modules/grades/data/model/grade_model.dart';
 
 /// Service for handling grade-related API requests and mock data.
 class GradeService extends ApiService {

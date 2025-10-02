@@ -51,7 +51,7 @@ ThemeData createTheme({
       space: 1,
       thickness: 1,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: cardBackground,
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -141,7 +141,7 @@ ThemeData createTheme({
         return null;
       }),
     ),
-    dialogTheme: const DialogTheme(
+    dialogTheme: const DialogThemeData(
       surfaceTintColor: Colors.transparent,
       backgroundColor: Colors.white,
     ),

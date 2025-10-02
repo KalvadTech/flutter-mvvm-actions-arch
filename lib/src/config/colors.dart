@@ -22,6 +22,7 @@ class ColorManager {
   // **Basic Colors**
   static const Color lightBackgroundColor = Color(0xFF1f1f2e);
   static const Color darkBackgroundColor = Color(0xFF141523);
+  static const Color cardColor = Color(0xFF141523);
   static const Color primaryColor = Color(0xFF00A79B);
   static const Color secondaryColor = Color(0xFFEA6969);
   static const Color appBarColor = Colors.white;

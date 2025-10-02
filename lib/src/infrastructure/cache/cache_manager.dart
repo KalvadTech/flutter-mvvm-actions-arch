@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'cache_store.dart';
-import 'cache_key_strategy.dart';
-import 'cache_policy.dart';
+import 'contracts/cache_store.dart';
+import 'contracts/cache_key_strategy.dart';
+import 'contracts/cache_policy.dart';
 
 /// **CacheManager**
 ///

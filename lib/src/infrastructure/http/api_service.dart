@@ -4,10 +4,11 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:path_provider/path_provider.dart';
 import '/src/core/errors/app_exception.dart';
-import '/src/essentials/config/api_config.dart';
-import '/src/infrastructure/storage/memory_service.dart';
+import '../../config/api_config.dart';
+import '/src/infrastructure/storage/app_storage_service.dart';
 import '/src/infrastructure/cache/cache_manager.dart';
 
 /// **ApiService**
@@ -91,13 +92,13 @@ class ApiService extends GetConnect {
   ///
   /// Current access token from [MemoryService], or `null` when not signed in.
   // ────────────────────────────────────────────────
-  String? get accessToken => MemoryService.instance.accessToken;
+  String? get accessToken => AppStorageService.instance.accessToken;
 
   /// **refreshToken**
   ///
   /// Current refresh token from [MemoryService], or `null` when not available.
   // ────────────────────────────────────────────────
-  String? get refreshToken => MemoryService.instance.refreshToken;
+  String? get refreshToken => AppStorageService.instance.refreshToken;
 
   /// Initializes the API service with a timeout setting for HTTP requests.
   /// **onInit**
@@ -132,14 +133,14 @@ class ApiService extends GetConnect {
       useCache: useCache,
       forceRefresh: forceRefresh,
       query: query,
-      headers: headers,
+      headers: headers ?? getAuthorizedHeader(),
       decoder: decoder,
     );
     if (cached != null) return cached;
 
     // 2) Perform network request with auth-retry.
     final response = await _withAuthRetry<T>((authHeaders) async {
-      final h = {...?headers, ...authHeaders};
+      final h = headers ?? authHeaders;
       return await super.get(
         url,
         contentType: contentType,
@@ -158,7 +159,7 @@ class ApiService extends GetConnect {
         statusCode: response.statusCode,
         bodyString: response.bodyString,
         query: query,
-        headers: headers,
+        headers: headers ?? getAuthorizedHeader(),
       );
     }
 
@@ -188,7 +189,7 @@ class ApiService extends GetConnect {
         useCache: useCache,
         forceRefresh: forceRefresh,
         query: query,
-        headers: headers,
+        headers: headers ?? getAuthorizedHeader(),
         decoder: decoder,
       );
       if (cached != null) return cached;
@@ -196,7 +197,7 @@ class ApiService extends GetConnect {
 
     // 2) Perform network request with auth-retry.
     final response = await _withAuthRetry<T>((authHeaders) async {
-      final h = {...?headers, ...authHeaders};
+      final h = headers ?? authHeaders;
       return await super.post(
         url,
         body,
@@ -217,7 +218,7 @@ class ApiService extends GetConnect {
         statusCode: response.statusCode,
         bodyString: response.bodyString,
         query: query,
-        headers: headers,
+        headers: headers ?? getAuthorizedHeader(),
       );
     }
 
@@ -246,14 +247,14 @@ class ApiService extends GetConnect {
       useCache: useCache,
       forceRefresh: forceRefresh,
       query: query,
-      headers: headers,
+      headers: headers ?? getAuthorizedHeader(),
       decoder: decoder,
     );
     if (cached != null) return cached;
 
     // 2) Perform network request with auth-retry.
     final response = await _withAuthRetry<T>((authHeaders) async {
-      final h = {...?headers, ...authHeaders};
+      final h = headers ?? authHeaders;
       return await super.put(
         url,
         body,
@@ -274,7 +275,7 @@ class ApiService extends GetConnect {
         statusCode: response.statusCode,
         bodyString: response.bodyString,
         query: query,
-        headers: headers,
+        headers: headers ?? getAuthorizedHeader(),
       );
     }
 
@@ -301,14 +302,14 @@ class ApiService extends GetConnect {
       useCache: useCache,
       forceRefresh: forceRefresh,
       query: query,
-      headers: headers,
+      headers: headers ?? getAuthorizedHeader(),
       decoder: decoder,
     );
     if (cached != null) return cached;
 
     // 2) Perform network request with auth-retry.
     final response = await _withAuthRetry<T>((authHeaders) async {
-      final h = {...?headers, ...authHeaders};
+      final h = headers ?? authHeaders;
       return await super.delete(
         url,
         contentType: contentType,
@@ -327,7 +328,7 @@ class ApiService extends GetConnect {
         statusCode: response.statusCode,
         bodyString: response.bodyString,
         query: query,
-        headers: headers,
+        headers: headers ?? getAuthorizedHeader(),
       );
     }
 
@@ -336,48 +337,99 @@ class ApiService extends GetConnect {
     return response;
   }
 
-  /// Custom method to download a file from the given URL.
+  /// **downloadFile**
   ///
-  /// [url]: The URL to download the file from.
-  /// [fileName]: The name to save the file as.
-  /// [onReceiveProgress]: Callback to track download progress.
+  /// Download a file and write it to disk.
+  ///
+  /// **Why**
+  /// - Reuses GetConnect for uniform behavior (headers, one-shot 401 refresh+retry,
+  ///   timeouts, logging) and requests bytes (`Response<List<int>>`).
+  /// - Avoids a separate HttpClient codepath for consistency and maintainability.
+  ///
+  /// **Parameters**
+  /// - `url`: Full URL to download from.
+  /// - `fileName`: Target file name under the app support directory.
+  /// - `headers`: Optional request headers; if `null`, defaults to [getAuthorizedHeader].
+  /// - `onReceiveProgress`: Optional progress callback `(received, total)`; since
+  ///   GetConnect returns the full byte body, this callback reports completion once
+  ///   after bytes are written.
+  ///
+  /// **Returns**
+  /// - `File`: The downloaded file written to the app support directory.
+  ///
+  /// **Errors**
+  /// - Throws [AuthException] on 401 responses.
+  /// - Throws [APIException] on non-success status codes or I/O failures.
+  ///
+  /// **Notes**
+  /// - If you need true streaming progress or proxy/certificate customization,
+  ///   consider implementing a specialized downloader.
+  ///
+  /// **Usage**
+  /// ```dart
+  /// final file = await downloadFile(
+  ///   'https://example.com/report.pdf',
+  ///   'report.pdf',
+  ///   onReceiveProgress: (r, t) => debugPrint('progress: $r/$t'),
+  /// );
+  /// ```
+  // ────────────────────────────────────────────────
   Future<File> downloadFile(
     String url,
     String fileName, {
     Map<String, String>? headers,
     Function(int received, int total)? onReceiveProgress,
   }) async {
-    Directory tempDir = await getApplicationSupportDirectory();
-    String savePath = '${tempDir.path}/$fileName';
+    // Build target file path first
+    final Directory dir = await getApplicationSupportDirectory();
+    final String savePath = '${dir.path}/$fileName';
+    final File file = File(savePath);
 
-    // Create the file to save the download
-    File file = File(savePath);
-    final request = await HttpClient().getUrl(Uri.parse(url));
-
-    // Add headers if provided
-    (headers ?? getAuthorizedHeader()).forEach((key, value) {
-      request.headers.add(key, value);
+    // Use GetConnect for uniform behavior, headers, and retry policies.
+    final Response response = await _withAuthRetry((authHeaders) async {
+      final h = headers ?? authHeaders;
+      return await super.get(
+        url,
+        headers: h,
+      );
     });
 
-    final response = await request.close();
+    // Log and map errors consistently with other requests.
+    logRequestData(response);
+    handleError(response);
 
-    if (response.statusCode == 200) {
-      final total = response.contentLength;
-      int received = 0;
-
-      final sink = file.openWrite();
-      await for (final chunk in response) {
-        received += chunk.length;
-        sink.add(chunk);
-        if (onReceiveProgress != null) {
-          onReceiveProgress(received, total);
-        }
+    // Write bytes to file (collect from Stream<List<int>> if needed)
+    late final List<int> bytes;
+    final dynamic bodyBytes = response.bodyBytes;
+    if (bodyBytes != null) {
+      if (bodyBytes is Stream<List<int>>) {
+        bytes = await _collectBytes(bodyBytes);
+      } else if (bodyBytes is List<int>) {
+        bytes = bodyBytes;
+      } else {
+        // Fallback: try to stringify if unexpected type
+        bytes = response.bodyString != null ? utf8.encode(response.bodyString!) : <int>[];
       }
-      await sink.close();
-      return file;
+    } else if (response.body is List<int>) {
+      bytes = response.body as List<int>;
+    } else if (response.bodyString != null) {
+      bytes = utf8.encode(response.bodyString!);
     } else {
-      throw Exception('Failed to download file: ${response.statusCode}');
+      bytes = <int>[];
     }
+
+    try {
+      await file.writeAsBytes(bytes, flush: true);
+      // Best-effort progress (complete) since GetConnect returns full body
+      if (onReceiveProgress != null) {
+        final total = bytes.length;
+        onReceiveProgress(total, total);
+      }
+    } catch (e) {
+      throw APIException('Failed to write file: $e');
+    }
+
+    return file;
   }
 
   /// Logs request and response data for debugging purposes.
@@ -426,7 +478,7 @@ class ApiService extends GetConnect {
 
   /// Generates the default headers for API requests.
   Map<String, String> getAuthorizedHeader([String? token]) {
-    final t = token ?? MemoryService.instance.accessToken;
+    final t = token ?? AppStorageService.instance.accessToken;
     return {
       if (t != null && t.isNotEmpty) 'Authorization': 'Bearer $t',
       'content-type': 'application/json',
@@ -444,7 +496,7 @@ class ApiService extends GetConnect {
   /// Returns true if successful; returns false if it fails. No navigation here.
   Future<bool> refreshSession() async {
     try {
-      final rt = MemoryService.instance.refreshToken;
+      final rt = AppStorageService.instance.refreshToken;
       if (rt == null || rt.isEmpty) return false;
       final body = {'refresh': rt};
       final Response response = await super.post(
@@ -455,12 +507,11 @@ class ApiService extends GetConnect {
       if (response.hasError) return false;
       final access = (response.body is Map) ? (response.body['access'] as String?) : null;
       if (access == null || access.isEmpty) return false;
-      MemoryService.instance.accessToken = access;
+      await AppStorageService.instance.setAccessToken(access);
       return true;
     } catch (_) {
       // Clear tokens but don't navigate; let callers decide.
-      MemoryService.instance.accessToken = null;
-      MemoryService.instance.refreshToken = null;
+      await AppStorageService.instance.clearTokens();
       return false;
     }
   }
@@ -576,5 +627,24 @@ class ApiService extends GetConnect {
       bodyString: bodyString,
       headers: headers,
     );
+  }
+
+  /// **_collectBytes**
+  ///
+  /// Collect all chunks from a `Stream<List<int>>` into a single list of bytes.
+  ///
+  /// **Parameters**
+  /// - `stream`: The byte stream to read.
+  ///
+  /// **Returns**
+  /// - `Future<List<int>>`: The concatenated bytes.
+  ///
+  // ────────────────────────────────────────────────
+  Future<List<int>> _collectBytes(Stream<List<int>> stream) async {
+    final buffer = <int>[];
+    await for (final chunk in stream) {
+      buffer.addAll(chunk);
+    }
+    return buffer;
   }
 }

@@ -6,10 +6,10 @@ class APIConfiguration {
   static const bool isDEV = true;
 
   /// The base URL for the staging environment.
-  static const String _stagingUrl = '';
+  static const String _stagingUrl = 'https://app-2f58668c-3ee7-467e-abc6-0bf73d700387.cleverapps.io';
 
   /// The base URL for the production environment.
-  static const String _productionUrl = '';
+  static const String _productionUrl = 'https://app-2f58668c-3ee7-467e-abc6-0bf73d700387.cleverapps.io';
 
   /// The base URL used in the application.
   /// If `isDEV` is true, the staging URL will be used; otherwise, the production URL.
@@ -25,4 +25,7 @@ class APIConfiguration {
 
   /// URL for refreshing an existing user session.
   static const String refreshSessionUrl = '$baseUrl/token/refresh';
+
+  static const String gradesUrl = '$baseUrl/folders';
+
 }

@@ -1,6 +1,6 @@
-import 'package:alakhtabut/src/essentials/config/action_presenter.dart';
-import 'package:alakhtabut/src/modules/grades/data/model/grade_model.dart';
-import 'package:alakhtabut/src/utils/route_manager.dart';
+import '/src/essentials/config/action_presenter.dart';
+import '/src/modules/grades/data/model/grade_model.dart';
+import '/src/utils/route_manager.dart';
 import 'package:get/get.dart';
 
 /// A singleton class for managing grade-related actions in the application.
@@ -18,6 +18,6 @@ class GradeActions extends ActionPresenter {
   ///
   /// [gradeModel]: The selected grade's model, passed as an argument to the subject page.
   void onGradeSelected(GradeModel gradeModel) {
-    Get.toNamed(RouteManager.subjectRoute, arguments: gradeModel);
+    // Get.toNamed(RouteManager.subjectRoute, arguments: gradeModel);
   }
 }

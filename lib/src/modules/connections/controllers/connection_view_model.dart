@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import '/src/core/errors/app_exception.dart';
 import '/src/config/config.dart';
 import '/src/utils/utils.dart';
 

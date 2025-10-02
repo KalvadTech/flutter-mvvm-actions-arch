@@ -22,6 +22,8 @@ dependencies:
   sentry: ^8.9.0
   timeago: ^3.7.0
   jwt_decoder: ^2.0.1
+  path_provider: ^2.1.5
+  flutter_secure_storage: ^9.2.2
 
 dev_dependencies:
   flutter_test:

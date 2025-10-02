@@ -1,9 +1,6 @@
-import 'package:alakhtabut/src/config/colors.dart';
-import 'package:alakhtabut/src/modules/app_tour/controllers/app_tour_view_model.dart';
-import 'package:alakhtabut/src/modules/app_tour/views/tour_spot.dart';
-import 'package:alakhtabut/src/modules/app_tour/views/tour_starter.dart';
-import 'package:alakhtabut/src/modules/grades/data/model/grade_model.dart';
-import 'package:alakhtabut/src/modules/grades/views/widgets/grade_grid_tile.dart';
+import '/src/config/colors.dart';
+import '/src/modules/grades/data/model/grade_model.dart';
+import '/src/modules/grades/views/widgets/grade_grid_tile.dart';
 import 'package:flutter/material.dart';
 
 class GradesGridView extends StatelessWidget {
@@ -29,16 +26,11 @@ class GradesGridView extends StatelessWidget {
         itemBuilder: (context, index) {
           final tile =  GradeGridTile(
             gradeModel: grades.last,
-            color: ColorManager.paletteColors[index % ColorManager.paletteColors.length],
+            color: ColorManager.primaryColor,
           );
           // ✅ spotlight only the first item
           return index == 0
-              ? Stack(
-            children: [
-              TourSpot(id: TourId.homeGradesGrid, child: tile),
-              const TourStarter(flowKey: 'home_v1')
-            ],
-          )
+              ? tile
               : tile;
         },
       ),

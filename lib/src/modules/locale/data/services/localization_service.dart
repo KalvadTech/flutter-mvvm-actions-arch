@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:get/get.dart';
-import '/src/essentials/services/memory_service.dart';
+import '/src/infrastructure/storage/preferences_storage.dart';
 import '/src/modules/locale/data/lang/lang.dart';
 
 /// A service for managing localization using GetX.
@@ -18,7 +18,7 @@ class LocalizationService extends Translations {
 
   /// Retrieves the saved language code or the device's locale code if none is saved.
   static String get savedLanguageCode {
-    return MemoryService.instance.languageCode ??
+    return PreferencesStorage.instance.languageCode ??
         Get.deviceLocale?.languageCode ??
         fallbackLocale.languageCode;
   }
@@ -26,7 +26,7 @@ class LocalizationService extends Translations {
   /// Initializes the localization by checking if a language code is saved
   /// and updates the locale accordingly.
   static init() {
-    String? languageCode = MemoryService.instance.languageCode;
+    String? languageCode = PreferencesStorage.instance.languageCode;
     if (languageCode != null) {
       _updateLocale(languageCode);
     }
@@ -34,7 +34,7 @@ class LocalizationService extends Translations {
 
   /// Saves the selected language code to persistent storage.
   static void _saveLocale(String languageCode) {
-    MemoryService.instance.languageCode = languageCode;
+    PreferencesStorage.instance.languageCode = languageCode;
   }
 
   /// Updates the locale and applies it to the GetX instance.
