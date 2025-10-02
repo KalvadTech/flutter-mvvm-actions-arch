@@ -50,7 +50,7 @@ class LanguagePickerDialog extends GetView<LocalizationViewModel> {
               child: Obx(
                     () => DropdownButtonFormField<LanguageModel>(
                   isExpanded: true,
-                  value: controller.language,
+                  initialValue: controller.language,
                   icon: const Icon(Icons.expand_more),
                   dropdownColor: Colors.white,
                   borderRadius: BorderRadius.circular(8.0),

@@ -63,7 +63,7 @@ class CustomButton extends StatelessWidget {
           padding: padding ?? EdgeInsets.all(ScreenUtils.getFontSize(context, 16)),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: enabled ? gradient.colors.last.withOpacity(0.15) : Colors.white.withOpacity(0.08),
+            color: enabled ? gradient.colors.last.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(8.0),
             border: Border.all(color: enabled ? gradient.colors.last : Colors.grey)
           ),
