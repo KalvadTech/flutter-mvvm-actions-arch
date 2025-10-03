@@ -21,8 +21,12 @@ class ActionPresenter {
         VoidCallback? onSuccess,
         VoidCallback? onFailure,
       }) async {
-    // Show the loading overlay during the action execution.
-    context.loaderOverlay.show();
+    // Show the loading overlay during the action execution (guarded).
+    try {
+      if (context.mounted) {
+        context.loaderOverlay.show();
+      }
+    } catch (_) {/* no overlay present; ignore */}
     try {
       // Execute the provided action.
       await action();
@@ -36,14 +40,19 @@ class ActionPresenter {
       _handleException(e, stackTrace, e.prefix, e.message);
       if (onFailure != null) onFailure(); // Call onFailure if provided.
     } catch (e, stackTrace) {
-      // Handle generic exceptions with a default error message.
-      _handleException(e, stackTrace, tkError, tkSomethingWentWrongMsg);
+      // Handle generic exceptions with a more specific message for auth errors.
+      final bool isAuth = e is AuthException || e.toString().toLowerCase().contains('unauthorized');
+      final String title = tkError;
+      final String message = isAuth ? 'Invalid email or password' : tkSomethingWentWrongMsg;
+      _handleException(e, stackTrace, title, message);
       if (onFailure != null) onFailure(); // Call onFailure if provided.
     } finally {
-      // Hide the loading overlay after the action completes.
-      if (context.mounted) {
-        context.loaderOverlay.hide();
-      }
+      // Hide the loading overlay after the action completes (guarded).
+      try {
+        if (context.mounted) {
+          context.loaderOverlay.hide();
+        }
+      } catch (_) {/* no overlay present; ignore */}
     }
   }
 

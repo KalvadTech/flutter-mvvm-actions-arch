@@ -90,13 +90,13 @@ class ApiService extends GetConnect {
 
   /// **accessToken**
   ///
-  /// Current access token from [MemoryService], or `null` when not signed in.
+  /// Current access token from [AppStorageService], or `null` when not signed in.
   // ────────────────────────────────────────────────
   String? get accessToken => AppStorageService.instance.accessToken;
 
   /// **refreshToken**
   ///
-  /// Current refresh token from [MemoryService], or `null` when not available.
+  /// Current refresh token from [AppStorageService], or `null` when not available.
   // ────────────────────────────────────────────────
   String? get refreshToken => AppStorageService.instance.refreshToken;
 

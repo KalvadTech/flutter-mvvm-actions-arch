@@ -35,6 +35,12 @@ The format is based on Keep a Changelog, and this project adheres loosely to Sem
   - `api_response.dart` → `src/core/presentation/api_response.dart`.
 - README and coding guidelines updated to reflect the new structure and APIs.
 
+- Auth module hardening:
+  - AuthViewModel.checkSession now ends in `authenticated` or `notAuthenticated` and never stays in `checking` after completion.
+  - AuthViewModel.logout now awaits `signOut()` before setting `notAuthenticated`.
+  - AuthService.signIn validates response shape (`access`/`refresh`) and throws `APIException` on malformed bodies.
+  - ActionPresenter guards loader overlay show/hide (no crash if overlay not mounted) and provides clearer user feedback for auth errors.
+
 ### Deprecated
 - `MemoryService` is deprecated in favor of the unified `AppStorageService` facade and the split `PreferencesStorage` + `SecureTokenStorage`.
 

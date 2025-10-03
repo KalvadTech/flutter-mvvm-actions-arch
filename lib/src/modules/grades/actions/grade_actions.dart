@@ -1,4 +1,4 @@
-import '/src/essentials/config/action_presenter.dart';
+import '../../../core/presentation/actions/action_presenter.dart';
 import '/src/modules/grades/data/model/grade_model.dart';
 import '/src/utils/route_manager.dart';
 import 'package:get/get.dart';

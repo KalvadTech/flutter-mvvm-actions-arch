@@ -249,3 +249,44 @@ These guidelines are living documentation. Propose improvements via PRs and mirr
 - Prefer reading tokens via AppStorageService synchronous getters for hot paths (e.g., HTTP headers): `AppStorageService.instance.accessToken`.
 - MemoryService is deprecated. Do not use it in new code. Migrate existing references to AppStorageService (preferences) and SecureTokenStorage (tokens) or the facade’s methods.
 - Align GetStorage container names across the app by using `AppStorageService.container`.
+
+
+
+## Presenters: loader overlay guard
+
+When showing a global loader overlay from presenters/actions (e.g., ActionPresenter), always guard calls so the app does not crash if the overlay is not mounted.
+
+- Use context.mounted checks before interacting with the overlay.
+- Wrap show/hide in try/catch to tolerate missing overlay in tests or minimal shells.
+- Keep error handling centralized and avoid double-reporting the same error.
+
+Example (simplified):
+```dart
+Future<void> actionHandler(BuildContext context, AsyncCallback action) async {
+  // Show overlay if available
+  try {
+    if (context.mounted) {
+      context.loaderOverlay.show();
+    }
+  } catch (_) { /* overlay not present; ignore */ }
+
+  try {
+    await action();
+  } on AppException catch (e, st) {
+    _handleException(e, st, e.prefix, e.message);
+  } catch (e, st) {
+    _handleException(e, st, tkError, tkSomethingWentWrongMsg);
+  } finally {
+    // Hide overlay if available
+    try {
+      if (context.mounted) {
+        context.loaderOverlay.hide();
+      }
+    } catch (_) { /* overlay not present; ignore */ }
+  }
+}
+```
+
+Notes
+- Prefer showing user-friendly messages for known auth failures (e.g., invalid credentials) while keeping generic copy for unknown errors.
+- Keep logs redacted and use assert-gated logging for sensitive data.

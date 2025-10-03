@@ -6,6 +6,28 @@ import '/src/config/config.dart';
 import '/src/utils/validator.dart';
 import '/src/modules/auth/auth.dart';
 
+/// **LoginPage**
+///
+/// Username/password form that validates input and delegates sign-in to
+/// [AuthActions] upon submit.
+/// 
+/// **Why**
+/// - Keep validation at the view level and business flow in actions/view model.
+///
+/// **Side Effects**
+/// - On submit, saves form fields into [AuthViewModel] and triggers the action
+///   handler which shows a loader overlay and error feedback.
+///
+/// **Usage**
+/// ```dart
+/// // Presented by AuthHandler when not authenticated
+/// LoginPage()
+/// ```
+///
+/// Notes
+/// - Ensure password field is obscured in the underlying [CustomFormField].
+///
+/// // ────────────────────────────────────────────────
 class LoginPage extends GetWidget<AuthViewModel> {
   final _formKey = GlobalKey<FormState>();
 
@@ -57,6 +79,18 @@ class LoginPage extends GetWidget<AuthViewModel> {
     );
   }
 
+  /// **_login**
+  ///
+  /// Validates and saves the form, then triggers [AuthActions.signIn].
+  ///
+  /// **Parameters**
+  /// - `context`: Build context used by the action presenter for overlay/snackbar.
+  ///
+  /// **Side Effects**
+  /// - Updates [AuthViewModel.username] and [AuthViewModel.password] via `onSaved`.
+  /// - Triggers the global loader overlay and error handling via [AuthActions].
+  ///
+  /// // ────────────────────────────────────────────────
   void _login(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();

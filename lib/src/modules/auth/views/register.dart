@@ -6,6 +6,25 @@ import '/src/utils/validator.dart';
 import '/src/presentation/custom/customs.dart';
 import '/src/modules/auth/auth.dart';
 
+/// **RegisterPage**
+///
+/// Registration form that collects basic user information and delegates
+/// account creation to [AuthActions].
+///
+/// Why
+/// - Keep form validation and field wiring in the view while business flow
+///   lives in actions/view model.
+///
+/// Usage
+/// ```dart
+/// // Navigated to from LoginPage via AuthActions.toRegisterPage()
+/// const RegisterPage()
+/// ```
+///
+/// Notes
+/// - Fields save into [AuthViewModel.newUser] via onSaved callbacks.
+///
+/// // ────────────────────────────────────────────────
 class RegisterPage extends GetWidget<AuthViewModel> {
   const RegisterPage({Key? key}) : super(key: key);
 

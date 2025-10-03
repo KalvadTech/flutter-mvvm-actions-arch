@@ -2,10 +2,43 @@ import 'package:get/get.dart';
 import '/src/modules/auth/data/models/user.dart';
 import '/src/modules/auth/data/services/auth_service.dart';
 
-/// Enum representing different authentication states.
+/// **AuthState**
+///
+/// Authentication lifecycle states used by the app shell to decide what to render.
+///
+/// - `checking`: App is determining session status (splash/loading).
+/// - `authenticated`: User has a valid session.
+/// - `notAuthenticated`: No valid session; show login/registration.
+///
+/// Notes
+/// - This enum is observed by [AuthHandler] via `Obx` to switch UI trees.
+///
+/// Example
+/// // Used internally by [AuthViewModel].
+///
+// ────────────────────────────────────────────────
 enum AuthState { checking, authenticated, notAuthenticated }
 
-/// ViewModel responsible for managing authentication logic using GetX.
+/// **AuthViewModel**
+///
+/// GetX controller responsible for managing authentication lifecycle and
+/// exposing a reactive [AuthState] for the app shell.
+/// 
+/// Why
+/// - Centralizes session checks, login/signup orchestration, and logout.
+/// - Keeps views simple; they react to state via `Obx` and delegate actions
+///   to [AuthActions] which wrap calls with loader and error handling.
+///
+/// Key Features
+/// - Emits `checking → authenticated | notAuthenticated` deterministically.
+/// - Supports token refresh via [AuthService.refreshSession].
+/// - Clears sensitive credentials after successful sign-in.
+///
+/// Example
+/// final vm = Get.find<AuthViewModel>();
+/// if (vm.isAuthenticated()) { /* navigate to home */ }
+///
+// ────────────────────────────────────────────────
 class AuthViewModel extends GetxController {
   /// Instance of `AuthService` to perform authentication-related operations.
   final AuthService _authService;
@@ -28,30 +61,63 @@ class AuthViewModel extends GetxController {
   /// Instance of a new user for the sign-up process.
   UserModel newUser = UserModel.empty();
 
-  /// Constructor initializes with the `AuthService` and checks the session on creation.
+  /// **AuthViewModel**
+  ///
+  /// Injects [AuthService] and triggers an initial [checkSession] to determine
+  /// the starting auth state.
+  /// 
+  /// **Parameters**
+  /// - `authService`: Service used for token checks and auth calls.
+  ///
+  /// // ────────────────────────────────────────────────
   AuthViewModel(this._authService) {
     checkSession();
   }
 
   // Checks if there is an active session by verifying token status.
   // Refreshes the session if the access token is expired but the refresh token is valid.
+  /// **checkSession**
+  ///
+  /// Determine current authentication status and emit a terminal state.
+  ///
+  /// Returns
+  /// - `bool`: `true` when a valid session exists after checks/refresh; otherwise `false`.
+  ///
+  /// Side Effects
+  /// - May call [AuthService.refreshSession] when access is expired and refresh is valid.
+  /// - May clear tokens and set [AuthState.notAuthenticated] when refresh is expired.
+  ///
+  /// Errors
+  /// - Any unexpected error is caught; state falls back to not authenticated.
+  ///
+  // ────────────────────────────────────────────────
   Future<bool> checkSession() async {
-    if (await _authService.isLoggedIn()) {
-      bool isAccessTokenExpired = await _authService.isAccessTokenExpired();
-      bool isRefreshTokenExpired = await _authService.isRefreshTokenExpired();
-
-      if (isAccessTokenExpired && !isRefreshTokenExpired) {
-        await refreshSession(); // Refreshes session if only the access token is expired
-      } else if (isRefreshTokenExpired) {
-        return false; // If both tokens are expired, return false
+    checking();
+    try {
+      if (!await _authService.isLoggedIn()) {
+        notAuthenticated();
+        return false;
       }
 
-      authenticated(); // Set state to authenticated if tokens are valid
-      update(); // Update GetX UI
+      final isAccessTokenExpired = await _authService.isAccessTokenExpired();
+      final isRefreshTokenExpired = await _authService.isRefreshTokenExpired();
+
+      if (isAccessTokenExpired && !isRefreshTokenExpired) {
+        await refreshSession();
+      } else if (isRefreshTokenExpired) {
+        // Refresh token expired → clear tokens and require login
+        await _authService.signOut();
+        notAuthenticated();
+        return false;
+      }
+
+      authenticated();
       return true;
+    } catch (_) {
+      // Any unexpected error → fail safe to not authenticated
+      notAuthenticated();
+      return false;
     }
-    notAuthenticated();
-    return false;
   }
 
   /// Refreshes the session by calling the refreshSession method from AuthService
@@ -62,6 +128,7 @@ class AuthViewModel extends GetxController {
   /// Performs user sign-in with the provided username and password.
   Future<void> signIn() async {
     await _authService.signIn(username!, password!);
+    clear();
     authenticated();
   }
 
@@ -96,8 +163,14 @@ class AuthViewModel extends GetxController {
   }
 
   /// Logs out the user and sets the state to not authenticated.
-  void logout() {
-    _authService.signOut();
+  Future<void> logout() async {
+    await _authService.signOut();
     notAuthenticated();
   }
+
+  void clear() {
+    username = null;
+    password = null;
+  }
+
 }

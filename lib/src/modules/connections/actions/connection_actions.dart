@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import '/src/essentials/config/action_presenter.dart';
+import '../../../core/presentation/actions/action_presenter.dart';
 import '../controllers/connection_view_model.dart';
 
 /// Singleton class to manage connection-related actions.

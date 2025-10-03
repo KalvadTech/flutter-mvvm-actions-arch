@@ -113,6 +113,18 @@ The ApiService.downloadFile method reuses GetConnect.get with `ResponseType.byte
 contain default login and register process using username and password with validation and logic. you can use default login and register pages or customize them.
 go to config/api-config and put your own api urls and routes then go to data/models/user.dart and update user model to meet your api response.
 
+##### Auth flow
+- State machine: `AuthState` cycles through `checking → authenticated | notAuthenticated`.
+  - App start: `AuthViewModel.checkSession()` sets `checking`, verifies tokens, refreshes access if needed, and ends in a definitive state (`authenticated` or `notAuthenticated`). It never stays stuck on `checking` after completion.
+  - Logout: `AuthViewModel.logout()` awaits token clearing, then sets `notAuthenticated`.
+- Validation: Performed in the view (`login.dart`) via `Form` validators before invoking actions.
+- Actions & error handling: `AuthActions` wraps calls with `ActionPresenter.actionHandler(context, ...)`.
+  - Shows a loader overlay while running, guarded to avoid crashes if no overlay is present.
+  - Catches `AppException` subclasses to display user-friendly messages and reports to Sentry.
+  - Avoids unsafe navigation (no unconditional `Get.back()` after sign-in).
+- Service: `AuthService` performs network calls (via `ApiService`) and persists tokens using `AppStorageService` (preferences + secure storage facade).
+  - Validates sign-in response shape (must include `access` and `refresh` tokens) and throws `APIException` on malformed bodies.
+
 
 #### connections
 handle the connectivity, check if the user is connected to through wifi or mobile data and have internet access or no. contain two widget one for splash screen with connection check. one stack widget for showing connectivity status changes, you can use it to show status throw all pages or for only one page.
