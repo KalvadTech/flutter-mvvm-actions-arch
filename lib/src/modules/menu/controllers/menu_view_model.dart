@@ -1,55 +1,136 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../view/page.dart';
+import '../data/models/menu_item.dart';
 
-/// A [MenuViewModel] class to manage the state and behavior of the menu pages.
-/// This class uses [GetX] for reactive state management.
+/// ViewModel for managing menu navigation and state.
+///
+/// This controller handles:
+/// - Menu item selection and navigation
+/// - Current page display management
+/// - Menu items configuration
+///
+/// ## Usage:
+/// ```dart
+/// final controller = Get.find<MenuViewModel>();
+/// controller.selectMenuItem(menuItem);
+/// ```
+///
+/// The ViewModel uses GetX for reactive state management and follows
+/// the MVVM pattern for clean separation of concerns.
 class MenuViewModel extends GetxController {
-  /// Observable index to track the currently selected page.
+  /// Currently selected menu item index.
   final RxInt _selectedIndex = 0.obs;
 
-  /// Getter to access the current selected index.
+  /// Getter for the currently selected menu item index.
   int get selectedIndex => _selectedIndex.value;
 
-  /// Observable boolean to manage the expanded state.
-  final RxBool _expanded = false.obs;
+  /// Currently displayed page widget.
+  final Rx<Widget> _currentPage = Rx<Widget>(const SizedBox.shrink());
 
-  /// Getter to access the expanded state.
-  bool get expanded => _expanded.value;
+  /// Getter for the currently displayed page.
+  Widget get currentPage => _currentPage.value;
 
-  /// Stores the currently selected page widget.
-  Widget _selectedPage = Container();
+  /// List of available menu items.
+  ///
+  /// This can be configured during initialization or updated dynamically.
+  final RxList<MenuItem> _menuItems = <MenuItem>[].obs;
 
-  /// Getter to access the currently selected page.
-  Widget get selectedPage => _selectedPage;
+  /// Getter for the list of menu items.
+  List<MenuItem> get menuItems => _menuItems;
 
-  /// List of pages available in the menu.
-  final List<Widget> _pages = [
-    const Page1(),
-    const Page2(),
-    const Page3(),
-  ];
-
-  /// Constructor to initialize the default selected page.
-  MenuViewModel() {
-    _selectedPage = _pages[0];
-  }
-
-  /// Method to change the selected page based on the provided [index].
-  /// If the index is valid, the corresponding page is set as the selected page.
-  /// If the index is out of bounds, the expanded state is toggled.
-  void onPageChanges(int index) {
-    if (index < _pages.length) {
-      _selectedIndex.value = index;
-      _selectedPage = _pages[index];
-      update(); // Notify listeners about the change.
-    } else {
-      onExpandedClicked(); // Toggle expanded state if the index is invalid.
+  /// Initializes the ViewModel with the provided menu items.
+  ///
+  /// Sets the first menu item as selected by default if available.
+  @override
+  void onInit() {
+    super.onInit();
+    if (_menuItems.isNotEmpty && _menuItems[0].page != null) {
+      _currentPage.value = _menuItems[0].page!;
     }
   }
 
-  /// Method to toggle the expanded state.
-  void onExpandedClicked() {
-    _expanded.value = !expanded;
+  /// Configures the menu with the provided list of menu items.
+  ///
+  /// This method should be called before the menu is displayed.
+  ///
+  /// ## Example:
+  /// ```dart
+  /// controller.configureMenu([
+  ///   MenuItem(id: 'home', label: 'Home', icon: Icons.home, page: HomePage()),
+  ///   MenuItem(id: 'profile', label: 'Profile', icon: Icons.person, page: ProfilePage()),
+  /// ]);
+  /// ```
+  void configureMenu(List<MenuItem> items) {
+    _menuItems.value = items;
+    if (items.isNotEmpty && items[0].page != null) {
+      _currentPage.value = items[0].page!;
+      _selectedIndex.value = 0;
+    }
   }
+
+  /// Selects a menu item by its index.
+  ///
+  /// Updates the selected index and displays the associated page if available.
+  ///
+  /// ## Parameters:
+  /// - [index]: The zero-based index of the menu item to select.
+  ///
+  /// ## Example:
+  /// ```dart
+  /// controller.selectMenuItemByIndex(1); // Select second menu item
+  /// ```
+  void selectMenuItemByIndex(int index) {
+    if (index >= 0 && index < _menuItems.length) {
+      _selectedIndex.value = index;
+      final menuItem = _menuItems[index];
+      if (menuItem.page != null) {
+        _currentPage.value = menuItem.page!;
+      }
+    }
+  }
+
+  /// Selects a menu item by its ID.
+  ///
+  /// Finds the menu item with the matching ID and selects it.
+  ///
+  /// ## Parameters:
+  /// - [id]: The unique identifier of the menu item to select.
+  ///
+  /// ## Example:
+  /// ```dart
+  /// controller.selectMenuItemById('home');
+  /// ```
+  void selectMenuItemById(String id) {
+    final index = _menuItems.indexWhere((item) => item.id == id);
+    if (index != -1) {
+      selectMenuItemByIndex(index);
+    }
+  }
+
+  /// Selects a menu item directly.
+  ///
+  /// Updates the selection based on the provided menu item.
+  ///
+  /// ## Parameters:
+  /// - [menuItem]: The menu item to select.
+  ///
+  /// ## Example:
+  /// ```dart
+  /// controller.selectMenuItem(homeMenuItem);
+  /// ```
+  void selectMenuItem(MenuItem menuItem) {
+    final index = _menuItems.indexWhere((item) => item.id == menuItem.id);
+    if (index != -1) {
+      selectMenuItemByIndex(index);
+    }
+  }
+
+  /// Checks if a menu item at the given index is currently selected.
+  ///
+  /// ## Parameters:
+  /// - [index]: The index to check.
+  ///
+  /// ## Returns:
+  /// `true` if the item at the given index is selected, `false` otherwise.
+  bool isSelected(int index) => _selectedIndex.value == index;
 }
