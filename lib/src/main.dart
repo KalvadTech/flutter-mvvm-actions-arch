@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import '/src/infrastructure/storage/app_storage_service.dart';
 import '/src/utils/route_manager.dart';
 import 'app.dart';
-import '/src/modules/connections/connection_bindings.dart';
-import '/src/modules/locale/data/services/localization_service.dart';
-import '/src/infrastructure/cache/cache_manager.dart';
+import 'modules/connections/connection_bindings.dart';
+import 'modules/locale/data/services/localization_service.dart';
+import 'infrastructure/cache/cache_manager.dart';
 import 'infrastructure/cache/contracts/cache_store.dart';
-import '/src/infrastructure/cache/default_cache_key_strategy.dart';
-import '/src/infrastructure/cache/simple_ttl_cache_policy.dart';
-import '/src/infrastructure/cache/get_storage_cache_store.dart';
-import '/src/infrastructure/http/api_service.dart';
+import 'infrastructure/cache/default_cache_key_strategy.dart';
+import 'infrastructure/cache/simple_ttl_cache_policy.dart';
+import 'infrastructure/cache/get_storage_cache_store.dart';
+import 'infrastructure/http/api_service.dart';
+import 'modules/theme/theme.dart';
 
 Future<void> main() async {
   RouteManager.instance.initialize();
@@ -20,6 +21,7 @@ Future<void> main() async {
 
   // Ensure connectivity VM is available before building the app/overlay.
   ConnectionBindings().dependencies();
+  ThemeBindings().dependencies();
   // 1) Create a CacheStore backed by GetStorage (async factory ensures init)
   final CacheStore store = await GetStorageCacheStorage.create(
     container: AppStorageService.container, // aligned with preferences container
