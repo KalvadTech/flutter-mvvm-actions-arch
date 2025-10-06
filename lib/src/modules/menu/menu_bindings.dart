@@ -12,7 +12,7 @@ import 'menu.dart';
 /// ```dart
 /// GetPage(
 ///   name: '/menu',
-///   page: () => MenuPage(),
+///   page: () => MenuPageWithDrawer(),
 ///   binding: MenuBindings(),
 /// )
 /// ```

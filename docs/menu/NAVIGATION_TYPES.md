@@ -5,7 +5,7 @@ The template provides **two navigation patterns** ready to use. Choose the one t
 ## 📱 Navigation Options
 
 ### 1. Side Drawer Navigation (Default)
-**File**: `MenuPage` in `menu_page.dart`
+**File**: `MenuPageWithDrawer` in `menu_page_with_drawer.dart`
 
 ```
 ┌─────────────────────┐
@@ -58,7 +58,7 @@ class AuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AuthHandler(
-      onAuthenticated: const MenuPage(),  // 👈 Side drawer version
+      onAuthenticated: const MenuPageWithDrawer(),  // 👈 Side drawer version
       onNotAuthenticated: LoginPage(),
       onChecking: const SplashPage(),
     );
@@ -87,7 +87,7 @@ class AuthPage extends StatelessWidget {
 }
 ```
 
-**That's it!** Just replace `MenuPage()` with `MenuPageWithBottomNav()`.
+**That's it!** Just replace `MenuPageWithDrawer()` with `MenuPageWithBottomNav()`.
 
 ---
 
@@ -223,7 +223,7 @@ class AuthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthHandler(
       onAuthenticated: AppSettings.navigationType == NavigationType.drawer
-          ? const MenuPage()
+          ? const MenuPageWithDrawer()
           : const MenuPageWithBottomNav(),
       onNotAuthenticated: LoginPage(),
       onChecking: const SplashPage(),
@@ -302,7 +302,7 @@ Use: **Side Drawer** ✅
 
 ```
 lib/src/modules/menu/views/
-├── menu_page.dart                   # Side drawer version
+├── menu_page_with_drawer.dart       # Side drawer version
 ├── menu_page_bottom_nav.dart        # Bottom nav version
 ├── side_menu_drawer.dart            # Side drawer content
 ├── menu_bottom_navigation.dart      # Bottom nav bar widget

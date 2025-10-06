@@ -22,7 +22,7 @@ class AuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthHandler(onAuthenticated: const MenuPage(), onNotAuthenticated: LoginPage(), onChecking: const SplashPage(),);
+    return AuthHandler(onAuthenticated: const MenuPageWithDrawer(), onNotAuthenticated: LoginPage(), onChecking: const SplashPage(),);
   }
 
 }

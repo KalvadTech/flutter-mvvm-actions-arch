@@ -3,14 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:getx_starter/src/modules/menu/controllers/menu_view_model.dart';
 import 'package:getx_starter/src/modules/menu/data/models/menu_item.dart';
-import 'package:getx_starter/src/modules/menu/views/menu_page.dart';
+import 'package:getx_starter/src/modules/menu/views/menu_page_with_drawer.dart';
 import 'package:getx_starter/src/modules/menu/views/side_menu_drawer.dart';
 import 'package:getx_starter/src/modules/theme/theme.dart';
+import 'package:getx_starter/src/modules/locale/locale.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('MenuPage Widget Tests', () {
+  group('MenuPageWithDrawer Widget Tests', () {
     late MenuViewModel viewModel;
 
     setUp(() {
@@ -19,6 +20,11 @@ void main() {
       // Register theme dependencies
       if (!Get.isRegistered<ThemeViewModel>()) {
         Get.put(ThemeViewModel(ThemeService()));
+      }
+
+      // Register locale dependencies
+      if (!Get.isRegistered<LocalizationViewModel>()) {
+        Get.put(LocalizationViewModel());
       }
 
       // Create and register ViewModel
@@ -48,7 +54,7 @@ void main() {
 
     Widget createTestWidget() {
       return const GetMaterialApp(
-        home: MenuPage(),
+        home: MenuPageWithDrawer(),
       );
     }
 
@@ -56,7 +62,7 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      expect(find.byType(MenuPage), findsOneWidget);
+      expect(find.byType(MenuPageWithDrawer), findsOneWidget);
     });
 
     testWidgets('displays Scaffold', (WidgetTester tester) async {

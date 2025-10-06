@@ -5,7 +5,7 @@ export 'controllers/menu_view_model.dart';
 export 'data/models/menu_item.dart';
 
 // Views - Drawer Navigation
-export 'views/menu_page.dart';
+export 'views/menu_page_with_drawer.dart';
 export 'views/side_menu_drawer.dart';
 export 'views/menu_drawer_item.dart';
 

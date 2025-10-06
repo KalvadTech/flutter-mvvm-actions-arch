@@ -52,7 +52,7 @@ class RouteManager {
       ),
       GetPage(
         name: menuRoute,
-        page: () => const MenuPage(),
+        page: () => const MenuPageWithDrawer(),
         binding: MenuBindings(),
         middlewares: [AuthMiddleware()],
       ),

@@ -7,7 +7,7 @@ The menu module provides a side drawer navigation system with configurable menu 
 ## Architecture
 
 ```
-MenuPage (Main Container)
+MenuPageWithDrawer (Main Container)
 ├── AppBar (with hamburger menu)
 ├── Drawer (SideMenuDrawer)
 │   ├── Menu Items
@@ -226,20 +226,20 @@ int currentIndex = MenuActions.selectedIndex;
 ```
 lib/src/modules/menu/
 ├── controllers/
-│   └── menu_view_model.dart      # State management
+│   └── menu_view_model.dart          # State management
 ├── data/
 │   └── models/
-│       └── menu_item.dart        # MenuItem model
+│       └── menu_item.dart            # MenuItem model
 ├── views/
-│   ├── menu_page.dart            # Main page with drawer
-│   ├── side_menu_drawer.dart     # Drawer content
-│   ├── menu_drawer_item.dart     # Individual menu item widget
-│   ├── logout_drawer_item.dart   # Logout button
-│   └── sample_pages.dart         # ⚠️ MOCK PAGES - REPLACE THESE
+│   ├── menu_page_with_drawer.dart    # Main page with drawer
+│   ├── side_menu_drawer.dart         # Drawer content
+│   ├── menu_drawer_item.dart         # Individual menu item widget
+│   ├── logout_drawer_item.dart       # Logout button
+│   └── sample_pages.dart             # ⚠️ MOCK PAGES - REPLACE THESE
 ├── actions/
-│   └── menu_actions.dart         # Navigation helpers
-├── menu_bindings.dart            # 👈 CONFIGURE MENU HERE
-└── menu.dart                     # Barrel export
+│   └── menu_actions.dart             # Navigation helpers
+├── menu_bindings.dart                # 👈 CONFIGURE MENU HERE
+└── menu.dart                         # Barrel export
 ```
 
 ## Best Practices

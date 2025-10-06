@@ -3,22 +3,23 @@ import 'package:get/get.dart';
 import '/src/modules/menu/controllers/menu_view_model.dart';
 import '/src/modules/menu/views/side_menu_drawer.dart';
 
-/// The main menu page with navigation drawer.
+/// Menu page with side drawer navigation.
 ///
-/// This page serves as the primary navigation container for the app.
-/// It displays the currently selected page content and provides access
-/// to the navigation drawer.
+/// This page uses a side drawer (hamburger menu) for navigation.
+/// The drawer slides in from the left and contains menu items,
+/// settings, and logout.
 ///
 /// ## Features:
+/// - Hamburger menu icon (☰) in AppBar
+/// - Side drawer with menu items
+/// - Theme and language switchers in drawer
+/// - Logout button in drawer
 /// - Displays current page based on menu selection
-/// - Provides side navigation drawer
-/// - Reactive to menu state changes
-/// - Material Design app bar
 ///
 /// ## Usage:
 /// ```dart
 /// // Navigate to menu page
-/// Get.to(() => MenuPage());
+/// Get.to(() => MenuPageWithDrawer());
 ///
 /// // Or use with named routes
 /// GetMaterialApp(
@@ -26,15 +27,17 @@ import '/src/modules/menu/views/side_menu_drawer.dart';
 ///   getPages: [
 ///     GetPage(
 ///       name: '/menu',
-///       page: () => MenuPage(),
+///       page: () => MenuPageWithDrawer(),
 ///       binding: MenuBindings(),
 ///     ),
 ///   ],
 /// )
 /// ```
-class MenuPage extends GetWidget<MenuViewModel> {
-  /// Creates a [MenuPage].
-  const MenuPage({super.key});
+///
+/// **Alternative**: For bottom navigation, use [MenuPageWithBottomNav] instead.
+class MenuPageWithDrawer extends GetWidget<MenuViewModel> {
+  /// Creates a [MenuPageWithDrawer].
+  const MenuPageWithDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

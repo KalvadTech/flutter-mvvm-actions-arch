@@ -20,7 +20,7 @@ import '../auth.dart';
 /// ```dart
 /// AuthHandler(
 ///   onChecking: const SplashPage(),
-///   onAuthenticated: const MenuPage(),
+///   onAuthenticated: const MenuPageWithDrawer(),
 ///   onNotAuthenticated: LoginPage(),
 /// )
 /// ```
