@@ -23,11 +23,11 @@ class LanguagePickerDialog extends GetView<LocalizationViewModel> {
       backgroundColor: Colors.white,
       surfaceTintColor: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-      child: Container(
-        height: ScreenUtils.getScreenHeight(context, 0.25),
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // Close button in the top-right corner.
             Row(
@@ -44,7 +44,7 @@ class LanguagePickerDialog extends GetView<LocalizationViewModel> {
               tkChooseLanguage,
               fontSize: 16.0,
             ),
-            const Spacer(),
+            const SizedBox(height: 16.0),
             // Dropdown button for selecting the language.
             ButtonTheme(
               alignedDropdown: true,
@@ -80,7 +80,7 @@ class LanguagePickerDialog extends GetView<LocalizationViewModel> {
                 ),
               ),
             ),
-            const Spacer(),
+            const SizedBox(height: 16.0),
             // Confirm button to save the selected language.
             CustomButton(
               text: tkConfirmBtn,
