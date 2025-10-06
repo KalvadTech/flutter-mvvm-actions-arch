@@ -1,0 +1,8 @@
+# <type>(<scope>): <subject>
+#
+# <body>
+#
+# Types: feat, fix, docs, style, refactor, test, chore, perf
+# Scope: module or component name
+# Subject: imperative, present tense, lowercase, no period
+# Body: explain what and why (optional)

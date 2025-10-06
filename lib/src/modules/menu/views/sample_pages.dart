@@ -1,5 +1,22 @@
 import 'package:flutter/material.dart';
 
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ⚠️  MOCK PAGES - FOR DEMONSTRATION ONLY
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//
+// These pages are example implementations to showcase the menu module.
+// They contain mock data and placeholder UI components.
+//
+// ⚠️ DO NOT USE IN PRODUCTION
+//
+// Replace these with your actual application pages:
+// 1. Create your pages in their respective modules
+// 2. Update menu_bindings.dart to use your pages
+// 3. Remove or ignore this file
+//
+// See: docs/menu/README.md for instructions on adding menu items
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 /// Dashboard/Home page for the application.
 ///
 /// This page displays an overview of the application with
