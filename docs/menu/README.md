@@ -324,6 +324,6 @@ List<MenuItem> configureMenuItems() {
 - Verify MenuViewModel is registered in bindings
 
 **Q: Want bottom navigation instead of drawer?**
-- Replace `drawer` with `bottomNavigationBar` in MenuPage
-- Create a BottomNavigationBar widget
-- Update selection logic in MenuViewModel
+- ✅ **Already implemented!** See [NAVIGATION_TYPES.md](./NAVIGATION_TYPES.md)
+- Simply replace `MenuPage()` with `MenuPageWithBottomNav()` in `auth.dart`
+- Both navigation patterns are ready to use
