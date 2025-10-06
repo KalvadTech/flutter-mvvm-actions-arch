@@ -3,6 +3,7 @@ import 'package:getx_starter/src/modules/grades/grade_bindings.dart';
 import '/src/modules/menu/menu.dart';
 import '/src/modules/auth/auth.dart';
 import '/src/modules/connections/connection.dart';
+import '/src/modules/locale/locale_bindings.dart';
 
 /// InitialBindings class is responsible for initializing and managing the core dependencies
 /// required throughout the application lifecycle.
@@ -21,6 +22,9 @@ class InitialBindings extends Bindings {
     if (!Get.isRegistered<ConnectionViewModel>()) {
       Get.put(ConnectionViewModel(), permanent: true);
     }
+
+    // Registers the dependencies for localization.
+    LocaleBindings().dependencies();
 
     // Registers the dependencies required for authentication.
     AuthBindings().dependencies();

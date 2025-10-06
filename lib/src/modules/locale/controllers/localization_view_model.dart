@@ -1,12 +1,7 @@
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../data/model/language_model.dart';
 import '../data/services/localization_service.dart';
-
-/// A list of supported languages with their respective codes and country codes.
-List<LanguageModel> supportedLanguage = [
-  LanguageModel('English', 'en', 'GB'),
-  LanguageModel('العربية', 'ar', 'AE'),
-];
 
 /// **LocalizationViewModel**
 ///
@@ -31,25 +26,33 @@ List<LanguageModel> supportedLanguage = [
 ///
 // ────────────────────────────────────────────────
 class LocalizationViewModel extends GetxController {
+  /// List of supported languages with their respective codes and country codes.
+  static const List<LanguageModel> supportedLanguages = [
+    LanguageModel('English', 'en', 'GB'),
+    LanguageModel('العربية', 'ar', 'AE'),
+  ];
+
   /// Observable to keep track of the currently selected language.
-  final Rx<LanguageModel> _language = LanguageModel('English', 'en', 'GB').obs;
+  late final Rx<LanguageModel> _language;
 
   /// Getter for the currently selected language.
   LanguageModel get language => _language.value;
 
-  /// Constructor to initialize and fetch the default language on startup.
-  LocalizationViewModel() {
-    _fetchDefaultLanguage();
+  @override
+  void onInit() {
+    super.onInit();
+    _initializeLanguage();
   }
 
-  /// Fetches the default language from the saved preferences and sets it.
-  Future _fetchDefaultLanguage() async {
-    LocalizationService.init(); // Initialize the localization service.
-    await Future.delayed(const Duration(milliseconds: 300)); // Simulate a small delay.
-    final newLang = supportedLanguage.firstWhere(
-          (element) => element.code == LocalizationService.savedLanguageCode,
+  /// Initializes the language from saved preferences or device locale.
+  void _initializeLanguage() {
+    final savedCode = LocalizationService.savedLanguageCode;
+    final initialLanguage = supportedLanguages.firstWhere(
+      (lang) => lang.code == savedCode,
+      orElse: () => supportedLanguages.first,
     );
-    selectLanguage(newLang); // Set the fetched language.
+    _language = initialLanguage.obs;
+    selectLanguage(initialLanguage);
   }
 
   /// Updates the selected language and applies it throughout the app.
@@ -73,18 +76,10 @@ class LocalizationViewModel extends GetxController {
 
   /// Dismisses the language selection and reverts to the default saved language.
   void dismiss() {
-    _language.value = supportedLanguage.firstWhere(
-          (element) => Get.locale!.languageCode == element.code,
+    final currentLocale = Get.locale?.languageCode ?? LocalizationService.fallbackLocale.languageCode;
+    _language.value = supportedLanguages.firstWhere(
+      (element) => currentLocale == element.code,
+      orElse: () => supportedLanguages.first,
     );
   }
-}
-
-/// Model to represent a language with its name, language code, and country code.
-class LanguageModel {
-  final String name; // The display name of the language.
-  final String code; // The language code (e.g., 'en', 'ar').
-  final String countryCode; // The country code associated with the language.
-
-  /// Constructor for `LanguageModel`.
-  LanguageModel(this.name, this.code, this.countryCode);
 }

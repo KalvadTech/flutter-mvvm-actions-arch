@@ -4,6 +4,7 @@ import '/src/utils/utils.dart';
 import '/src/config/config.dart';
 import '/src/presentation/custom/customs.dart';
 import '../controllers/localization_view_model.dart';
+import '../data/model/language_model.dart';
 
 /// A dialog widget to allow the user to select a language from a dropdown list.
 /// This dialog uses GetX's `LocalizationViewModel` to manage the selected language.
@@ -63,7 +64,7 @@ class LanguagePickerDialog extends GetView<LocalizationViewModel> {
                     enabledBorder: border,
                     focusedBorder: border,
                   ),
-                  items: supportedLanguage
+                  items: LocalizationViewModel.supportedLanguages
                       .map(
                         (e) => DropdownMenuItem(
                       value: e,
@@ -93,13 +94,13 @@ class LanguagePickerDialog extends GetView<LocalizationViewModel> {
 
   /// Confirms the language change and saves it using the `LocalizationViewModel`.
   void _confirm() {
-    Get.find<LocalizationViewModel>().saveLanguageChange();
+    controller.saveLanguageChange();
     Get.back(); // Close the dialog.
   }
 
   /// Closes the dialog and dismisses any unsaved changes.
   void _close() {
-    Get.find<LocalizationViewModel>().dismiss();
+    controller.dismiss();
     Get.back(); // Close the dialog.
   }
 }
