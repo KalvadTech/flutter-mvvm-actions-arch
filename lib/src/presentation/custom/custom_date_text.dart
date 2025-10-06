@@ -7,6 +7,32 @@ import '/src/config/config.dart';
 import '/src/utils/screen_utils.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+/// **CustomDateText**
+///
+/// Displays formatted date strings with locale and responsive font sizing.
+///
+/// **Why**
+/// - Encapsulate date formatting logic to keep views clean.
+/// - Support flexible formatting options (with/without year, day names, etc.).
+/// - Integrate responsive sizing via [ScreenUtils].
+///
+/// **Key Features**
+/// - Formats dates using `intl.DateFormat` in English locale.
+/// - Optional `toDateTime` for date ranges.
+/// - Customizable flags: `withYear`, `withDayName`, `withShortYear`, `withShortDayName`.
+/// - Returns empty string when `dateTime` is null.
+///
+/// **Example**
+/// ```dart
+/// CustomDateText(
+///   DateTime.now(),
+///   dateFormat: 'MMM d, yyyy',
+///   fontSize: 12,
+///   color: Colors.grey,
+/// )
+/// ```
+///
+// ────────────────────────────────────────────────
 class CustomDateText extends StatelessWidget {
   final DateTime? dateTime;
   final DateTime? toDateTime;
@@ -74,6 +100,29 @@ class CustomDateText extends StatelessWidget {
   }
 }
 
+/// **CustomTimeText**
+///
+/// Displays formatted time strings with optional time range support.
+///
+/// **Why**
+/// - Centralize time formatting to avoid duplication in views.
+/// - Support time ranges (e.g., "10:00 AM - 12:00 PM").
+///
+/// **Key Features**
+/// - Uses `intl.DateFormat` for time formatting.
+/// - Optional `toDateTime` for time ranges.
+/// - Outputs uppercase by default.
+///
+/// **Example**
+/// ```dart
+/// CustomTimeText(
+///   DateTime.now(),
+///   dateFormat: 'h:mm a',
+///   fontSize: 10,
+/// )
+/// ```
+///
+// ────────────────────────────────────────────────
 class CustomTimeText extends StatelessWidget {
   final DateTime dateTime;
   final DateTime? toDateTime;
@@ -125,6 +174,29 @@ class CustomTimeText extends StatelessWidget {
   }
 }
 
+/// **CustomTimeAgoText**
+///
+/// Displays relative time strings ("2 hours ago", "just now") with automatic periodic updates.
+///
+/// **Why**
+/// - Provide user-friendly relative timestamps that stay fresh.
+/// - Automatically update every minute to keep text accurate.
+///
+/// **Key Features**
+/// - Uses `timeago` package for relative time formatting.
+/// - Stateful widget with a periodic timer (1 minute interval).
+/// - Timer is canceled on disposal to prevent memory leaks.
+///
+/// **Example**
+/// ```dart
+/// CustomTimeAgoText(
+///   DateTime.now().subtract(Duration(hours: 2)),
+///   fontSize: 10,
+///   color: Colors.grey,
+/// )
+/// ```
+///
+// ────────────────────────────────────────────────
 class CustomTimeAgoText extends StatefulWidget {
   final DateTime dateTime;
   final Color? color;

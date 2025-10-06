@@ -3,6 +3,28 @@ import 'package:get/get.dart';
 import '/src/config/colors.dart';
 import '/src/utils/screen_utils.dart';
 
+/// **CustomText**
+///
+/// Reusable text widget with responsive font sizing and GetX translation support.
+///
+/// **Why**
+/// - Standardize text styling across the app with named constructors for common variants.
+/// - Integrate automatic translation via GetX `.tr` extension.
+/// - Support responsive font scaling via [ScreenUtils].
+///
+/// **Key Features**
+/// - Default constructor for body text.
+/// - Named constructors: `.title`, `.authTitle`, `.subtitle`, `.black` for semantic variants.
+/// - Auto-translates `text` via GetX when rendered.
+/// - Responsive `fontSize` scaling based on screen size.
+///
+/// **Example**
+/// ```dart
+/// CustomText.title('pages.home.title') // Large title, auto-translated
+/// CustomText('Some body text', fontSize: 14)
+/// ```
+///
+// ────────────────────────────────────────────────
 class CustomText extends StatelessWidget {
   final String text;
   final Color? color;
@@ -42,6 +64,30 @@ class CustomText extends StatelessWidget {
 }
 
 
+/// **CustomTranslatedText**
+///
+/// Text widget that displays different strings based on the current locale (English/Arabic).
+///
+/// **Why**
+/// - Handle hard-coded locale-specific text without translation keys.
+/// - Useful for dynamic content received from APIs that includes multiple language variants.
+///
+/// **Key Features**
+/// - Accepts separate `textEn` and `textAr` properties.
+/// - Switches displayed text based on `Get.locale.languageCode`.
+/// - Supports full text styling customization.
+///
+/// **Example**
+/// ```dart
+/// CustomTranslatedText(
+///   textEn: 'Hello',
+///   textAr: 'مرحبا',
+///   fontSize: 16,
+///   color: Colors.black,
+/// )
+/// ```
+///
+// ────────────────────────────────────────────────
 class CustomTranslatedText extends StatelessWidget {
   final String textEn;
   final String textAr;

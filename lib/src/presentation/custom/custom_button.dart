@@ -3,6 +3,35 @@ import '/src/utils/screen_utils.dart';
 import '../../config/config.dart';
 import 'custom_text.dart';
 
+/// **CustomButton**
+///
+/// Reusable button widget with gradient backgrounds, disabled states, and semantic variants.
+///
+/// **Why**
+/// - Provide consistent button styling across the app.
+/// - Support positive/negative semantic variants for actions (e.g., confirm/cancel).
+/// - Integrate responsive sizing and auto-translation.
+///
+/// **Key Features**
+/// - Default constructor with customizable gradient and text color.
+/// - Named constructors: `.positive` (green-toned) and `.negative` (red-toned).
+/// - Disabled state visual feedback (grayed-out).
+/// - Responsive width and padding via [ScreenUtils].
+/// - Accepts either `text` (auto-translated) or custom `child` widget.
+///
+/// **Example**
+/// ```dart
+/// CustomButton.positive(
+///   text: 'buttons.confirm',
+///   onPressed: () => print('Confirmed'),
+/// )
+/// CustomButton.negative(
+///   text: 'buttons.cancel',
+///   onPressed: () => Navigator.pop(context),
+/// )
+/// ```
+///
+// ────────────────────────────────────────────────
 class CustomButton extends StatelessWidget {
   final String? text;
   final Widget? child;

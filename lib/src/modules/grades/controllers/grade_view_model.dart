@@ -3,7 +3,28 @@ import '/src/modules/grades/data/model/grade_model.dart';
 import '/src/modules/grades/data/service/grade_service.dart';
 import 'package:get/get.dart';
 
-/// ViewModel class to manage grades' state and business logic.
+/// **GradeViewModel**
+///
+/// GetX controller responsible for managing grades list state and
+/// orchestrating data fetching via [GradeService].
+///
+/// **Why**
+/// - Encapsulate grades business logic separate from UI.
+/// - Provide reactive [ApiResponse] state for loading/success/error rendering.
+///
+/// **Key Features**
+/// - Reactive `grades` observable wrapped in [ApiResponse].
+/// - Automatic data fetch on initialization.
+/// - Refresh capability for pull-to-refresh or manual reload.
+/// - Uses [apiFetch] helper to manage loading/success/error lifecycle.
+///
+/// **Example**
+/// ```dart
+/// final gradesVM = Get.find<GradeViewModel>();
+/// gradesVM.refreshData();
+/// ```
+///
+// ────────────────────────────────────────────────
 class GradeViewModel extends GetxController {
   /// Service used to fetch grades from the API.
   final GradeService _gradeService;

@@ -8,7 +8,28 @@ List<LanguageModel> supportedLanguage = [
   LanguageModel('العربية', 'ar', 'AE'),
 ];
 
-/// ViewModel to manage the localization logic and handle language changes.
+/// **LocalizationViewModel**
+///
+/// GetX controller responsible for managing app-wide localization state and
+/// language switching with persistence via [LocalizationService].
+///
+/// **Why**
+/// - Provide a single entry point for locale changes across the app.
+/// - Keep views reactive via observable [language] property.
+///
+/// **Key Features**
+/// - Reactive `language` property exposed to UI.
+/// - Persists selected locale using [LocalizationService].
+/// - Initializes date formatting for the selected locale.
+/// - Fetches default language from storage on startup.
+///
+/// **Example**
+/// ```dart
+/// final localeVM = Get.find<LocalizationViewModel>();
+/// await localeVM.selectLanguage(LanguageModel('العربية', 'ar', 'AE'));
+/// ```
+///
+// ────────────────────────────────────────────────
 class LocalizationViewModel extends GetxController {
   /// Observable to keep track of the currently selected language.
   final Rx<LanguageModel> _language = LanguageModel('English', 'en', 'GB').obs;

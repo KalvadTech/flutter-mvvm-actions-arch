@@ -2,9 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../data/theme_service.dart';
 
-/// The `ThemeViewModel` class is responsible for managing the theme mode of the application.
-/// It provides methods to initialize, change, and update the theme mode, and interacts with
-/// the [ThemeService] to persist the user's theme preference.
+/// **ThemeViewModel**
+///
+/// GetX controller responsible for managing theme mode (light/dark) and
+/// persisting user preference via [ThemeService].
+///
+/// **Why**
+/// - Centralize theme state and provide reactive theme switching.
+/// - Keep views decoupled from storage details; they observe [isDark] via `Obx`.
+///
+/// **Key Features**
+/// - Reactive `isDark` boolean for UI consumption.
+/// - Persists theme mode preference using [ThemeService].
+/// - Fallback to light mode when no preference is saved.
+/// - Integrates with GetX theme engine via `Get.changeThemeMode`.
+///
+/// **Example**
+/// ```dart
+/// final themeVM = Get.find<ThemeViewModel>();
+/// themeVM.changeTheme(ThemeMode.dark);
+/// ```
+///
+// ────────────────────────────────────────────────
 class ThemeViewModel extends GetxController {
   /// Service to handle saving and retrieving the theme preference.
   final ThemeService _themeService;

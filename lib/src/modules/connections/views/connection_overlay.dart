@@ -44,9 +44,9 @@ class ConnectionOverlay extends GetWidget<ConnectionViewModel> {
               return const InfoItem(label: 'Please wait, trying to reconnect');
             case ConnectivityType.disconnected:
             case ConnectivityType.noInternet:
-              return const NoInternetWidget();
+              return const OfflineStatusCard();
             default:
-              return Container();
+              return const SizedBox.shrink();
           }
         }),
       ],
@@ -54,19 +54,32 @@ class ConnectionOverlay extends GetWidget<ConnectionViewModel> {
   }
 }
 
-/// **NoInternetWidget**
+/// **OfflineStatusCard**
 ///
-/// Full-width card shown when the app determines there is no internet
+/// Full-screen modal card shown when the app determines there is no internet
 /// connectivity. Displays a timer since disconnection and offers a manual
 /// refresh action.
-class NoInternetWidget extends StatefulWidget {
-  const NoInternetWidget({super.key});
+///
+/// **Why**
+/// - Provide clear, blocking feedback when connectivity is lost.
+/// - Show user how long they've been offline with a live timer.
+///
+/// **Key Features**
+/// - Full-screen overlay with semi-transparent background.
+/// - Live offline duration timer via ConnectionViewModel.
+/// - Manual refresh button to retry connectivity check.
+/// - Material 3 theming (errorContainer/onErrorContainer).
+/// - Auto-dismisses when connectivity is restored.
+///
+// ────────────────────────────────────────────────
+class OfflineStatusCard extends StatefulWidget {
+  const OfflineStatusCard({super.key});
 
   @override
-  State<NoInternetWidget> createState() => _NoInternetWidgetState();
+  State<OfflineStatusCard> createState() => _OfflineStatusCardState();
 }
 
-class _NoInternetWidgetState extends State<NoInternetWidget> {
+class _OfflineStatusCardState extends State<OfflineStatusCard> {
   /// Initializes the connection lost handler.
   @override
   void initState() {
@@ -77,59 +90,68 @@ class _NoInternetWidgetState extends State<NoInternetWidget> {
   /// Builds the UI for the no-internet widget.
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Material(
-      color: Colors.white10,
-      child: Container(
-        padding: const EdgeInsets.all(24.0),
-        alignment: Alignment.center,
-        child: CustomCard(
+      color: Colors.black26,
+      child: SafeArea(
+        child: Container(
           padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.wifi_off_outlined,
-                color: Colors.white,
-                size: 40,
-              ),
-              SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
-              CustomText.title(
-                "CONNECTION LOST",
-                color: Colors.red,
-                fontSize: 20,
-              ),
-              const CustomText.title(
-                'Looks like you have no internet connection.',
-                fontSize: 16,
-                fontWeight: FontWeight.w300,
-              ),
-              SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
-              const CustomText.title(
-                '(This popup will disappear automatically\nwhen the connection is reestablished.)',
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                textAlign: TextAlign.center,
-              ),
-              GetBuilder<ConnectionViewModel>(
-                builder: (controller) {
-                  return CustomText.title(
-                    '(${controller.dialogTimer})',
-                    fontSize: 16,
-                  );
-                },
-              ),
-              const SizedBox(height: 12.0),
-              InkWell(
-                onTap: _refresh,
-                child: const CustomText.title(
-                  'Refresh',
-                  color: ColorManager.primaryColor,
-                  fontSize: 18,
+          alignment: Alignment.center,
+          child: Container(
+            padding: const EdgeInsets.all(24.0),
+            decoration: BoxDecoration(
+              color: cs.errorContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Semantics(
+                  label: 'No internet connection',
+                  child: Icon(
+                    Icons.wifi_off_outlined,
+                    color: cs.onErrorContainer,
+                    size: 40,
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
+                CustomText.title(
+                  "CONNECTION LOST",
+                  color: cs.onErrorContainer,
+                  fontSize: 20,
+                ),
+                CustomText.title(
+                  'Looks like you have no internet connection.',
+                  color: cs.onErrorContainer,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                ),
+                SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
+                CustomText.title(
+                  '(This popup will disappear automatically\nwhen the connection is reestablished.)',
+                  color: cs.onErrorContainer,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  textAlign: TextAlign.center,
+                ),
+                Obx(() => CustomText.title(
+                      '(${Get.find<ConnectionViewModel>().dialogTimer.value})',
+                      color: cs.onErrorContainer,
+                      fontSize: 16,
+                    )),
+                const SizedBox(height: 12.0),
+                InkWell(
+                  onTap: _refresh,
+                  child: CustomText.title(
+                    'Refresh',
+                    color: cs.primary,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -172,14 +194,20 @@ class InfoItem extends StatelessWidget {
   /// Builds the UI for the `InfoItem`.
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black38,
-      padding: const EdgeInsets.all(24.0),
-      child: Row(
-        children: [
-          Expanded(child: CustomText(label)),
-          trailing ?? const CircularProgressIndicator(),
-        ],
+    final cs = Theme.of(context).colorScheme;
+    return SafeArea(
+      child: Semantics(
+        label: 'Reconnecting',
+        child: Container(
+          color: cs.surfaceVariant,
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(child: CustomText(label)),
+              trailing ?? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+            ],
+          ),
+        ),
       ),
     );
   }
