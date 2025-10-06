@@ -81,3 +81,18 @@ The format is based on Keep a Changelog, and this project adheres loosely to Sem
 
 ## [0.1.0] - 2025-08-15
 - Initial public template with GetX modules (auth, connections, locale, theme), basic theming, and `ActionPresenter`.
+
+## [Unreleased]
+
+### Added
+- PR3 (connections): Unit and widget tests for the connectivity module
+  - ConnectionOverlay: renders connecting bar, offline card, and hides when connected.
+  - ConnectionHandler: shows connected content only when connected; retry tap triggers callback once.
+  - ConnectionViewModel: basic `isConnected` truth table.
+- Documentation: docs/architecture/connectivity_module.md covering states, ReachabilityService config, debounce, lifecycle re-check, theming (M3 tokens), and telemetry callbacks.
+
+### Changed
+- Note: `connecting` is NOT treated as connected by `ConnectionViewModel.isConnected()` (landed in PR1; reiterated here for clarity in tests/docs).
+
+### Internal / Testability
+- ConnectionViewModel: added optional `autoInit` constructor flag (default true) to skip platform connectivity initialization in tests. Does not affect production behavior.

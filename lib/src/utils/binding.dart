@@ -18,7 +18,9 @@ class InitialBindings extends Bindings {
   @override
   void dependencies() {
     // Registers ConnectionViewModel as a lazy-loaded dependency.
-    Get.lazyPut(() => ConnectionViewModel());
+    if (!Get.isRegistered<ConnectionViewModel>()) {
+      Get.put(ConnectionViewModel(), permanent: true);
+    }
 
     // Registers the dependencies required for authentication.
     AuthBindings().dependencies();

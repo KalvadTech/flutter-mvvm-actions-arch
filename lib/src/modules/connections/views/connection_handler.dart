@@ -5,19 +5,27 @@ import '../connection.dart';
 /// **ConnectionHandler**
 ///
 /// Simple switcher that observes connection state via [ConnectionViewModel]
-/// and renders either a `connectedWidget` or a retry UI when offline.
+/// and renders one of three states:
+/// - `connectedWidget` when connected,
+/// - `onConnectingWidget` while probing reachability,
+/// - a retry UI when offline.
 ///
 /// Why
 /// - Centralize connection gating around a section of the UI.
 /// - Provide a consistent retry affordance when offline.
+/// - Avoid showing connected content while the app is still checking connectivity.
 ///
 /// Parameters
 /// - `connectedWidget`: Rendered when `isConnected()` is true.
-/// - `notConnectedWidget`: Optional custom offline UI; defaults to a basic prompt.
-/// - `tryAgainAction`: Callback invoked when user taps to retry.
+/// - `onConnectingWidget`: Optional widget while `ConnectivityType.connecting`; defaults to a centered spinner.
+/// - `notConnectedWidget`: Optional custom offline UI; defaults to a basic prompt with retry.
+/// - `tryAgainAction`: Callback invoked when user taps to retry (offline states only).
 class ConnectionHandler extends GetWidget<ConnectionViewModel> {
   /// The widget to display when the device is connected to the internet.
   final Widget connectedWidget;
+
+  /// The widget to display while the app is probing connectivity.
+  final Widget? onConnectingWidget;
 
   /// The widget to display when the device is not connected.
   /// Defaults to a column with an icon and "try again" text.
@@ -31,37 +39,43 @@ class ConnectionHandler extends GetWidget<ConnectionViewModel> {
     super.key,
     required this.connectedWidget,
     required this.tryAgainAction,
+    this.onConnectingWidget,
     this.notConnectedWidget,
   });
 
   /// Builds the UI based on the current connection state using an `Obx` widget.
   ///
-  /// When the connection is established, the `connectedWidget` is displayed.
-  /// If not connected, the `notConnectedWidget` or a default UI with a retry
-  /// tap handler is shown. The retry action is only triggered by user input to
-  /// avoid repeated calls on rebuilds.
+  /// When connected, shows `connectedWidget`. While probing, shows `onConnectingWidget`
+  /// (or a default spinner). When offline, shows `notConnectedWidget` or a default
+  /// UI with a retry tap handler. The retry action is only triggered by user input
+  /// to avoid repeated calls on rebuilds.
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        // Return the appropriate widget based on the connection state.
-        return controller.isConnected()
-            ? connectedWidget
-            : InkWell(
-                onTap: tryAgainAction,
-                child: notConnectedWidget ??
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.cloud_off,
-                          size: MediaQuery.of(context).size.height / 4,
-                        ),
-                        const SizedBox(height: 16.0),
-                        const Text('Try again'),
-                      ],
-                    ),
-              );
+        final state = controller.connectionType.value;
+        if (controller.isConnected()) {
+          return connectedWidget;
+        }
+        if (state == ConnectivityType.connecting) {
+          return onConnectingWidget ?? const Center(child: CircularProgressIndicator());
+        }
+        // Offline (disconnected or noInternet): show retry UI
+        return InkWell(
+          onTap: tryAgainAction,
+          child: notConnectedWidget ??
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.cloud_off,
+                    size: MediaQuery.of(context).size.height / 4,
+                  ),
+                  const SizedBox(height: 16.0),
+                  const Text('Try again'),
+                ],
+              ),
+        );
       },
     );
   }

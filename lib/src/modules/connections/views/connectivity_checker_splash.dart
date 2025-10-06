@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:getx_starter/src/utils/utils.dart';
 import '../connection.dart';
 import '/src/config/assets.dart';
 
@@ -25,7 +26,7 @@ import '/src/config/assets.dart';
 class ConnectivityCheckerSplash extends StatefulWidget {
   final String nextRouteName;
   final int delayInSeconds;
-  const ConnectivityCheckerSplash({super.key, this.nextRouteName = '/auth', this.delayInSeconds = 1});
+  const ConnectivityCheckerSplash({super.key, this.nextRouteName = RouteManager.authRoute, this.delayInSeconds = 1});
 
   @override
   State<ConnectivityCheckerSplash> createState() => _ConnectivityCheckerSplashState();
