@@ -38,20 +38,10 @@ class MenuViewModel extends GetxController {
   /// Getter for the list of menu items.
   List<MenuItem> get menuItems => _menuItems;
 
-  /// Initializes the ViewModel with the provided menu items.
-  ///
-  /// Sets the first menu item as selected by default if available.
-  @override
-  void onInit() {
-    super.onInit();
-    if (_menuItems.isNotEmpty && _menuItems[0].page != null) {
-      _currentPage.value = _menuItems[0].page!;
-    }
-  }
-
   /// Configures the menu with the provided list of menu items.
   ///
-  /// This method should be called before the menu is displayed.
+  /// This method should be called during initialization to set up the menu.
+  /// It will automatically select the first menu item if available.
   ///
   /// ## Example:
   /// ```dart
@@ -62,6 +52,7 @@ class MenuViewModel extends GetxController {
   /// ```
   void configureMenu(List<MenuItem> items) {
     _menuItems.value = items;
+    // Set the first page as current if available
     if (items.isNotEmpty && items[0].page != null) {
       _currentPage.value = items[0].page!;
       _selectedIndex.value = 0;

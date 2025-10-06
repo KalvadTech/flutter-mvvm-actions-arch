@@ -29,15 +29,12 @@ class MenuBindings implements Bindings {
   @override
   void dependencies() {
     if (!Get.isRegistered<MenuViewModel>()) {
-      final viewModel = MenuViewModel();
-      Get.lazyPut<MenuViewModel>(() => viewModel);
-
-      // Configure menu items after putting the controller
-      // This will be called when the controller is first accessed
-      Get.lazyPut(() {
+      Get.lazyPut<MenuViewModel>(() {
+        final viewModel = MenuViewModel();
+        // Configure menu items immediately after creation
         viewModel.configureMenu(configureMenuItems());
         return viewModel;
-      }, fenix: true);
+      });
     }
   }
 
