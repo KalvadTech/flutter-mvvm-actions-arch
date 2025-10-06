@@ -75,11 +75,7 @@ class AuthActions extends ActionPresenter {
   Future signUp(BuildContext context) async {
     actionHandler(context, () async {
       await _authViewModel.signUp();
-      // Avoid unsafe pops; only pop if there is a route to pop.
-      try {
-        final navigator = Navigator.of(context);
-        if (navigator.canPop()) navigator.pop();
-      } catch (_) {/* ignore if no Navigator available */}
+      back();
       Get.snackbar('Sign Up', 'Done Successfully Now Login');
     });
   }

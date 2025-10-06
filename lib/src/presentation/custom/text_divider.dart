@@ -6,7 +6,7 @@ class TextDivider extends StatelessWidget {
   final double height;
   final double thickness;
   final Color color;
-  const TextDivider(this.text,{Key? key, this.height = 16.0, this.thickness = 0.1, this.color = const Color(0xFF000000)}) : super(key: key);
+  const TextDivider(this.text,{super.key, this.height = 16.0, this.thickness = 0.1, this.color = const Color(0xFF000000)});
 
   @override
   Widget build(BuildContext context) {

@@ -200,4 +200,9 @@ class ActionPresenter {
       ),
     );
   }
+
+
+  void back() {
+    Get.back();
+  }
 }

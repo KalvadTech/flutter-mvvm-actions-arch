@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:path_provider/path_provider.dart';
 import '/src/core/errors/app_exception.dart';
 import '../../config/api_config.dart';

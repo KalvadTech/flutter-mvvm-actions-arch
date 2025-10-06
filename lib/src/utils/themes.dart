@@ -64,7 +64,7 @@ ThemeData createTheme({
     ),
     appBarTheme: AppBarTheme(
       systemOverlayStyle: systemOverlayStyle,
-      color: cardBackground,
+      backgroundColor: cardBackground,
       titleTextStyle: TextStyle(
         color: secondaryText,
         fontFamily: fontFamily,
@@ -106,7 +106,7 @@ ThemeData createTheme({
         fontFamily: fontFamily,
         fontWeight: FontWeight.w600,
         fontSize: 16.0,
-        color: primaryText.withOpacity(0.5),
+        color: primaryText.withValues(alpha: 0.5),
       ),
       hintStyle: TextStyle(
         color: secondaryText,

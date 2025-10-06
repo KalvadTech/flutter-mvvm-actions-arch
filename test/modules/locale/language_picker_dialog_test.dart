@@ -147,8 +147,6 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      final initialLang = viewModel.language.code;
-
       // Change language
       await tester.tap(find.byType(DropdownButtonFormField<LanguageModel>));
       await tester.pumpAndSettle();
@@ -194,8 +192,8 @@ void main() {
       );
 
       expect(dropdown.decoration, isNotNull);
-      expect(dropdown.decoration!.filled, isTrue);
-      expect(dropdown.decoration!.fillColor, equals(Colors.white));
+      expect(dropdown.decoration.filled, isTrue);
+      expect(dropdown.decoration.fillColor, equals(Colors.white));
     });
 
     testWidgets('handles rapid language changes', (WidgetTester tester) async {

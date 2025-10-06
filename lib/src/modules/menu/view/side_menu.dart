@@ -7,7 +7,7 @@ import '/src/modules/menu/menu.dart';
 import '/src/presentation/custom/customs.dart';
 
 class SideMenu extends GetWidget<MenuViewModel> {
-  const SideMenu({Key? key}) : super(key: key);
+  const SideMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +68,12 @@ class DrawerItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const DrawerItem({
-    Key? key,
+    super.key,
     required this.label,
     required this.iconData,
     required this.selected,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

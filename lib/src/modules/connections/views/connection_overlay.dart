@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/src/config/config.dart';
 import '/src/utils/utils.dart';
 import '/src/presentation/custom/customs.dart';
 import '../connection.dart';
@@ -199,7 +198,7 @@ class InfoItem extends StatelessWidget {
       child: Semantics(
         label: 'Reconnecting',
         child: Container(
-          color: cs.surfaceVariant,
+          color: cs.surfaceContainerHighest,
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
