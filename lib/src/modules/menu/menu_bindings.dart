@@ -67,22 +67,22 @@ class MenuBindings implements Bindings {
   List<MenuItem> configureMenuItems() {
     return [
       const MenuItem(
-        id: 'page1',
-        label: 'Page 1',
-        icon: Icons.home,
-        page: Page1(),
+        id: 'dashboard',
+        label: 'Dashboard',
+        icon: Icons.dashboard,
+        page: DashboardPage(),
       ),
       const MenuItem(
-        id: 'page2',
-        label: 'Page 2',
-        icon: Icons.category,
-        page: Page2(),
+        id: 'settings',
+        label: 'Settings',
+        icon: Icons.settings,
+        page: SettingsPage(),
       ),
       const MenuItem(
-        id: 'page3',
-        label: 'Page 3',
+        id: 'profile',
+        label: 'Profile',
         icon: Icons.person,
-        page: Page3(),
+        page: ProfilePage(),
       ),
     ];
   }

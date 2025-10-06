@@ -1,33 +1,97 @@
 import 'package:flutter/material.dart';
 
-/// Sample page 1 for demonstration purposes.
+/// Dashboard/Home page for the application.
 ///
-/// This is a placeholder page that can be replaced with actual
-/// application pages when implementing the menu system.
-class Page1 extends StatelessWidget {
-  /// Creates [Page1].
-  const Page1({super.key});
+/// This page displays an overview of the application with
+/// quick access cards and statistics.
+class DashboardPage extends StatelessWidget {
+  /// Creates [DashboardPage].
+  const DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.home,
-            size: 64.0,
-            color: Theme.of(context).primaryColor,
+          Text(
+            'Dashboard',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: 24.0),
+
+          // Stats Cards
+          Row(
+            children: [
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.folder,
+                  title: 'Projects',
+                  value: '12',
+                  color: Colors.blue,
+                ),
+              ),
+              const SizedBox(width: 16.0),
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.task_alt,
+                  title: 'Tasks',
+                  value: '48',
+                  color: Colors.green,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16.0),
-          Text(
-            'Page 1',
-            style: Theme.of(context).textTheme.headlineMedium,
+          Row(
+            children: [
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.notifications,
+                  title: 'Alerts',
+                  value: '3',
+                  color: Colors.orange,
+                ),
+              ),
+              const SizedBox(width: 16.0),
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.check_circle,
+                  title: 'Completed',
+                  value: '28',
+                  color: Colors.purple,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 32.0),
+
           Text(
-            'Home page content',
-            style: Theme.of(context).textTheme.bodyMedium,
+            'Recent Activity',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: 16.0),
+
+          // Activity List
+          _ActivityItem(
+            icon: Icons.add_task,
+            title: 'New task created',
+            subtitle: '2 hours ago',
+          ),
+          _ActivityItem(
+            icon: Icons.done,
+            title: 'Task completed',
+            subtitle: '5 hours ago',
+          ),
+          _ActivityItem(
+            icon: Icons.message,
+            title: 'New message received',
+            subtitle: '1 day ago',
           ),
         ],
       ),
@@ -35,34 +99,166 @@ class Page1 extends StatelessWidget {
   }
 }
 
-/// Sample page 2 for demonstration purposes.
+/// Settings page for application configuration.
 ///
-/// This is a placeholder page that can be replaced with actual
-/// application pages when implementing the menu system.
-class Page2 extends StatelessWidget {
-  /// Creates [Page2].
-  const Page2({super.key});
+/// This page provides access to various app settings and
+/// preferences.
+class SettingsPage extends StatelessWidget {
+  /// Creates [SettingsPage].
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return ListView(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        Text(
+          'Settings',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+        const SizedBox(height: 24.0),
+
+        _SettingsSection(
+          title: 'Account',
+          children: [
+            _SettingsTile(
+              icon: Icons.person,
+              title: 'Profile',
+              subtitle: 'Manage your profile information',
+              onTap: () {},
+            ),
+            _SettingsTile(
+              icon: Icons.security,
+              title: 'Privacy',
+              subtitle: 'Privacy and security settings',
+              onTap: () {},
+            ),
+          ],
+        ),
+        const SizedBox(height: 24.0),
+
+        _SettingsSection(
+          title: 'Preferences',
+          children: [
+            _SettingsTile(
+              icon: Icons.notifications,
+              title: 'Notifications',
+              subtitle: 'Manage notification preferences',
+              onTap: () {},
+            ),
+            _SettingsTile(
+              icon: Icons.storage,
+              title: 'Storage',
+              subtitle: 'Manage app storage',
+              onTap: () {},
+            ),
+          ],
+        ),
+        const SizedBox(height: 24.0),
+
+        _SettingsSection(
+          title: 'About',
+          children: [
+            _SettingsTile(
+              icon: Icons.info,
+              title: 'App Info',
+              subtitle: 'Version 1.0.0',
+              onTap: () {},
+            ),
+            _SettingsTile(
+              icon: Icons.help,
+              title: 'Help & Support',
+              subtitle: 'Get help and support',
+              onTap: () {},
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Profile page for user information.
+///
+/// Displays user profile details and account information.
+class ProfilePage extends StatelessWidget {
+  /// Creates [ProfilePage].
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.category,
-            size: 64.0,
-            color: Theme.of(context).primaryColor,
+          const SizedBox(height: 24.0),
+
+          // Profile Avatar
+          CircleAvatar(
+            radius: 50.0,
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Icon(
+              Icons.person,
+              size: 50.0,
+              color: Colors.white,
+            ),
           ),
           const SizedBox(height: 16.0),
+
           Text(
-            'Page 2',
-            style: Theme.of(context).textTheme.headlineMedium,
+            'John Doe',
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const SizedBox(height: 8.0),
           Text(
-            'Categories page content',
-            style: Theme.of(context).textTheme.bodyMedium,
+            'john.doe@example.com',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.grey[600],
+                ),
+          ),
+          const SizedBox(height: 32.0),
+
+          // Profile Info Cards
+          _ProfileInfoCard(
+            icon: Icons.email,
+            title: 'Email',
+            value: 'john.doe@example.com',
+          ),
+          const SizedBox(height: 12.0),
+          _ProfileInfoCard(
+            icon: Icons.phone,
+            title: 'Phone',
+            value: '+1 234 567 8900',
+          ),
+          const SizedBox(height: 12.0),
+          _ProfileInfoCard(
+            icon: Icons.location_on,
+            title: 'Location',
+            value: 'New York, USA',
+          ),
+          const SizedBox(height: 12.0),
+          _ProfileInfoCard(
+            icon: Icons.calendar_today,
+            title: 'Member Since',
+            value: 'January 2024',
+          ),
+          const SizedBox(height: 32.0),
+
+          // Edit Profile Button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.edit),
+              label: const Text('Edit Profile'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+              ),
+            ),
           ),
         ],
       ),
@@ -70,36 +266,158 @@ class Page2 extends StatelessWidget {
   }
 }
 
-/// Sample page 3 for demonstration purposes.
-///
-/// This is a placeholder page that can be replaced with actual
-/// application pages when implementing the menu system.
-class Page3 extends StatelessWidget {
-  /// Creates [Page3].
-  const Page3({super.key});
+// Helper Widgets
+
+class _StatCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String value;
+  final Color color;
+
+  const _StatCard({
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.person,
-            size: 64.0,
-            color: Theme.of(context).primaryColor,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: color, size: 32.0),
+            const SizedBox(height: 12.0),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 4.0),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ActivityItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+
+  const _ActivityItem({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+        child: Icon(icon, color: Theme.of(context).primaryColor),
+      ),
+      title: Text(title),
+      subtitle: Text(subtitle),
+    );
+  }
+}
+
+class _SettingsSection extends StatelessWidget {
+  final String title;
+  final List<Widget> children;
+
+  const _SettingsSection({
+    required this.title,
+    required this.children,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 16.0, bottom: 8.0),
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
           ),
-          const SizedBox(height: 16.0),
-          Text(
-            'Page 3',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 8.0),
-          Text(
-            'Profile page content',
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
+        ),
+        Card(
+          child: Column(children: children),
+        ),
+      ],
+    );
+  }
+}
+
+class _SettingsTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _SettingsTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      subtitle: Text(subtitle),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: onTap,
+    );
+  }
+}
+
+class _ProfileInfoCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String value;
+
+  const _ProfileInfoCard({
+    required this.icon,
+    required this.title,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        leading: Icon(icon, color: Theme.of(context).primaryColor),
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Colors.grey[600],
+              ),
+        ),
+        subtitle: Text(
+          value,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
       ),
     );
   }

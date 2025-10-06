@@ -9,6 +9,7 @@ export 'views/menu_page.dart';
 export 'views/side_menu_drawer.dart';
 export 'views/menu_drawer_item.dart';
 export 'views/sample_pages.dart';
+export 'views/logout_drawer_item.dart';
 
 // Actions
 export 'actions/menu_actions.dart';
