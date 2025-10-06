@@ -5,8 +5,19 @@ import '/src/utils/utils.dart';
 import '/src/presentation/custom/customs.dart';
 import '../connection.dart';
 
-/// A widget that overlays a child widget with a connection status indicator.
-/// Displays different widgets depending on the connection type.
+/// **ConnectionOverlay**
+///
+/// Widget that overlays its [child] with a small status surface when the
+/// device is attempting to reconnect or has no internet connectivity.
+///
+/// Why
+/// - Provide ambient feedback without blocking the entire screen.
+/// - Keep feature UIs responsive while connection issues resolve.
+///
+/// Usage
+/// ```dart
+/// ConnectionOverlay(child: YourPage())
+/// ```
 class ConnectionOverlay extends GetWidget<ConnectionViewModel> {
   /// The child widget to overlay with the connection status.
   final Widget child;
@@ -43,7 +54,11 @@ class ConnectionOverlay extends GetWidget<ConnectionViewModel> {
   }
 }
 
-/// A widget displayed when there is no internet connection.
+/// **NoInternetWidget**
+///
+/// Full-width card shown when the app determines there is no internet
+/// connectivity. Displays a timer since disconnection and offers a manual
+/// refresh action.
 class NoInternetWidget extends StatefulWidget {
   const NoInternetWidget({super.key});
 

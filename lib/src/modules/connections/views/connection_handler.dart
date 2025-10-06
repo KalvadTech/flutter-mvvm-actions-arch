@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../connection.dart';
 
-/// A widget to handle network connection states and display appropriate UI.
+/// **ConnectionHandler**
 ///
-/// This widget listens to the connection state via the `ConnectionViewModel`
-/// and switches between a connected or not-connected widget accordingly.
+/// Simple switcher that observes connection state via [ConnectionViewModel]
+/// and renders either a `connectedWidget` or a retry UI when offline.
 ///
-/// If the device is connected, it displays the `connectedWidget`. If not, it
-/// shows the `notConnectedWidget` or a default "try again" UI.
+/// Why
+/// - Centralize connection gating around a section of the UI.
+/// - Provide a consistent retry affordance when offline.
+///
+/// Parameters
+/// - `connectedWidget`: Rendered when `isConnected()` is true.
+/// - `notConnectedWidget`: Optional custom offline UI; defaults to a basic prompt.
+/// - `tryAgainAction`: Callback invoked when user taps to retry.
 class ConnectionHandler extends GetWidget<ConnectionViewModel> {
   /// The widget to display when the device is connected to the internet.
   final Widget connectedWidget;
@@ -30,36 +36,32 @@ class ConnectionHandler extends GetWidget<ConnectionViewModel> {
 
   /// Builds the UI based on the current connection state using an `Obx` widget.
   ///
-  /// When the connection is established, the `tryAgainAction` is triggered,
-  /// and the `connectedWidget` is displayed. If not connected, the
-  /// `notConnectedWidget` or a default UI is shown.
+  /// When the connection is established, the `connectedWidget` is displayed.
+  /// If not connected, the `notConnectedWidget` or a default UI with a retry
+  /// tap handler is shown. The retry action is only triggered by user input to
+  /// avoid repeated calls on rebuilds.
   @override
   Widget build(BuildContext context) {
     return Obx(
-          () {
-        // Trigger the action if the connection is available.
-        if (controller.isConnected()) {
-          tryAgainAction();
-        }
-
+      () {
         // Return the appropriate widget based on the connection state.
         return controller.isConnected()
             ? connectedWidget
             : InkWell(
-          onTap: tryAgainAction,
-          child: notConnectedWidget ??
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.cloud_off,
-                    size: MediaQuery.of(context).size.height / 4,
-                  ),
-                  const SizedBox(height: 16.0),
-                  const Text('Try again'),
-                ],
-              ),
-        );
+                onTap: tryAgainAction,
+                child: notConnectedWidget ??
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.cloud_off,
+                          size: MediaQuery.of(context).size.height / 4,
+                        ),
+                        const SizedBox(height: 16.0),
+                        const Text('Try again'),
+                      ],
+                    ),
+              );
       },
     );
   }
