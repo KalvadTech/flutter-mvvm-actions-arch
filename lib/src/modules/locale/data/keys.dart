@@ -39,3 +39,6 @@ const String tkChooseLanguage = 'pages.language.choose';
 const String tkConfirmBtn = 'buttons.confirm';
 const String tkLoginBtn = 'buttons.login';
 const String tkRegisterBtn = 'buttons.register';
+
+/// settings/theme keys
+const String tkDarkMode = 'settings.theme.darkMode';

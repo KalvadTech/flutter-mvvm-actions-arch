@@ -30,4 +30,5 @@ const Map<String, String> arabicTranslationsMap = {
   tkRegisterBtn: 'تسجيل',
   tkConfirmBtn: 'تأكيد',
   tkChooseLanguage: 'اختر اللغة',
+  tkDarkMode: 'الوضع الداكن',
 };

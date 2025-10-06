@@ -30,4 +30,5 @@ const Map<String, String> englishTranslationsMap = {
   tkRegisterBtn: 'Sign Up',
   tkConfirmBtn: 'Confirm',
   tkChooseLanguage: 'Choose Language',
+  tkDarkMode: 'Dark mode',
 };
