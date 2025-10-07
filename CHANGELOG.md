@@ -85,14 +85,45 @@ The format is based on Keep a Changelog, and this project adheres loosely to Sem
 ## [Unreleased]
 
 ### Added
+- **Auth module tests**: 31 comprehensive tests for authentication
+  - AuthViewModel (23 tests): initialization, state transitions, sign-in/sign-up/logout flows, token refresh, error handling, reactivity
+  - AuthService (8 tests): mock sign-up, service instantiation, UserModel validation
+  - All tests passing, bringing total test count from 171 to 202
+- **Auth architecture documentation**: docs/architecture/auth_module.md covering:
+  - Authentication states and transitions
+  - Token lifecycle and refresh strategy
+  - Mock authentication guide
+  - Error handling patterns
+  - Testing guidelines
+  - Migration from mock to real API
+- **Menu module refactoring**: Complete MVVM restructure with dual navigation patterns
+  - MenuItem model for configurable menu items
+  - MenuPageWithDrawer and MenuPageWithBottomNav ready to use
+  - Sample pages (Dashboard, Settings, Profile) with clear mock warnings
+  - LanguageDrawerItem and LogoutDrawerItem components
+  - Menu module tests (10 tests) covering navigation and state
+  - Documentation: docs/menu/README.md and docs/menu/NAVIGATION_TYPES.md
+- **Theme module tests**: 92 comprehensive tests for theme management
+  - ThemeViewModel tests covering initialization, theme switching, persistence
+  - Widget tests for theme switcher UI components
+- **Locale module tests**: 57 comprehensive tests for localization
+  - LocalizationViewModel tests covering language selection and persistence
+  - Language picker dialog widget tests
 - PR3 (connections): Unit and widget tests for the connectivity module
-  - ConnectionOverlay: renders connecting bar, offline card, and hides when connected.
-  - ConnectionHandler: shows connected content only when connected; retry tap triggers callback once.
-  - ConnectionViewModel: basic `isConnected` truth table.
-- Documentation: docs/architecture/connectivity_module.md covering states, ReachabilityService config, debounce, lifecycle re-check, theming (M3 tokens), and telemetry callbacks.
+  - ConnectionOverlay: renders connecting bar, offline card, and hides when connected
+  - ConnectionHandler: shows connected content only when connected; retry tap triggers callback once
+  - ConnectionViewModel: basic `isConnected` truth table
+- Documentation: docs/architecture/connectivity_module.md covering states, ReachabilityService config, debounce, lifecycle re-check, theming (M3 tokens), and telemetry callbacks
 
 ### Changed
-- Note: `connecting` is NOT treated as connected by `ConnectionViewModel.isConnected()` (landed in PR1; reiterated here for clarity in tests/docs).
+- Note: `connecting` is NOT treated as connected by `ConnectionViewModel.isConnected()` (landed in PR1; reiterated here for clarity in tests/docs)
+- **Renamed MenuPage to MenuPageWithDrawer** for naming consistency with MenuPageWithBottomNav
+- **Removed MenuPageWithBottomNavComplete** duplicate class; kept only MenuPageWithBottomNav
+
+### Fixed
+- **Color extension deprecation warnings**: Updated to use new Flutter Color API (a, r, g, b) instead of deprecated properties (alpha, red, green, blue)
+- **Menu initialization bug**: Fixed MenuBindings to properly configure menu items on initialization
 
 ### Internal / Testability
-- ConnectionViewModel: added optional `autoInit` constructor flag (default true) to skip platform connectivity initialization in tests. Does not affect production behavior.
+- ConnectionViewModel: added optional `autoInit` constructor flag (default true) to skip platform connectivity initialization in tests. Does not affect production behavior
+- MockAuthService created for testing AuthViewModel in isolation
