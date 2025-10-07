@@ -1,0 +1,5 @@
+# Exclude mason brick templates from analysis
+# The brick files are templates and should not be analyzed alongside the source
+analyzer:
+  exclude:
+    - '**'
