@@ -1,0 +1,7 @@
+name: get_x_template
+description: A Flutter application template using GetX for state management with MVVM + Actions Layer architecture. Includes pre-built modules for authentication, connectivity, localization, theme management, and a complete API integration pattern example.
+
+vars:
+  - project_name
+  - description
+  - org_name
