@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:getx_starter/src/modules/grades/grade_bindings.dart';
 import '/src/modules/menu/menu.dart';
 import '/src/modules/auth/auth.dart';
 import '/src/modules/connections/connection.dart';
 import '/src/modules/locale/locale_bindings.dart';
 import '/src/modules/theme/theme_bindings.dart';
+import '/src/modules/posts/posts.dart';
 
 /// InitialBindings class is responsible for initializing and managing the core dependencies
 /// required throughout the application lifecycle.
@@ -38,6 +38,8 @@ class InitialBindings extends Bindings {
     // Registers the dependencies related to menu functionality.
     MenuBindings().dependencies();
 
-    GradeBindings().dependencies();
+    // Registers the dependencies for posts example module.
+    // This demonstrates the apiFetch → ApiResponse → ApiHandler pattern.
+    PostBindings().dependencies();
   }
 }

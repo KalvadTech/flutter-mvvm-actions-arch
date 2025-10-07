@@ -201,6 +201,224 @@ At the top of important files, add a brief module banner:
 - Timeouts: default HTTP timeout is 120 seconds (set in `onInit`).
 - File downloads: `ApiService.downloadFile` reuses `GetConnect.get` with `ResponseType.bytes` for uniform behavior and headers (including one-shot retry after refresh). It honors `httpClient.timeout` and logging, writes bytes to disk, and the optional progress callback reports completion since the body is returned whole. If you need true streaming progress or proxy/certificate customization, implement a specialized downloader.
 
+### 5.1 API URL Configuration
+- **All API URLs must be defined in `APIConfiguration`** class (`lib/src/config/api_config.dart`)
+- **Never hardcode URLs in service classes**
+- Use environment-aware URLs with `isDevelopment` flag for staging/production switching
+- Group URLs by module with clear section dividers
+
+**Example:**
+```dart
+// ✅ Good: URLs in APIConfiguration
+class APIConfiguration {
+  static const String baseUrl = isDevelopment ? _stagingUrl : _productionUrl;
+
+  // --- Auth Module URLs ---
+  static const String signInUrl = '$baseUrl/signin';
+
+  // --- Posts Module URLs ---
+  static const String postsUrl = '$baseUrl/posts';
+}
+
+// ✅ Good: Service uses APIConfiguration
+class PostService extends ApiService {
+  Future<List<PostModel>> fetchPosts() async {
+    final response = await get(APIConfiguration.postsUrl);
+    return postModelFromJson(response.body);
+  }
+}
+
+// ❌ Bad: Hardcoded URL in service
+class PostService extends ApiService {
+  static const String _baseUrl = 'https://api.example.com'; // Wrong!
+
+  Future<List<PostModel>> fetchPosts() async {
+    final response = await get('$_baseUrl/posts'); // Wrong!
+    return postModelFromJson(response.body);
+  }
+}
+```
+
+### 5.2 API Integration Pattern: apiFetch → ApiResponse → ApiHandler
+
+This template provides a type-safe, reactive pattern for API integration with automatic state management.
+
+**Pattern Overview:**
+```
+Service (HTTP) → apiFetch() → ApiResponse<T> → ApiHandler<T> → UI
+```
+
+**Benefits:**
+- ✅ Automatic loading/success/error state management
+- ✅ Type-safe data flow
+- ✅ Reusable error handling
+- ✅ Empty state detection
+- ✅ Reactive UI updates via GetX
+
+#### Step-by-Step Implementation
+
+**1. Define Model with JSON serialization:**
+```dart
+class PostModel {
+  final int id;
+  final String title;
+
+  factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
+    id: json["id"],
+    title: json["title"],
+  );
+
+  Map<String, dynamic> toJson() => {"id": id, "title": title};
+}
+```
+
+**2. Create Service extending ApiService:**
+```dart
+class PostService extends ApiService {
+  Future<List<PostModel>> fetchPosts() async {
+    final response = await get(APIConfiguration.postsUrl);
+    return postModelFromJson(response.body);
+  }
+}
+```
+
+**3. Create ViewModel with apiFetch pattern:**
+```dart
+class PostViewModel extends GetxController {
+  final PostService _postService;
+
+  PostViewModel(this._postService);
+
+  final Rx<ApiResponse<List<PostModel>>> _posts =
+      ApiResponse<List<PostModel>>.idle().obs;
+
+  ApiResponse<List<PostModel>> get posts => _posts.value;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _initialize();
+  }
+
+  void _initialize() {
+    _fetchPosts();
+  }
+
+  void _fetchPosts() {
+    apiFetch(_postService.fetchPosts).listen((value) {
+      _posts.value = value;
+    });
+  }
+
+  void refreshData() {
+    _fetchPosts();
+  }
+}
+```
+
+**Key Points:**
+- Use `Rx<ApiResponse<T>>` for reactive state
+- Call `_initialize()` in `onInit()`, NOT in constructor
+- Wrap service calls with `apiFetch()` helper
+- `apiFetch()` automatically emits: `loading` → `success`/`error`
+
+**4. Create View with ApiHandler:**
+```dart
+class PostsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GetX<PostViewModel>(
+        builder: (controller) => RefreshIndicator(
+          onRefresh: () async => controller.refreshData(),
+          child: ApiHandler<List<PostModel>>(
+            response: controller.posts,
+            tryAgain: controller.refreshData,
+            isEmpty: (posts) => posts.isEmpty,
+            successBuilder: (posts) => ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) => ListTile(
+                title: Text(posts[index].title),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+**ApiHandler Parameters:**
+- `response`: Current `ApiResponse<T>` state
+- `tryAgain`: Callback for retry button (on error)
+- `isEmpty`: Function to check if data is empty
+- `successBuilder`: Widget builder for success state (receives data)
+- `loadingWidget` (optional): Custom loading widget
+- `errorBuilder` (optional): Custom error builder
+- `emptyBuilder` (optional): Custom empty state widget
+
+**5. Register in Bindings:**
+```dart
+class PostBindings implements Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<PostService>(() => PostService());
+    Get.lazyPut<PostViewModel>(() => PostViewModel(Get.find()));
+  }
+}
+```
+
+#### ApiResponse States
+
+```dart
+enum ApiStatus { idle, loading, success, error }
+
+// Initial state
+ApiResponse<T>.idle()
+
+// Loading state (request in progress)
+ApiResponse<T>.loading()
+
+// Success state (data available)
+ApiResponse<T>.success(data)
+
+// Error state (request failed)
+ApiResponse<T>.error(message)
+```
+
+#### Complete Example
+
+See the **Posts module** for a working implementation:
+- Model: `lib/src/modules/posts/data/models/post_model.dart`
+- Service: `lib/src/modules/posts/data/services/post_service.dart`
+- ViewModel: `lib/src/modules/posts/controllers/post_view_model.dart`
+- View: `lib/src/modules/posts/views/posts_page.dart`
+- Documentation: `docs/examples/api_pattern_example.md`
+
+**Advanced: POST Requests**
+```dart
+// In Service
+Future<PostModel> createPost({required String title, required String body}) async {
+  final response = await post(APIConfiguration.postsUrl, {
+    'title': title,
+    'body': body,
+  });
+  return PostModel.fromJson(jsonDecode(response.body));
+}
+
+// In ViewModel
+void createPost(String title, String body) {
+  apiFetch(() => _postService.createPost(title: title, body: body))
+    .listen((value) {
+      _createResponse.value = value;
+      if (value.status == ApiStatus.success) {
+        refreshData(); // Refresh list on success
+      }
+    });
+}
+```
+
 
 ## 6) Caching guidelines
 - Store and retrieve raw response text (`bodyString`); rehydrate types at the call site using the provided decoder.

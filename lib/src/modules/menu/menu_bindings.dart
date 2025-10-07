@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '/src/modules/posts/posts.dart';
 import 'menu.dart';
 
 /// Bindings class for the menu module.
@@ -68,6 +69,12 @@ class MenuBindings implements Bindings {
         label: 'Dashboard',
         icon: Icons.dashboard,
         page: DashboardPage(),
+      ),
+      const MenuItem(
+        id: 'posts',
+        label: 'Posts Example',
+        icon: Icons.article,
+        page: PostsPage(),
       ),
       const MenuItem(
         id: 'settings',

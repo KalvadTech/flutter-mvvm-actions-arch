@@ -85,6 +85,19 @@ The format is based on Keep a Changelog, and this project adheres loosely to Sem
 ## [Unreleased]
 
 ### Added
+- **Posts example module**: Replaced project-specific grades module with a universal example using JSONPlaceholder public API
+  - Complete API pattern demonstration: `apiFetch() → ApiResponse<T> → ApiHandler<T>`
+  - PostModel, PostService, PostViewModel, PostBindings, PostsPage, and view widgets
+  - Fetches 100 blog posts from https://jsonplaceholder.typicode.com/posts
+  - Pull-to-refresh support with RefreshIndicator
+  - Material Design card-based UI with user badges
+  - Documentation: docs/examples/api_pattern_example.md covering:
+    - Architecture flow diagram
+    - Step-by-step implementation guide
+    - ApiResponse states and ApiHandler rendering logic
+    - Complete code examples for all layers
+    - POST request examples and error handling
+    - Migration guide for adapting to custom APIs
 - **Auth module tests**: 31 comprehensive tests for authentication
   - AuthViewModel (23 tests): initialization, state transitions, sign-in/sign-up/logout flows, token refresh, error handling, reactivity
   - AuthService (8 tests): mock sign-up, service instantiation, UserModel validation
@@ -120,10 +133,22 @@ The format is based on Keep a Changelog, and this project adheres loosely to Sem
 - **Renamed MenuPage to MenuPageWithDrawer** for naming consistency with MenuPageWithBottomNav
 - **Removed MenuPageWithBottomNavComplete** duplicate class; kept only MenuPageWithBottomNav
 
+### Removed
+- **Grades module**: Removed project-specific grades module (education domain) in favor of the universal posts example module
+  - Deleted lib/src/modules/grades/ directory and all associated files
+  - Removed `gradesUrl` configuration from api_config.dart
+  - Updated InitialBindings to use PostBindings instead of GradeBindings
+
 ### Fixed
 - **Color extension deprecation warnings**: Updated to use new Flutter Color API (a, r, g, b) instead of deprecated properties (alpha, red, green, blue)
+  - Fixed withOpacity() deprecation in posts module using withValues(alpha: value)
 - **Menu initialization bug**: Fixed MenuBindings to properly configure menu items on initialization
 
 ### Internal / Testability
 - ConnectionViewModel: added optional `autoInit` constructor flag (default true) to skip platform connectivity initialization in tests. Does not affect production behavior
 - MockAuthService created for testing AuthViewModel in isolation
+
+### Migration Notes
+- If you were using the grades module, replace it with your own custom module or adapt the posts example
+- The posts module demonstrates the same API patterns (apiFetch → ApiResponse → ApiHandler)
+- See docs/examples/api_pattern_example.md for a complete implementation guide
