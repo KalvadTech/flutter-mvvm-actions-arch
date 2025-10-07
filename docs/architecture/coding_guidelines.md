@@ -19,14 +19,45 @@ These guidelines define how we name things, structure code, and document public 
 
 
 ## 2) File and folder structure
+
+### 2.1 Module Structure
 - Core primitives under `lib/src/core/` and app configuration under `lib/src/config/`.
 - Features under `lib/src/modules/<feature>/` following MVVM + Actions layer structure:
-  - `actions/` - User intent handlers extending ActionPresenter
-  - `controllers/` - ViewModels (GetX Controllers)
-  - `data/models/` - Domain objects (plain Dart classes)
+  - `actions/` - User intent handlers extending ActionPresenter (optional, only if needed)
+  - `controllers/` - ViewModels (GetX Controllers) - **Use `controllers/` directory, NOT `viewmodels/`**
+  - `data/models/` - Domain objects (plain Dart classes) - **MUST be plural `models/`**
   - `data/services/` - Data access layer (HTTP, storage)
   - `views/` - UI widgets
-  - `bindings/` - GetX dependency injection (optional)
+  - `views/widgets/` - Feature-specific reusable widgets
+  - `<feature>_bindings.dart` - GetX dependency injection (at module root)
+  - `<feature>.dart` - Barrel export file (at module root)
+
+### 2.2 Module Naming Conventions
+- **Module folder names:** Use plural when representing collections (e.g., `posts/`, `connections/`, NOT `post/`, `connection/`)
+- **Bindings file:** Must match module name exactly (e.g., `posts_bindings.dart` for `posts/` module)
+- **Bindings class:** Must match module name exactly (e.g., `PostsBindings` for `posts/` module)
+- **Model folder:** Always use plural `models/` (e.g., `data/models/`, NOT `data/model/`)
+- **Controllers folder:** Always use `controllers/` (GetX convention, NOT `viewmodels/`)
+
+**Example Structure:**
+```
+lib/src/modules/posts/
+├── controllers/
+│   └── post_view_model.dart       // ViewModel files use *_view_model.dart
+├── data/
+│   ├── models/                    // Plural: models/
+│   │   └── post_model.dart
+│   └── services/
+│       └── post_service.dart
+├── views/
+│   ├── posts_page.dart
+│   └── widgets/
+│       └── post_list_tile.dart
+├── posts_bindings.dart            // Matches module name
+└── posts.dart                     // Barrel export
+```
+
+### 2.3 Infrastructure
 - Caching abstractions live under `lib/src/infrastructure/cache/`:
   - `cache_store.dart`, `cache_key_strategy.dart`, `cache_policy.dart`, `cache_manager.dart`, plus defaults like `default_cache_key_strategy.dart`, `simple_ttl_cache_policy.dart` (`SimpleTimeToLiveCachePolicy`), and `get_storage_cache_store.dart` (`GetStorageCacheStorage`).
 - HTTP-calling services should extend `ApiService` and live under each feature's `data/services/`. ApiService itself lives under `lib/src/infrastructure/http/`.

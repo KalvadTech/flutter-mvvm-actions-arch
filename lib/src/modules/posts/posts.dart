@@ -11,4 +11,4 @@ export 'views/widgets/posts_list_view.dart';
 export 'views/widgets/post_list_tile.dart';
 
 // Bindings
-export 'post_bindings.dart';
+export 'posts_bindings.dart';

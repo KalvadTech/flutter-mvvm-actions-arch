@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '/src/config/config.dart';
 import '/src/presentation/custom/customs.dart';
 import '../controllers/localization_view_model.dart';
-import '../data/model/language_model.dart';
+import '../data/models/language_model.dart';
 
 /// A dialog widget to allow the user to select a language from a dropdown list.
 /// This dialog uses GetX's `LocalizationViewModel` to manage the selected language.

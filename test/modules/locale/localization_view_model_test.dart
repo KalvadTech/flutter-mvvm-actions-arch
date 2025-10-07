@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:getx_starter/src/modules/locale/controllers/localization_view_model.dart';
-import 'package:getx_starter/src/modules/locale/data/model/language_model.dart';
+import 'package:getx_starter/src/modules/locale/data/models/language_model.dart';
 import 'package:getx_starter/src/modules/locale/data/services/localization_service.dart';
 
 void main() {

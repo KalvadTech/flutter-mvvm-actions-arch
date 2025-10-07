@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../data/model/language_model.dart';
+import '../data/models/language_model.dart';
 import '../data/services/localization_service.dart';
 
 /// **LocalizationViewModel**

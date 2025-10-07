@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '/src/infrastructure/storage/app_storage_service.dart';
 import '/src/utils/route_manager.dart';
 import 'app.dart';
-import 'modules/connections/connection_bindings.dart';
+import 'modules/connections/connections_bindings.dart';
 import 'modules/locale/data/services/localization_service.dart';
 import 'infrastructure/cache/cache_manager.dart';
 import 'infrastructure/cache/contracts/cache_store.dart';
@@ -20,7 +20,7 @@ Future<void> main() async {
   LocalizationService.init();
 
   // Ensure connectivity VM is available before building the app/overlay.
-  ConnectionBindings().dependencies();
+  ConnectionsBindings().dependencies();
   ThemeBindings().dependencies();
   // 1) Create a CacheStore backed by GetStorage (async factory ensures init)
   final CacheStore store = await GetStorageCacheStorage.create(

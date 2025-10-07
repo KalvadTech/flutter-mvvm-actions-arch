@@ -40,6 +40,6 @@ class InitialBindings extends Bindings {
 
     // Registers the dependencies for posts example module.
     // This demonstrates the apiFetch → ApiResponse → ApiHandler pattern.
-    PostBindings().dependencies();
+    PostsBindings().dependencies();
   }
 }

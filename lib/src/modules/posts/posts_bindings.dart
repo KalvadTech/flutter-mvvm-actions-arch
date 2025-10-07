@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import '/src/modules/posts/controllers/post_view_model.dart';
 import '/src/modules/posts/data/services/post_service.dart';
 
-/// **PostBindings**
+/// **PostsBindings**
 ///
 /// Dependency injection setup for the posts module using GetX bindings.
 ///
@@ -16,14 +16,14 @@ import '/src/modules/posts/data/services/post_service.dart';
 /// GetPage(
 ///   name: '/posts',
 ///   page: () => PostsPage(),
-///   binding: PostBindings(),
+///   binding: PostsBindings(),
 /// )
 /// ```
 ///
 /// **Dependencies Registered**:
 /// 1. [PostService] - API communication layer
 /// 2. [PostViewModel] - State management with apiFetch pattern
-class PostBindings implements Bindings {
+class PostsBindings implements Bindings {
   @override
   void dependencies() {
     // Register PostService if not already registered.
