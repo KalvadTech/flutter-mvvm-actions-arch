@@ -893,13 +893,16 @@ testWidgets('signIn shows loader and navigates on success', (tester) async {
 **Automatic and transparent:**
 
 1. `ApiService` detects `401 Unauthorized` response
-2. Calls `AuthService.refreshToken()` with refresh token
+2. Calls `ApiService.refreshSession()` (base class implementation) with refresh token
 3. Saves new access token to `AppStorageService`
 4. Retries original request with new token (one time only)
 5. If refresh fails, throws `AuthException` → user logged out
 
-**Configuration:**
-Tokens are stored in `AppStorageService` (secure storage for tokens, GetStorage for preferences).
+**Key Points:**
+- Token refresh is handled automatically by `ApiService` base class
+- `AuthService` does not override this method
+- All HTTP requests benefit from automatic token refresh on 401
+- Tokens are stored in `AppStorageService` (secure storage for tokens, GetStorage for preferences)
 
 **No token refresh endpoint?**
 Override `ApiService._retryAfterRefresh()` to return `false`.
