@@ -177,7 +177,7 @@ class MyActions extends ActionPresenter {
   Future doSomething(BuildContext context) async {
     actionHandler(context, () async {
       await _viewModel.performAction();
-      Get.snackbar('Done', 'Action completed');
+      showSuccessSnackBar('Done', 'Action completed');
     });
   }
 }
