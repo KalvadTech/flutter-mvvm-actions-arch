@@ -1,4 +1,4 @@
-# 🚀 getX_starter
+# 🚀 Flutter MVVM Actions Architecture
 
 A Flutter application template using **GetX** for state management with **MVVM + Actions Layer** architecture. Includes pre-built modules for authentication, connectivity, localization, theme management, and a complete API integration pattern example.
 
@@ -121,7 +121,7 @@ dart pub global activate mason_cli
 
 **2. Add the template:**
 ```sh
-mason add -g --source git https://github.com/KalvadTech/getX-template --path lib/mason/bricks/get_x_template
+mason add -g --source git https://github.com/KalvadTech/flutter-mvvm-actions-arch --path lib/mason/bricks/get_x_template
 ```
 
 **3. Verify installation:**
@@ -1159,13 +1159,13 @@ Contributions are welcome! Help make this template better for everyone.
 
 ### 📋 How to Contribute
 
-1. **🐛 Report Issues**: Found a bug? [Open an issue](https://github.com/KalvadTech/getX-template/issues) with:
+1. **🐛 Report Issues**: Found a bug? [Open an issue](https://github.com/KalvadTech/flutter-mvvm-actions-arch/issues) with:
    - Clear description of the problem
    - Steps to reproduce
    - Expected vs actual behavior
    - Screenshots if applicable
 
-2. **💡 Suggest Features**: Have an idea? [Open a feature request](https://github.com/KalvadTech/getX-template/issues) explaining:
+2. **💡 Suggest Features**: Have an idea? [Open a feature request](https://github.com/KalvadTech/flutter-mvvm-actions-arch/issues) explaining:
    - Use case and problem it solves
    - Proposed solution
    - Alternative approaches considered
@@ -1276,4 +1276,4 @@ SOFTWARE.
 
 **⭐ Star this repo if you found it helpful!**
 
-**🐛 [Report Issues](https://github.com/KalvadTech/getX-template/issues) | 💡 [Request Features](https://github.com/KalvadTech/getX-template/issues) | 🤝 [Contribute](https://github.com/KalvadTech/getX-template/pulls)**
+**🐛 [Report Issues](https://github.com/KalvadTech/flutter-mvvm-actions-arch/issues) | 💡 [Request Features](https://github.com/KalvadTech/flutter-mvvm-actions-arch/issues) | 🤝 [Contribute](https://github.com/KalvadTech/flutter-mvvm-actions-arch/pulls)**

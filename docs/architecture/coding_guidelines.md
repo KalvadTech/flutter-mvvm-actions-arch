@@ -1670,8 +1670,8 @@ Closes #123
 These guidelines are living documentation. Propose improvements via PRs and mirror changes into the mason brick equivalents to keep generated projects aligned.
 
 **Feedback welcome:**
-- 🐛 Report issues: [GitHub Issues](https://github.com/KalvadTech/getX-template/issues)
-- 💡 Suggest improvements: [GitHub Discussions](https://github.com/KalvadTech/getX-template/discussions)
+- 🐛 Report issues: [GitHub Issues](https://github.com/KalvadTech/flutter-mvvm-actions-arch/issues)
+- 💡 Suggest improvements: [GitHub Discussions](https://github.com/KalvadTech/flutter-mvvm-actions-arch/discussions)
 - 🔧 Contribute: [Contributing Guide](#-git--pr-hygiene)
 
 ---

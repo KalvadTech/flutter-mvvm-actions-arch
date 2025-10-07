@@ -68,7 +68,7 @@ mason --version
 
 **Global installation (recommended):**
 ```sh
-mason add -g get_x_template --git-url https://github.com/KalvadTech/getX-template --git-path lib/mason/bricks/get_x_template
+mason add -g get_x_template --git-url https://github.com/KalvadTech/flutter-mvvm-actions-arch --git-path lib/mason/bricks/get_x_template
 ```
 
 **Or add to your project's Mason file:**
@@ -77,7 +77,7 @@ mason add -g get_x_template --git-url https://github.com/KalvadTech/getX-templat
 bricks:
   get_x_template:
     git:
-      url: https://github.com/KalvadTech/getX-template
+      url: https://github.com/KalvadTech/flutter-mvvm-actions-arch
       path: lib/mason/bricks/get_x_template
 ```
 
@@ -585,7 +585,7 @@ Comprehensive documentation is generated alongside the code:
 - **`CHANGELOG.md`** - Version history and migration guides
 
 ### 💡 Additional Resources
-- [Main README](https://github.com/KalvadTech/getX-template/blob/master/README.md) - Complete template documentation
+- [Main README](https://github.com/KalvadTech/flutter-mvvm-actions-arch/blob/master/README.md) - Complete template documentation
 - [GetX Documentation](https://pub.dev/packages/get)
 - [Mason Documentation](https://github.com/felangel/mason)
 
@@ -661,12 +661,12 @@ Comprehensive documentation is generated alongside the code:
 ## 🤝 Support & Contributing
 
 ### 💬 Get Help
-- **Repository**: [KalvadTech/getX-template](https://github.com/KalvadTech/getX-template)
-- **Issues**: [Report bugs or request features](https://github.com/KalvadTech/getX-template/issues)
+- **Repository**: [KalvadTech/flutter-mvvm-actions-arch](https://github.com/KalvadTech/flutter-mvvm-actions-arch)
+- **Issues**: [Report bugs or request features](https://github.com/KalvadTech/flutter-mvvm-actions-arch/issues)
 - **Discussions**: Ask questions in GitHub Discussions
 
 ### 🔧 Contributing
-Contributions are welcome! See the main repository's [Contributing Guide](https://github.com/KalvadTech/getX-template#contributing).
+Contributions are welcome! See the main repository's [Contributing Guide](https://github.com/KalvadTech/flutter-mvvm-actions-arch#contributing).
 
 ### ⭐ Show Your Support
 If this template helped you, consider:
