@@ -54,7 +54,7 @@ class AuthActions extends ActionPresenter {
   Future signIn(BuildContext context) async {
     actionHandler(context, () async {
       await _authViewModel.signIn();
-      Get.snackbar('Sign In', 'Done Successfully');
+      showSuccessSnackBar('Sign In', 'Done Successfully');
     });
   }
 
@@ -76,7 +76,7 @@ class AuthActions extends ActionPresenter {
     actionHandler(context, () async {
       await _authViewModel.signUp();
       back();
-      Get.snackbar('Sign Up', 'Done Successfully Now Login');
+      showSuccessSnackBar('Sign Up', 'Done Successfully Now Login');
     });
   }
 
