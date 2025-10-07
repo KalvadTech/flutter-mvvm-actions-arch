@@ -15,6 +15,18 @@ A Flutter application template using **GetX** for state management with **MVVM +
 
 ---
 
+**🔌 Built Like LEGO Blocks**
+
+This isn't your typical rigid template. It's built to adapt to your needs:
+
+- **Plug & Play**: Use the entire template as-is, or cherry-pick just the modules that fit your project
+- **Layer Independence**: Every architectural layer (Actions, ViewModels, Services) is decoupled—swap any layer with your own implementation without breaking the rest
+- **Framework Agnostic**: Don't like GetX? No problem. Replace it with Riverpod, Bloc, or whatever you prefer. The architecture patterns remain solid regardless of your state management choice
+
+Think of it as **architecture-as-a-library** rather than architecture-as-a-framework. You're in control.
+
+---
+
 ## 📑 Table of Contents
 
 - [💭 Philosophy](#-philosophy)
@@ -36,8 +48,13 @@ A Flutter application template using **GetX** for state management with **MVVM +
 ---
 
 ## 💭 Philosophy
-
 **Why MVVM + Actions Layer?**
+
+***The Origin Story***
+
+Real talk—I was tired of choosing between messy MVVM code and over-engineered MVPVM setups that take forever to implement. I wanted that clean **single responsibility** vibe from MVPVM without the headache. So I built this template as the perfect middle ground: powerful enough for production apps, simple enough to actually enjoy using.
+
+***The Solution***
 
 This template embraces **separation of concerns** at every level. Traditional MVVM often mixes UX concerns (loading overlays, error toasts, navigation) with business logic in ViewModels. By introducing an **Actions layer**, we achieve:
 
@@ -47,9 +64,6 @@ This template embraces **separation of concerns** at every level. Traditional MV
 - **🧪 Testability**: Each layer can be tested in isolation without mocking UI concerns
 - **📖 Readability**: Code clearly expresses "what" (Actions) vs "how" (ViewModels)
 
-**The Origin Story**
-
-Real talk—I was tired of choosing between messy MVVM code and over-engineered MVPVM setups that take forever to implement. I wanted that clean **single responsibility** vibe from MVPVM without the headache. So I built this template as the perfect middle ground: powerful enough for production apps, simple enough to actually enjoy using. No cap.
 
 **Why GetX?**
 
@@ -58,16 +72,6 @@ Real talk—I was tired of choosing between messy MVVM code and over-engineered 
 - **💉 Smart DI**: Lazy loading and automatic disposal of dependencies
 - **🧭 Simple Routing**: Navigate without context, type-safe routes
 - **🌍 Built-in i18n**: Translation system included
-
-**🔌 Built Like LEGO Blocks**
-
-This isn't your typical rigid template. It's built to adapt to your needs:
-
-- **Plug & Play**: Use the entire template as-is, or cherry-pick just the modules that fit your project
-- **Layer Independence**: Every architectural layer (Actions, ViewModels, Services) is decoupled—swap any layer with your own implementation without breaking the rest
-- **Framework Agnostic**: Don't like GetX? No problem. Replace it with Riverpod, Bloc, or whatever you prefer. The architecture patterns remain solid regardless of your state management choice
-
-Think of it as **architecture-as-a-library** rather than architecture-as-a-framework. You're in control.
 
 **Clean Architecture Principles**
 
