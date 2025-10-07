@@ -199,52 +199,6 @@ class AuthService extends ApiService {
     return true;
   }
 
-  /// **refreshSession**
-  ///
-  /// Refresh the access token using the refresh token.
-  ///
-  /// Returns
-  /// - `bool`: `true` when new access token is received and saved.
-  ///
-  /// Errors
-  /// - Throws [APIException] when the response is malformed or refresh fails.
-  ///
-  // ────────────────────────────────────────────────
-  @override
-  Future<bool> refreshSession() async {
-    if (_useMockAuth) {
-      // Generate new mock access token
-      final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      final mockAccessToken = _generateMockJWT({
-        'sub': 'mock_user',
-        'iat': now,
-        'exp': now + (24 * 60 * 60), // 1 day
-        'type': 'access',
-      });
-      await AppStorageService.instance.setAccessToken(mockAccessToken);
-      return true;
-    }
-
-    final refreshToken = SecureTokenStorage.instance.readRefreshTokenSync;
-    if (refreshToken == null) {
-      throw AuthException('No refresh token available');
-    }
-
-    final Response response = await post(
-      APIConfiguration.refreshSessionUrl,
-      headers: getUnauthorizedHeader(),
-      {'refresh': refreshToken},
-    );
-
-    final respBody = response.body;
-    if (respBody is! Map || respBody['access'] is! String) {
-      throw APIException('Malformed refresh response');
-    }
-
-    await AppStorageService.instance.setAccessToken(respBody['access'] as String);
-    return true;
-  }
-
   // Handles user sign-out by clearing tokens and selected venue/zone from MemoryService.
   /// **signOut**
   ///
