@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '/src/config/config.dart';
-import '/src/utils/validator.dart';
+import '/src/utils/form_validators.dart';
 import '/src/presentation/custom/customs.dart';
 import '/src/modules/auth/auth.dart';
 
@@ -45,22 +45,22 @@ class RegisterPage extends GetWidget<AuthViewModel> {
             CustomFormField(
               label: tkUsername,
               onSaved: (value) => controller.newUser.username = value,
-              validator: InputsValidator.usernameValidator,
+              validator: FormValidators.usernameValidator,
             ),
             CustomFormField(
               label: tkPhone,
               onSaved: (value) => controller.newUser.phone = value,
-              validator: InputsValidator.phoneValidator,
+              validator: FormValidators.phoneValidator,
             ),
             CustomFormField(
               label: tkEmail,
               onSaved: (value) => controller.newUser.email = value,
-              validator: InputsValidator.emailValidator,
+              validator: FormValidators.emailValidator,
             ),
             CustomFormField(
               label: tkPassword,
               onSaved: (value) => controller.newUser.password = value,
-              validator: InputsValidator.passwordValidator,
+              validator: FormValidators.passwordValidator,
             ),
             CustomButton(
               text: tkRegisterBtn,

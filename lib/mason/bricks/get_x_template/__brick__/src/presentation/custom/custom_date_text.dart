@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '/src/utils/screen_utils.dart';
+import '/src/utils/responsive_utils.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 /// **CustomDateText**
@@ -73,7 +73,7 @@ class CustomDateText extends StatelessWidget {
     final effectiveColor = color ?? theme.textTheme.bodyMedium?.color;
 
     final customStyle = TextStyle(
-      fontSize: ScreenUtils.getFontSize(context, fontSize),
+      fontSize: ResponsiveUtils.scaledFontSize(context, fontSize),
       color: effectiveColor,
       fontWeight: fontWeight,
       letterSpacing: letterSpacing,
@@ -190,7 +190,7 @@ class CustomTimeText extends StatelessWidget {
       displayText,
       style: textStyle ??
           TextStyle(
-            fontSize: ScreenUtils.getFontSize(context, fontSize),
+            fontSize: ResponsiveUtils.scaledFontSize(context, fontSize),
             color: effectiveColor,
             fontWeight: fontWeight,
             letterSpacing: letterSpacing,
@@ -302,7 +302,7 @@ class _CustomTimeAgoTextState extends State<CustomTimeAgoText> {
       timeago.format(widget.dateTime),
       style: widget.textStyle ??
           TextStyle(
-            fontSize: ScreenUtils.getFontSize(context, widget.fontSize),
+            fontSize: ResponsiveUtils.scaledFontSize(context, widget.fontSize),
             color: effectiveColor,
             fontWeight: widget.fontWeight,
             letterSpacing: widget.letterSpacing,

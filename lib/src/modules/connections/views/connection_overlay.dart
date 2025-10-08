@@ -116,7 +116,7 @@ class _OfflineStatusCardState extends State<OfflineStatusCard> {
                     size: 40,
                   ),
                 ),
-                SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
+                SizedBox(height: ResponsiveUtils.screenHeight(context, 0.01)),
                 CustomText.title(
                   tkConnectionLost.tr,
                   color: cs.onErrorContainer,
@@ -125,7 +125,7 @@ class _OfflineStatusCardState extends State<OfflineStatusCard> {
                   tkNoInternetConnectionMessage.tr,
                   color: cs.onErrorContainer,
                 ),
-                SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
+                SizedBox(height: ResponsiveUtils.screenHeight(context, 0.01)),
                 CustomText.subtitle(
                   tkConnectionAutoReconnect.tr,
                   color: cs.onErrorContainer,

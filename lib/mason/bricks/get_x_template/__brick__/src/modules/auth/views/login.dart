@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '/src/presentation/custom/customs.dart';
 import '/src/config/config.dart';
-import '/src/utils/validator.dart';
+import '/src/utils/form_validators.dart';
 import '/src/modules/auth/auth.dart';
 
 /// **LoginPage**
@@ -53,12 +53,14 @@ class LoginPage extends GetWidget<AuthViewModel> {
                 CustomFormField(
                   label: tkUsername,
                   onSaved: (value) => controller.username = value,
-                  validator: InputsValidator.usernameValidator,
+                  maxLines: 1,
+                  validator: FormValidators.usernameValidator,
                 ),
-                CustomFormField(
+                PasswordFormField(
                   label: tkPassword,
                   onSaved: (value) => controller.password = value,
-                  validator: InputsValidator.passwordValidator,
+                  maxLines: 1,
+                  validator: FormValidators.passwordValidator,
                 ),
                 CustomButton(text: tkLoginBtn, onPressed: () => _login(context)),
                 Row(

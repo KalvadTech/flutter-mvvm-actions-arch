@@ -181,7 +181,7 @@ class ConnectionViewModel extends GetxController with WidgetsBindingObserver {
     onWentOfflineCallback?.call();
     _connectionLostTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _timerSeconds = DateTime.now().difference(_connectionLostDate!).inSeconds.toDouble();
-      dialogTimer.value = Utils.printDuration(Duration(seconds: _timerSeconds.toInt())); // Format the duration.
+      dialogTimer.value = DateTimeUtils.formatDuration(Duration(seconds: _timerSeconds.toInt())); // Format the duration.
     });
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/src/utils/screen_utils.dart';
+import '/src/utils/responsive_utils.dart';
 
 /// **CustomFormField**
 ///
@@ -102,13 +102,13 @@ class CustomFormField extends StatelessWidget {
     final hintStyle = TextStyle(
       color: hintColor,
       fontWeight: FontWeight.w400,
-      fontSize: ScreenUtils.getFontSize(context, fontSize),
+      fontSize: ResponsiveUtils.scaledFontSize(context, fontSize),
     );
 
     final textStyle = TextStyle(
       color: effectiveTextColor,
       fontWeight: FontWeight.w500,
-      fontSize: ScreenUtils.getFontSize(context, fontSize),
+      fontSize: ResponsiveUtils.scaledFontSize(context, fontSize),
     );
 
     final borderRadiusValue = BorderRadius.circular(borderRadius);
@@ -280,13 +280,13 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
     final hintStyle = TextStyle(
       color: hintColor,
       fontWeight: FontWeight.w400,
-      fontSize: ScreenUtils.getFontSize(context, widget.fontSize),
+      fontSize: ResponsiveUtils.scaledFontSize(context, widget.fontSize),
     );
 
     final textStyle = TextStyle(
       color: effectiveTextColor,
       fontWeight: FontWeight.w500,
-      fontSize: ScreenUtils.getFontSize(context, widget.fontSize),
+      fontSize: ResponsiveUtils.scaledFontSize(context, widget.fontSize),
     );
 
     final borderRadiusValue = BorderRadius.circular(widget.borderRadius);

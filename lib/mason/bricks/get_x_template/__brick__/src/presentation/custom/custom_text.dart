@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/src/utils/screen_utils.dart';
+import '/src/utils/responsive_utils.dart';
 
 /// **CustomText**
 ///
@@ -231,7 +231,7 @@ class CustomText extends StatelessWidget {
     return Text(
       text.tr,
       style: TextStyle(
-        fontSize: ScreenUtils.getFontSize(context, fontSize),
+        fontSize: ResponsiveUtils.scaledFontSize(context, fontSize),
         color: _getThemeColor(context),
         fontWeight: fontWeight,
         letterSpacing: letterSpacing,
@@ -328,7 +328,7 @@ class CustomTranslatedText extends StatelessWidget {
     return Text(
       _getLocalizedText(),
       style: TextStyle(
-        fontSize: ScreenUtils.getFontSize(context, fontSize),
+        fontSize: ResponsiveUtils.scaledFontSize(context, fontSize),
         color: color,
         fontWeight: fontWeight,
         letterSpacing: letterSpacing,

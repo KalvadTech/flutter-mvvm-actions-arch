@@ -116,38 +116,31 @@ class _OfflineStatusCardState extends State<OfflineStatusCard> {
                     size: 40,
                   ),
                 ),
-                SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
+                SizedBox(height: ResponsiveUtils.screenHeight(context, 0.01)),
                 CustomText.title(
-                  tkConnectionLost,
+                  tkConnectionLost.tr,
                   color: cs.onErrorContainer,
-                  fontSize: 20,
                 ),
-                CustomText.title(
-                  tkNoInternetConnectionMessage,
+                CustomText.subtitle(
+                  tkNoInternetConnectionMessage.tr,
                   color: cs.onErrorContainer,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w300,
                 ),
-                SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
-                CustomText.title(
-                  tkConnectionAutoReconnect,
+                SizedBox(height: ResponsiveUtils.screenHeight(context, 0.01)),
+                CustomText.subtitle(
+                  tkConnectionAutoReconnect.tr,
                   color: cs.onErrorContainer,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
                   textAlign: TextAlign.center,
                 ),
-                Obx(() => CustomText.title(
+                Obx(() => CustomText.subtitle(
                       '(${Get.find<ConnectionViewModel>().dialogTimer.value})',
                       color: cs.onErrorContainer,
-                      fontSize: 16,
                     )),
                 const SizedBox(height: 12.0),
                 InkWell(
                   onTap: _refresh,
-                  child: CustomText.title(
-                    tkRefreshBtn,
+                  child: CustomText.subtitle(
+                    tkRefreshBtn.tr,
                     color: cs.primary,
-                    fontSize: 18,
                   ),
                 ),
               ],
