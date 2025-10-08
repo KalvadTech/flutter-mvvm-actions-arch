@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getx_starter/src/utils/utils.dart';
+import 'package:getx_starter/src/core/route_manager.dart';
 import '../connection.dart';
 import '/src/config/assets.dart';
 

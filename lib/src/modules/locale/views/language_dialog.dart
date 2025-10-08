@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/src/config/config.dart';
+import '../../../core/routing/route_manager.dart';
 import '/src/presentation/custom/customs.dart';
 import '../controllers/localization_view_model.dart';
 import '../data/models/language_model.dart';
@@ -93,12 +94,12 @@ class LanguagePickerDialog extends GetView<LocalizationViewModel> {
   /// Confirms the language change and saves it using the `LocalizationViewModel`.
   void _confirm() {
     controller.saveLanguageChange();
-    Get.back(); // Close the dialog.
+    RouteManager.back(); // Close the dialog.
   }
 
   /// Closes the dialog and dismisses any unsaved changes.
   void _close() {
     controller.dismiss();
-    Get.back(); // Close the dialog.
+    RouteManager.back(); // Close the dialog.
   }
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/src/utils/utils.dart';
+import '/src/core/route_manager.dart';
 import 'auth.dart';
 
 class AuthMiddleware extends GetMiddleware {
@@ -14,7 +15,7 @@ class AuthMiddleware extends GetMiddleware {
     isAuthenticated = Get.find<AuthViewModel>().isAuthenticated();
     log('isAuthenticated: $isAuthenticated');
     if (isAuthenticated == false) {
-      return const RouteSettings(name: RouteManager.initialRoute);
+      return RouteSettings(name: RouteManager.initialRoute);
     }
     return null;
   }

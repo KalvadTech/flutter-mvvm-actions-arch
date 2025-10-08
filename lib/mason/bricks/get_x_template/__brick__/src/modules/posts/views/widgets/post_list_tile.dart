@@ -93,7 +93,7 @@ class PostListTile extends StatelessWidget {
   ///
   /// Currently shows a snackbar. Replace with navigation to detail page:
   /// ```dart
-  /// Get.toNamed('/post-detail', arguments: post);
+  /// RouteManager.to('/post-detail', arguments: post);
   /// ```
   void _onPostTapped(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -104,6 +104,6 @@ class PostListTile extends StatelessWidget {
     );
 
     // Optional: Navigate to detail page
-    // Get.toNamed('/post-detail', arguments: post);
+    // RouteManager.to('/post-detail', arguments: post);
   }
 }

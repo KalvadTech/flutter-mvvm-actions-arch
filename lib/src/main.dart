@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/src/infrastructure/storage/app_storage_service.dart';
-import '/src/utils/route_manager.dart';
+import 'core/routing/route_manager.dart';
 import 'app.dart';
 import 'modules/connections/connections_bindings.dart';
 import 'modules/locale/data/services/localization_service.dart';

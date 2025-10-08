@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '/src/core/route_manager.dart';
 import '/src/modules/auth/auth.dart';
 import '../controllers/menu_view_model.dart';
 
@@ -78,6 +79,6 @@ class MenuActions {
   /// MenuActions.back();
   /// ```
   static void back() {
-    Get.back();
+    RouteManager.back();
   }
 }

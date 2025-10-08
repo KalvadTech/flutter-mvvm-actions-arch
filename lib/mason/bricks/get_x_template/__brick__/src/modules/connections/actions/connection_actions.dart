@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import '../../../core/presentation/actions/action_presenter.dart';
+import '../../../core/route_manager.dart';
 import '../controllers/connection_view_model.dart';
 
 /// Singleton class to manage connection-related actions.
@@ -40,7 +41,7 @@ class ConnectionActions extends ActionPresenter {
     actionHandlerWithoutLoading(() async {
       await Future.delayed(Duration(seconds: delayInSeconds)); // Wait for the specified delay.
       await checkConnectivity(); // Check connectivity after the delay.
-      Get.offNamed(nextRouteString); // Navigate to the next route if no issues.
+      RouteManager.off(nextRouteString); // Navigate to the next route if no issues.
     });
   }
 
