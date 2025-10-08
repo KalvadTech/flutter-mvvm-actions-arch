@@ -304,6 +304,7 @@ class _StatCard extends StatelessWidget {
     return FloatSurfaceCard(
       size: FSCSize.standard,
       elevation: FSCElevation.resting,
+      width: double.infinity,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
