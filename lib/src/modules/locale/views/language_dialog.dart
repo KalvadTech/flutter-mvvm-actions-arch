@@ -39,9 +39,8 @@ class LanguagePickerDialog extends GetView<LocalizationViewModel> {
               ],
             ),
             // Title text for the language picker.
-            const CustomText.title(
+            const CustomText.subtitle(
               tkChooseLanguage,
-              fontSize: 16.0,
             ),
             const SizedBox(height: 16.0),
             // Dropdown button for selecting the language.
