@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '/src/utils/utils.dart';
-import 'core/routing/route_manager.dart';
+import '/src/core/core.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:get/get.dart';
 import '/src/config/config.dart';
-import '/src/utils/binding.dart';
 import 'modules/locale/data/services/localization_service.dart';
 import 'modules/connections/connection.dart';
 import 'modules/theme/theme.dart';
