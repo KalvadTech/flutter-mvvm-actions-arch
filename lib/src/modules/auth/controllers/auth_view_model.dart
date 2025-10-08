@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/src/modules/auth/data/models/user.dart';
 import '/src/modules/auth/data/services/auth_service.dart';
@@ -23,7 +24,7 @@ enum AuthState { checking, authenticated, notAuthenticated }
 ///
 /// GetX controller responsible for managing authentication lifecycle and
 /// exposing a reactive [AuthState] for the app shell.
-/// 
+///
 /// Why
 /// - Centralizes session checks, login/signup orchestration, and logout.
 /// - Keeps views simple; they react to state via `Obx` and delegate actions
@@ -33,6 +34,7 @@ enum AuthState { checking, authenticated, notAuthenticated }
 /// - Emits `checking → authenticated | notAuthenticated` deterministically.
 /// - Supports token refresh via [AuthService.refreshSession].
 /// - Clears sensitive credentials after successful sign-in.
+/// - Supports state change callbacks for dependency registration.
 ///
 /// Example
 /// final vm = Get.find<AuthViewModel>();
@@ -42,6 +44,12 @@ enum AuthState { checking, authenticated, notAuthenticated }
 class AuthViewModel extends GetxController {
   /// Instance of `AuthService` to perform authentication-related operations.
   final AuthService _authService;
+
+  /// Callback invoked when authentication state changes to authenticated.
+  final VoidCallback? onAuthenticated;
+
+  /// Callback invoked when authentication state changes to not authenticated.
+  final VoidCallback? onNotAuthenticated;
 
   /// Observable authentication state.
   final Rx<AuthState> _authState = AuthState.checking.obs;
@@ -65,12 +73,18 @@ class AuthViewModel extends GetxController {
   ///
   /// Injects [AuthService] and triggers an initial [checkSession] to determine
   /// the starting auth state.
-  /// 
+  ///
   /// **Parameters**
   /// - `authService`: Service used for token checks and auth calls.
+  /// - `onAuthenticated`: Optional callback invoked when state becomes authenticated.
+  /// - `onNotAuthenticated`: Optional callback invoked when state becomes not authenticated.
   ///
   /// // ────────────────────────────────────────────────
-  AuthViewModel(this._authService) {
+  AuthViewModel(
+    this._authService, {
+    this.onAuthenticated,
+    this.onNotAuthenticated,
+  }) {
     checkSession();
   }
 
@@ -137,14 +151,16 @@ class AuthViewModel extends GetxController {
     await _authService.signUp(newUser);
   }
 
-  /// Sets the state to authenticated.
+  /// Sets the state to authenticated and invokes the onAuthenticated callback.
   void authenticated() {
     _authState.value = AuthState.authenticated;
+    onAuthenticated?.call();
   }
 
-  /// Sets the state to not authenticated.
+  /// Sets the state to not authenticated and invokes the onNotAuthenticated callback.
   void notAuthenticated() {
     _authState.value = AuthState.notAuthenticated;
+    onNotAuthenticated?.call();
   }
 
   /// Sets the state to checking.
