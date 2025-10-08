@@ -38,7 +38,7 @@ import 'custom_text.dart';
 ///   color: Colors.blue,
 /// )
 /// ```
-class TextDivider extends StatelessWidget {
+class CustomTextDivider extends StatelessWidget {
   /// The text to display in the center of the divider.
   final String text;
 
@@ -65,21 +65,18 @@ class TextDivider extends StatelessWidget {
   /// Font weight for the text.
   final FontWeight? fontWeight;
 
-  /// Custom text style (overrides fontSize and fontWeight if provided).
-  final TextStyle? textStyle;
 
-  const TextDivider(
-    this.text, {
-    super.key,
-    this.height = 16.0,
-    this.thickness = 1.0,
-    this.color,
-    this.spacing = 16.0,
-    this.icon,
-    this.fontSize,
-    this.fontWeight,
-    this.textStyle,
-  });
+  const CustomTextDivider(
+      this.text, {
+        super.key,
+        this.height = 16.0,
+        this.thickness = 1.0,
+        this.color,
+        this.spacing = 16.0,
+        this.icon,
+        this.fontSize,
+        this.fontWeight,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +104,8 @@ class TextDivider extends StatelessWidget {
         CustomText(
           text,
           color: effectiveColor,
-          fontSize: fontSize,
-          fontWeight: fontWeight,
-          textStyle: textStyle,
+          fontSize: fontSize ?? 14,
+          fontWeight: fontWeight ?? FontWeight.w400,
         ),
         SizedBox(width: spacing),
         Expanded(
