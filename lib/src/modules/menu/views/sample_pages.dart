@@ -219,7 +219,7 @@ class ProfilePage extends StatelessWidget {
             child: Icon(
               Icons.person,
               size: 50.0,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
           const SizedBox(height: 16.0),
@@ -234,7 +234,7 @@ class ProfilePage extends StatelessWidget {
           Text(
             'john.doe@example.com',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey[600],
+                  color: Theme.of(context).textTheme.bodySmall?.color,
                 ),
           ),
           const SizedBox(height: 32.0),
@@ -318,7 +318,7 @@ class _StatCard extends StatelessWidget {
             Text(
               title,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey[600],
+                    color: Theme.of(context).textTheme.bodySmall?.color,
                   ),
             ),
           ],
@@ -428,7 +428,7 @@ class _ProfileInfoCard extends StatelessWidget {
         title: Text(
           title,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Colors.grey[600],
+                color: Theme.of(context).textTheme.bodySmall?.color,
               ),
         ),
         subtitle: Text(

@@ -21,7 +21,7 @@ final ThemeData lightTheme = ThemeData(
     seedColor: const Color(0xFFE91E63),
     brightness: Brightness.light,
   ),
-  textTheme: GoogleFonts.nunitoTextTheme(),
+  textTheme: GoogleFonts.nunitoTextTheme(ThemeData.light().textTheme),
   appBarTheme: const AppBarTheme(
     systemOverlayStyle: SystemUiOverlayStyle.dark,
   ),
@@ -42,11 +42,12 @@ final ThemeData lightTheme = ThemeData(
 final ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
+  primaryColor: const Color(0xFFE91E63),
   colorScheme: ColorScheme.fromSeed(
     seedColor: const Color(0xFFE91E63),
     brightness: Brightness.dark,
   ),
-  textTheme: GoogleFonts.nunitoTextTheme(),
+  textTheme: GoogleFonts.nunitoTextTheme(ThemeData.dark().textTheme),
   appBarTheme: const AppBarTheme(
     systemOverlayStyle: SystemUiOverlayStyle.light,
   ),
