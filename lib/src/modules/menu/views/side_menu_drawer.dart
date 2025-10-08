@@ -7,7 +7,6 @@ import '/src/modules/menu/views/menu_drawer_item.dart';
 import '/src/modules/menu/views/logout_drawer_item.dart';
 import '/src/modules/theme/theme.dart';
 import '/src/modules/locale/locale.dart';
-import '/src/modules/locale/data/keys.dart';
 
 /// Navigation drawer widget for the menu system.
 ///
