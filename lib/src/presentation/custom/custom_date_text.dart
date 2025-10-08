@@ -2,37 +2,39 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '/src/config/colors.dart';
-import '/src/config/config.dart';
 import '/src/utils/screen_utils.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 /// **CustomDateText**
 ///
-/// Displays formatted date strings with locale and responsive font sizing.
+/// A theme-aware widget that displays formatted date strings with responsive sizing.
 ///
-/// **Why**
-/// - Encapsulate date formatting logic to keep views clean.
-/// - Support flexible formatting options (with/without year, day names, etc.).
-/// - Integrate responsive sizing via [ScreenUtils].
+/// **Features**:
+/// - Theme-aware colors with automatic light/dark mode support
+/// - Responsive font sizing via [ScreenUtils]
+/// - Date range support with `toDateTime`
+/// - Flexible formatting using `intl.DateFormat`
+/// - Proper overflow handling
 ///
-/// **Key Features**
-/// - Formats dates using `intl.DateFormat` in English locale.
-/// - Optional `toDateTime` for date ranges.
-/// - Customizable flags: `withYear`, `withDayName`, `withShortYear`, `withShortDayName`.
-/// - Returns empty string when `dateTime` is null.
-///
-/// **Example**
+/// **Usage**:
 /// ```dart
+/// // Simple date
+/// CustomDateText(DateTime.now())
+///
+/// // Custom format
 /// CustomDateText(
 ///   DateTime.now(),
 ///   dateFormat: 'MMM d, yyyy',
-///   fontSize: 12,
-///   color: Colors.grey,
+///   fontSize: 14,
+/// )
+///
+/// // Date range
+/// CustomDateText(
+///   startDate,
+///   toDateTime: endDate,
+///   dateFormat: 'MMM d',
 /// )
 /// ```
-///
-// ────────────────────────────────────────────────
 class CustomDateText extends StatelessWidget {
   final DateTime? dateTime;
   final DateTime? toDateTime;
@@ -46,18 +48,14 @@ class CustomDateText extends StatelessWidget {
   final String? fontFamily;
   final TextAlign? textAlign;
   final TextStyle? textStyle;
-  final bool capsLock;
-  final bool withYear;
-  final bool withDayName;
-  final bool withShortYear;
-  final bool withShortDayName;
+  final TextOverflow? overflow;
 
   const CustomDateText(
     this.dateTime, {
     super.key,
     this.dateFormat,
-    this.color = ColorManager.bodyColor,
-    this.fontSize = 10.0,
+    this.color,
+    this.fontSize = 12.0,
     this.fontWeight = FontWeight.w400,
     this.height,
     this.letterSpacing,
@@ -66,69 +64,85 @@ class CustomDateText extends StatelessWidget {
     this.maxLines,
     this.textStyle,
     this.toDateTime,
-    this.capsLock = true,
-    this.withYear = true,
-    this.withDayName = true,
-    this.withShortYear = false,
-    this.withShortDayName = false,
+    this.overflow,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final effectiveColor = color ?? theme.textTheme.bodyMedium?.color;
+
     final customStyle = TextStyle(
       fontSize: ScreenUtils.getFontSize(context, fontSize),
-      color: color,
+      color: effectiveColor,
       fontWeight: fontWeight,
       letterSpacing: letterSpacing,
       height: height,
       fontFamily: fontFamily,
     );
+
     if (dateTime == null) {
       return Text(
         '',
         style: customStyle,
       );
     }
-    var formatter = dateFormat == null ? DateFormat.MMMMd('en') : DateFormat(dateFormat, 'en');
-    String text =  '${formatter.format(dateTime!)} ${toDateTime != null ? '- ${formatter.format(toDateTime!)}' : ''}';
+
+    final formatter = dateFormat == null
+        ? DateFormat.MMMMd('en')
+        : DateFormat(dateFormat, 'en');
+
+    final text = toDateTime != null
+        ? '${formatter.format(dateTime!)} - ${formatter.format(toDateTime!)}'
+        : formatter.format(dateTime!);
+
     return Text(
       text,
       style: textStyle ?? customStyle,
       textAlign: textAlign,
       maxLines: maxLines,
+      overflow: overflow,
     );
   }
 }
 
 /// **CustomTimeText**
 ///
-/// Displays formatted time strings with optional time range support.
+/// A theme-aware widget that displays formatted time strings with responsive sizing.
 ///
-/// **Why**
-/// - Centralize time formatting to avoid duplication in views.
-/// - Support time ranges (e.g., "10:00 AM - 12:00 PM").
+/// **Features**:
+/// - Theme-aware colors with automatic light/dark mode support
+/// - Responsive font sizing via [ScreenUtils]
+/// - Time range support with `toDateTime`
+/// - Flexible formatting using `intl.DateFormat`
+/// - Optional uppercase transformation
+/// - Proper overflow handling
 ///
-/// **Key Features**
-/// - Uses `intl.DateFormat` for time formatting.
-/// - Optional `toDateTime` for time ranges.
-/// - Outputs uppercase by default.
-///
-/// **Example**
+/// **Usage**:
 /// ```dart
+/// // Simple time
+/// CustomTimeText(DateTime.now())
+///
+/// // Custom format
 /// CustomTimeText(
 ///   DateTime.now(),
 ///   dateFormat: 'h:mm a',
-///   fontSize: 10,
+///   fontSize: 12,
+///   uppercase: false,
+/// )
+///
+/// // Time range
+/// CustomTimeText(
+///   startTime,
+///   toDateTime: endTime,
 /// )
 /// ```
-///
-// ────────────────────────────────────────────────
 class CustomTimeText extends StatelessWidget {
   final DateTime dateTime;
   final DateTime? toDateTime;
   final String? dateFormat;
   final Color? color;
-  final double? fontSize;
+  final double fontSize;
   final double? letterSpacing;
   final double? height;
   final int? maxLines;
@@ -136,13 +150,15 @@ class CustomTimeText extends StatelessWidget {
   final String? fontFamily;
   final TextAlign? textAlign;
   final TextStyle? textStyle;
+  final TextOverflow? overflow;
+  final bool uppercase;
 
   const CustomTimeText(
     this.dateTime, {
     super.key,
     this.dateFormat,
-    this.color = ColorManager.bodyColor,
-    this.fontSize = 10.0,
+    this.color,
+    this.fontSize = 12.0,
     this.fontWeight = FontWeight.w400,
     this.height,
     this.letterSpacing,
@@ -151,18 +167,31 @@ class CustomTimeText extends StatelessWidget {
     this.maxLines,
     this.textStyle,
     this.toDateTime,
+    this.overflow,
+    this.uppercase = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    var format = dateFormat == null ? DateFormat.Hm() : DateFormat(dateFormat, 'en');
+    final theme = Theme.of(context);
+    final effectiveColor = color ?? theme.textTheme.bodyMedium?.color;
+
+    final format = dateFormat == null
+        ? DateFormat.Hm()
+        : DateFormat(dateFormat, 'en');
+
+    final text = toDateTime != null
+        ? '${format.format(dateTime)} - ${format.format(toDateTime!)}'
+        : format.format(dateTime);
+
+    final displayText = uppercase ? text.toUpperCase() : text;
 
     return Text(
-      '${format.format(dateTime)} ${toDateTime != null ? '- ${format.format(toDateTime!)}' : ''}'.toUpperCase(),
+      displayText,
       style: textStyle ??
           TextStyle(
-            fontSize: fontSize,
-            color: color,
+            fontSize: ScreenUtils.getFontSize(context, fontSize),
+            color: effectiveColor,
             fontWeight: fontWeight,
             letterSpacing: letterSpacing,
             height: height,
@@ -170,37 +199,42 @@ class CustomTimeText extends StatelessWidget {
           ),
       textAlign: textAlign,
       maxLines: maxLines,
+      overflow: overflow,
     );
   }
 }
 
 /// **CustomTimeAgoText**
 ///
-/// Displays relative time strings ("2 hours ago", "just now") with automatic periodic updates.
+/// A theme-aware widget that displays relative time strings with automatic updates.
 ///
-/// **Why**
-/// - Provide user-friendly relative timestamps that stay fresh.
-/// - Automatically update every minute to keep text accurate.
+/// **Features**:
+/// - Theme-aware colors with automatic light/dark mode support
+/// - Responsive font sizing via [ScreenUtils]
+/// - Automatic periodic updates to keep time fresh
+/// - Configurable update interval
+/// - Uses `timeago` package for formatting
+/// - Proper overflow handling
 ///
-/// **Key Features**
-/// - Uses `timeago` package for relative time formatting.
-/// - Stateful widget with a periodic timer (1 minute interval).
-/// - Timer is canceled on disposal to prevent memory leaks.
-///
-/// **Example**
+/// **Usage**:
 /// ```dart
+/// // Simple relative time
 /// CustomTimeAgoText(
 ///   DateTime.now().subtract(Duration(hours: 2)),
-///   fontSize: 10,
+/// )
+///
+/// // Custom styling
+/// CustomTimeAgoText(
+///   postDate,
+///   fontSize: 12,
 ///   color: Colors.grey,
+///   updateInterval: Duration(seconds: 30),
 /// )
 /// ```
-///
-// ────────────────────────────────────────────────
 class CustomTimeAgoText extends StatefulWidget {
   final DateTime dateTime;
   final Color? color;
-  final double? fontSize;
+  final double fontSize;
   final double? letterSpacing;
   final double? height;
   final int? maxLines;
@@ -208,27 +242,31 @@ class CustomTimeAgoText extends StatefulWidget {
   final String? fontFamily;
   final TextAlign? textAlign;
   final TextStyle? textStyle;
+  final TextOverflow? overflow;
+  final Duration updateInterval;
 
   const CustomTimeAgoText(
-      this.dateTime, {
-        super.key,
-        this.color,
-        this.fontSize = 10.0,
-        this.fontWeight = FontWeight.w400,
-        this.height,
-        this.letterSpacing,
-        this.fontFamily,
-        this.textAlign,
-        this.maxLines,
-        this.textStyle,
-      });
+    this.dateTime, {
+    super.key,
+    this.color,
+    this.fontSize = 12.0,
+    this.fontWeight = FontWeight.w400,
+    this.height,
+    this.letterSpacing,
+    this.fontFamily,
+    this.textAlign,
+    this.maxLines,
+    this.textStyle,
+    this.overflow,
+    this.updateInterval = const Duration(minutes: 1),
+  });
 
   @override
   State<CustomTimeAgoText> createState() => _CustomTimeAgoTextState();
 }
 
 class _CustomTimeAgoTextState extends State<CustomTimeAgoText> {
-  late Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -237,25 +275,35 @@ class _CustomTimeAgoTextState extends State<CustomTimeAgoText> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
-      setState(() {});
-    });
+    // Only start timer if widget is still mounted
+    if (mounted) {
+      _timer = Timer.periodic(widget.updateInterval, (timer) {
+        if (mounted) {
+          setState(() {});
+        } else {
+          timer.cancel();
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final effectiveColor = widget.color ?? theme.textTheme.bodyMedium?.color;
+
     return Text(
       timeago.format(widget.dateTime),
       style: widget.textStyle ??
           TextStyle(
-            fontSize: widget.fontSize,
-            color: widget.color,
+            fontSize: ScreenUtils.getFontSize(context, widget.fontSize),
+            color: effectiveColor,
             fontWeight: widget.fontWeight,
             letterSpacing: widget.letterSpacing,
             height: widget.height,
@@ -263,6 +311,7 @@ class _CustomTimeAgoTextState extends State<CustomTimeAgoText> {
           ),
       textAlign: widget.textAlign,
       maxLines: widget.maxLines,
+      overflow: widget.overflow,
     );
   }
 }
