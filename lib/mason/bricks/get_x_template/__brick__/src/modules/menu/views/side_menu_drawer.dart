@@ -7,6 +7,7 @@ import '/src/modules/menu/views/menu_drawer_item.dart';
 import '/src/modules/menu/views/logout_drawer_item.dart';
 import '/src/modules/theme/theme.dart';
 import '/src/modules/locale/locale.dart';
+import '/src/modules/locale/data/keys.dart';
 
 /// Navigation drawer widget for the menu system.
 ///
@@ -62,7 +63,7 @@ class SideMenuDrawer extends GetWidget<MenuViewModel> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
               child: Text(
-                'Settings',
+                tkSettings.tr,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[600],

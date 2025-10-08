@@ -39,6 +39,26 @@ const String tkChooseLanguage = 'pages.language.choose';
 const String tkConfirmBtn = 'buttons.confirm';
 const String tkLoginBtn = 'buttons.login';
 const String tkRegisterBtn = 'buttons.register';
+const String tkCancelBtn = 'buttons.cancel';
+const String tkTryAgainBtn = 'buttons.tryAgain';
+const String tkRefreshBtn = 'buttons.refresh';
+const String tkLogoutBtn = 'buttons.logout';
 
-/// settings/theme keys
+/// auth messages
+const String tkDontHaveAccount = 'auth.messages.dontHaveAccount';
+const String tkRegisterNow = 'auth.messages.registerNow';
+const String tkSignInSuccess = 'auth.messages.signInSuccess';
+const String tkSignUpSuccess = 'auth.messages.signUpSuccess';
+const String tkLogoutConfirmTitle = 'auth.messages.logoutConfirmTitle';
+const String tkLogoutConfirmMessage = 'auth.messages.logoutConfirmMessage';
+
+/// connection messages
+const String tkConnectionLost = 'connection.messages.connectionLost';
+const String tkNoInternetConnectionMessage = 'connection.messages.noInternetConnectionMessage';
+const String tkConnectionAutoReconnect = 'connection.messages.autoReconnect';
+const String tkReconnecting = 'connection.messages.reconnecting';
+const String tkTryAgainReconnect = 'connection.messages.tryAgainReconnect';
+
+/// menu/settings
+const String tkSettings = 'menu.settings';
 const String tkDarkMode = 'settings.theme.darkMode';

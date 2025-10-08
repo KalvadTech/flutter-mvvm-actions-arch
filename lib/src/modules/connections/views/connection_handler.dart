@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '/src/modules/locale/data/keys.dart';
 import '../connection.dart';
 
 /// **ConnectionHandler**
@@ -72,7 +73,7 @@ class ConnectionHandler extends GetWidget<ConnectionViewModel> {
                     size: MediaQuery.of(context).size.height / 4,
                   ),
                   const SizedBox(height: 16.0),
-                  const Text('Try again'),
+                  Text(tkTryAgainBtn.tr),
                 ],
               ),
         );

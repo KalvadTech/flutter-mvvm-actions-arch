@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_starter/src/core/presentation/actions/action_presenter.dart';
 import 'package:getx_starter/src/utils/route_manager.dart';
+import '/src/modules/locale/data/keys.dart';
 import '../controllers/auth_view_model.dart';
 
 /// **AuthActions**
@@ -54,7 +55,7 @@ class AuthActions extends ActionPresenter {
   Future signIn(BuildContext context) async {
     actionHandler(context, () async {
       await _authViewModel.signIn();
-      showSuccessSnackBar('Sign In', 'Done Successfully');
+      showSuccessSnackBar(tkLoginBtn, tkSignInSuccess);
     });
   }
 
@@ -76,7 +77,7 @@ class AuthActions extends ActionPresenter {
     actionHandler(context, () async {
       await _authViewModel.signUp();
       back();
-      showSuccessSnackBar('Sign Up', 'Done Successfully Now Login');
+      showSuccessSnackBar(tkRegisterBtn, tkSignUpSuccess);
     });
   }
 

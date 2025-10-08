@@ -64,10 +64,10 @@ class LoginPage extends GetWidget<AuthViewModel> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    const CustomText('You don\'t have account?'),
+                    const CustomText(tkDontHaveAccount),
                     TextButton(
                       onPressed: AuthActions.instance.toRegisterPage,
-                      child: const CustomText('Register Now'),
+                      child: const CustomText(tkRegisterNow),
                     )
                   ],
                 )

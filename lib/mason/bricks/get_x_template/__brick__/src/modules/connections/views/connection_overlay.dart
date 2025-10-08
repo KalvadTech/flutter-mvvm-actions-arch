@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/src/utils/utils.dart';
 import '/src/presentation/custom/customs.dart';
+import '/src/modules/locale/data/keys.dart';
 import '../connection.dart';
 
 /// **ConnectionOverlay**
@@ -40,7 +41,7 @@ class ConnectionOverlay extends GetWidget<ConnectionViewModel> {
         Obx(() {
           switch (controller.connectionType.value) {
             case ConnectivityType.connecting:
-              return const InfoItem(label: 'Please wait, trying to reconnect');
+              return InfoItem(label: tkReconnecting.tr);
             case ConnectivityType.disconnected:
             case ConnectivityType.noInternet:
               return const OfflineStatusCard();
@@ -108,7 +109,7 @@ class _OfflineStatusCardState extends State<OfflineStatusCard> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Semantics(
-                  label: 'No internet connection',
+                  label: tkNoInternetMsg.tr,
                   child: Icon(
                     Icons.wifi_off_outlined,
                     color: cs.onErrorContainer,
@@ -117,19 +118,19 @@ class _OfflineStatusCardState extends State<OfflineStatusCard> {
                 ),
                 SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
                 CustomText.title(
-                  "CONNECTION LOST",
+                  tkConnectionLost,
                   color: cs.onErrorContainer,
                   fontSize: 20,
                 ),
                 CustomText.title(
-                  'Looks like you have no internet connection.',
+                  tkNoInternetConnectionMessage,
                   color: cs.onErrorContainer,
                   fontSize: 16,
                   fontWeight: FontWeight.w300,
                 ),
                 SizedBox(height: ScreenUtils.getScreenHeight(context, 0.01)),
                 CustomText.title(
-                  '(This popup will disappear automatically\nwhen the connection is reestablished.)',
+                  tkConnectionAutoReconnect,
                   color: cs.onErrorContainer,
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
@@ -144,7 +145,7 @@ class _OfflineStatusCardState extends State<OfflineStatusCard> {
                 InkWell(
                   onTap: _refresh,
                   child: CustomText.title(
-                    'Refresh',
+                    tkRefreshBtn,
                     color: cs.primary,
                     fontSize: 18,
                   ),
@@ -196,7 +197,7 @@ class InfoItem extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     return SafeArea(
       child: Semantics(
-        label: 'Reconnecting',
+        label: tkReconnecting.tr,
         child: Container(
           color: cs.surfaceContainerHighest,
           padding: const EdgeInsets.all(16),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '/src/modules/menu/actions/menu_actions.dart';
+import '/src/modules/locale/data/keys.dart';
 
 /// Logout drawer item for the navigation menu.
 ///
@@ -27,7 +29,7 @@ class LogoutDrawerItem extends StatelessWidget {
         color: Colors.red,
       ),
       title: Text(
-        'Logout',
+        tkLogoutBtn.tr,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
               color: Colors.red,
@@ -42,12 +44,12 @@ class LogoutDrawerItem extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+        title: Text(tkLogoutConfirmTitle.tr),
+        content: Text(tkLogoutConfirmMessage.tr),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(tkCancelBtn.tr),
           ),
           TextButton(
             onPressed: () {
@@ -58,7 +60,7 @@ class LogoutDrawerItem extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
             ),
-            child: const Text('Logout'),
+            child: Text(tkLogoutBtn.tr),
           ),
         ],
       ),
