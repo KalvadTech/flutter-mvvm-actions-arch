@@ -396,7 +396,11 @@ lib/src/
 │   └── keys.dart                # 🔑 Translation keys
 ├── core/
 │   ├── errors/                  # ❌ Exception classes
-│   └── presentation/            # 🎨 ApiResponse, ActionPresenter
+│   ├── presentation/            # 🎨 ApiResponse, ActionPresenter
+│   ├── bindings/
+│   │   └── bindings.dart        # 💉 Global DI
+│   └── routing/
+│       └── route_manager.dart   # 🧭 Navigation & routing
 ├── infrastructure/
 │   ├── http/                    # 🌐 ApiService
 │   ├── cache/                   # 💾 Caching system
@@ -406,9 +410,10 @@ lib/src/
 │   ├── screens/                 # 📱 Shared screens
 │   └── widgets/                 # 🧱 Reusable widgets
 ├── utils/
-│   ├── binding.dart             # 💉 Global DI
-│   ├── route_manager.dart       # 🧭 Navigation
-│   └── color_manager.dart       # 🎨 Colors
+│   ├── date_time_extensions.dart # 📅 DateTime/Duration extensions
+│   ├── form_validators.dart     # ✅ Form input validators
+│   ├── responsive_utils.dart    # 📱 Responsive design helpers
+│   └── themes.dart              # 🎨 Theme configurations
 └── modules/
     ├── auth/                    # 🔐 Authentication
     ├── connections/             # 📡 Connectivity
@@ -417,6 +422,449 @@ lib/src/
     ├── posts/                   # 📝 API example
     └── menu/                    # 🍔 Navigation menu
 ```
+
+---
+
+## 🛠️ Utilities & Helpers
+
+This template provides a set of utilities and extensions to simplify common tasks. These are located in `/src/utils/` and `/src/core/`.
+
+### 🧭 Navigation - RouteManager
+
+**Location:** `lib/src/core/routing/route_manager.dart`
+
+Centralized navigation management wrapping GetX routing. **Always use `RouteManager` instead of direct `Get.*` calls** for consistency.
+
+**⚠️ Important: Navigation belongs in the Actions layer**
+- Views should **never** call `RouteManager` directly (except for simple `back()` navigation)
+- Navigation logic must go through the Actions layer to maintain architectural boundaries
+- Actions orchestrate navigation after business logic completes
+
+**Route Definitions:**
+```dart
+class RouteManager {
+  static const String initialRoute = '/';
+  static const String authRoute = '/auth';
+  static const String registerRoute = '/register';
+  static const String menuRoute = '/menu';
+  // ... other routes
+}
+```
+
+**Navigation Helpers:**
+```dart
+// Specific routes
+RouteManager.toAuth();           // Navigate to login
+RouteManager.toRegister();       // Navigate to registration
+RouteManager.toMenu();           // Navigate to menu
+RouteManager.toInitial();        // Navigate to initial route
+
+// Auth flow helpers
+RouteManager.logout();           // Clear stack, go to auth
+RouteManager.loginSuccess();     // Clear stack, go to menu
+
+// Generic navigation
+RouteManager.to('/custom-route', arguments: data);
+RouteManager.off('/custom-route');      // Replace current
+RouteManager.offAll('/custom-route');   // Clear stack
+RouteManager.back(result: data);        // Go back
+RouteManager.until('/target-route');    // Pop until route
+
+// Utilities
+String current = RouteManager.currentRoute;
+bool isOnAuth = RouteManager.isCurrentRoute(RouteManager.authRoute);
+dynamic args = RouteManager.arguments;
+```
+
+**Why RouteManager?**
+- Centralized navigation logic
+- Type-safe route constants
+- Consistent navigation patterns across app
+- Easier testing and debugging
+- Simplified route management
+
+**Example:**
+```dart
+// ✅ Good - Navigation happens in Actions layer
+void navigateToRegister() {
+  AuthActions.instance.toRegisterPage();
+}
+
+// Inside AuthActions:
+void toRegisterPage() {
+  RouteManager.toRegister();
+}
+
+// ❌ Bad - Direct RouteManager call from view
+void navigateToRegister() {
+  RouteManager.toRegister(); // Wrong! Should go through Actions layer
+}
+
+// ❌ Bad - Direct GetX usage
+void navigateToRegister() {
+  Get.toNamed('/register'); // Wrong! Use RouteManager via Actions
+}
+```
+
+### 💉 Dependency Injection - Bindings
+
+**Location:** `lib/src/core/bindings/bindings.dart`
+
+`InitialBindings` registers only **core, permanent dependencies**:
+
+```dart
+class InitialBindings extends Bindings {
+  @override
+  void dependencies() {
+    // Core dependencies only
+    ConnectionsBindings().dependencies();
+    ThemeBindings().dependencies();
+    LocaleBindings().dependencies();
+
+    // Feature modules (Auth, Menu, Posts) registered via:
+    // - Route bindings in GetPages
+    // - Auth state callbacks (onAuthenticated)
+  }
+}
+```
+
+**Pattern: Feature modules loaded on-demand**
+- Auth bindings registered via route binding
+- Menu/Posts bindings registered in `AuthViewModel.onAuthenticated` callback
+- Better performance (smaller initial bundle)
+- Clearer dependency lifecycle
+
+**Example - AuthBindings with State Callbacks:**
+```dart
+class AuthBindings implements Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut(() => AuthService(), fenix: true);
+    Get.lazyPut(
+      () => AuthViewModel(
+        Get.find(),
+        onAuthenticated: _onAuthenticated,
+        onNotAuthenticated: _onNotAuthenticated,
+      ),
+    );
+  }
+
+  void _onAuthenticated() {
+    // Register feature modules for logged-in users
+    MenuBindings().dependencies();
+    PostsBindings().dependencies();
+  }
+
+  void _onNotAuthenticated() {
+    // Optional cleanup on logout
+  }
+}
+```
+
+### ✅ Form Validation - FormValidators
+
+**Location:** `lib/src/utils/form_validators.dart`
+
+Static validator methods for form inputs with i18n support.
+
+**Basic Validators:**
+```dart
+TextFormField(
+  validator: FormValidators.email,
+  // Validates email format
+)
+
+TextFormField(
+  validator: FormValidators.phone,
+  // Validates phone format
+)
+
+TextFormField(
+  validator: FormValidators.password,
+  // Validates password strength
+)
+
+TextFormField(
+  validator: FormValidators.name,
+  // Validates full name
+)
+
+TextFormField(
+  validator: FormValidators.username,
+  // Validates username
+)
+```
+
+**Combining Validators:**
+```dart
+TextFormField(
+  validator: FormValidators.combine([
+    FormValidators.required,
+    FormValidators.email,
+  ]),
+)
+```
+
+**Custom Validators:**
+```dart
+TextFormField(
+  validator: FormValidators.custom(
+    regex: RegExp(r'^[A-Z]{2}\d{4}$'),
+    errorMessage: 'Invalid format (e.g., AB1234)',
+  ),
+)
+```
+
+**Configurable Regex Patterns:**
+```dart
+// Override default patterns globally
+FormValidators.emailRegex = RegExp(r'your-custom-pattern');
+FormValidators.phoneRegex = RegExp(r'your-phone-pattern');
+```
+
+**Why FormValidators?**
+- Consistent validation across app
+- i18n error messages out of the box
+- Reusable, composable validators
+- Easy to extend and customize
+
+### 📱 Responsive Design - ResponsiveUtils
+
+**Location:** `lib/src/utils/responsive_utils.dart`
+
+Complete responsive design system with breakpoint-based layouts.
+
+**Device Type Detection:**
+```dart
+if (ResponsiveUtils.isMobile(context)) {
+  // Mobile: width < 600
+}
+
+if (ResponsiveUtils.isTablet(context)) {
+  // Tablet: 600 <= width < 1024
+}
+
+if (ResponsiveUtils.isDesktop(context)) {
+  // Desktop: 1024 <= width < 1440
+}
+
+if (ResponsiveUtils.isWideDesktop(context)) {
+  // Wide Desktop: width >= 1440
+}
+```
+
+**Responsive Values:**
+```dart
+double padding = ResponsiveUtils.valueByDevice<double>(
+  context,
+  mobile: 16,
+  tablet: 24,
+  desktop: 32,
+  wide: 40,
+);
+
+int columns = ResponsiveUtils.valueByDevice<int>(
+  context,
+  mobile: 1,
+  tablet: 2,
+  desktop: 3,
+  wide: 4,
+);
+```
+
+**Helpers:**
+```dart
+// Scaled font sizes
+double fontSize = ResponsiveUtils.scaledFontSize(context, 16);
+// mobile: 16, tablet: 17.6, desktop: 18.4, wide: 19.2
+
+// Responsive padding/margin
+double padding = ResponsiveUtils.padding(context);
+double margin = ResponsiveUtils.margin(context);
+
+// Grid columns
+int columns = ResponsiveUtils.gridColumns(context);
+// mobile: 1, tablet: 2, desktop: 3, wide: 4
+
+// Screen dimensions
+double height = ResponsiveUtils.screenHeight(context, 0.5); // 50% of screen
+double width = ResponsiveUtils.screenWidth(context, 0.8);   // 80% of screen
+```
+
+**Custom Breakpoints:**
+```dart
+// Override defaults globally
+ResponsiveUtils.mobileBreakpoint = 640;
+ResponsiveUtils.tabletBreakpoint = 1024;
+ResponsiveUtils.desktopBreakpoint = 1536;
+```
+
+**Why ResponsiveUtils?**
+- Consistent breakpoints across app
+- Type-safe responsive values
+- Easy to adapt layouts for different screens
+- Extensible and customizable
+
+**Example - Responsive Layout:**
+```dart
+class MyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(ResponsiveUtils.padding(context)),
+      child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: ResponsiveUtils.gridColumns(context),
+          crossAxisSpacing: ResponsiveUtils.valueByDevice(
+            context,
+            mobile: 8,
+            tablet: 12,
+            desktop: 16,
+          ),
+        ),
+        itemBuilder: (context, index) => MyCard(),
+      ),
+    );
+  }
+}
+```
+
+### 📅 DateTime Extensions
+
+**Location:** `lib/src/utils/date_time_extensions.dart`
+
+Fluent API for DateTime and Duration operations.
+
+**DateTime Extension Methods:**
+
+**Date Comparisons (Getters):**
+```dart
+final date = DateTime.now();
+
+if (date.isToday) {
+  // Same calendar day as today
+}
+
+if (date.isYesterday) {
+  // Calendar day before today
+}
+
+if (date.isTomorrow) {
+  // Calendar day after today
+}
+```
+
+**Date Comparisons (Methods):**
+```dart
+if (date.isSameDay(otherDate)) {
+  // Same calendar day
+}
+
+if (date.isSameMonth(otherDate)) {
+  // Same month and year
+}
+
+if (date.isSameYear(otherDate)) {
+  // Same year
+}
+```
+
+**Date Manipulation (Getters):**
+```dart
+final start = date.startOfDay;    // 00:00:00
+final end = date.endOfDay;        // 23:59:59
+```
+
+**Calculations:**
+```dart
+int days = date.daysBetween(otherDate);  // Absolute days difference
+```
+
+**Formatting:**
+```dart
+String formatted = date.format();                // Default: 'dd/MM/yyyy'
+String formatted = date.format('yyyy-MM-dd');    // Custom pattern
+
+String time = date.formatTime();                 // Default: 'HH:mm'
+String time = date.formatTime('hh:mm a');        // Custom pattern
+
+String datetime = date.formatDateTime();         // Default: 'dd/MM/yyyy HH:mm'
+String datetime = date.formatDateTime('yyyy-MM-dd HH:mm:ss');
+
+String relative = date.timeAgo();
+// "just now", "5 minutes ago", "2 hours ago", "yesterday",
+// "3 days ago", "in 5 minutes", "in 2 days"
+```
+
+**Duration Extension Methods:**
+```dart
+final duration = Duration(hours: 2, minutes: 5, seconds: 30);
+
+String formatted = duration.format();  // "02:05:30"
+```
+
+**Why Extensions?**
+- More idiomatic than static utility methods
+- Fluent, discoverable API
+- Better code readability
+- Easy to chain operations
+
+**Example - Usage in UI:**
+```dart
+class PostCard extends StatelessWidget {
+  final PostModel post;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          Text(post.title),
+          Text(
+            post.createdAt.timeAgo(),  // "2 hours ago"
+            style: TextStyle(color: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+**Example - Before/After Migration:**
+```dart
+// ❌ Before: Static utility methods
+if (DateTimeUtils.isToday(selectedDate)) {
+  String formatted = DateTimeUtils.formatDate(selectedDate);
+  String relative = DateTimeUtils.timeAgo(selectedDate);
+}
+
+// ✅ After: Extension methods
+if (selectedDate.isToday) {
+  String formatted = selectedDate.format();
+  String relative = selectedDate.timeAgo();
+}
+```
+
+### 🧩 Core vs Utils
+
+**`/src/core/` - Framework-level code:**
+- Bindings (dependency injection)
+- Routing (navigation management)
+- Errors (exception classes)
+- Presentation (ApiResponse, ActionPresenter)
+
+**`/src/utils/` - Helper functions and extensions:**
+- Form validators
+- Responsive utilities
+- DateTime extensions
+- Theme configurations
+
+**Why this separation?**
+- Clear distinction between framework concerns and helpers
+- Better organization and discoverability
+- Easier to maintain and extend
+- Follows separation of concerns principle
 
 ---
 
