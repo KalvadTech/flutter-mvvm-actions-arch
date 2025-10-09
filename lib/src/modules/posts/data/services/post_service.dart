@@ -1,4 +1,4 @@
-import 'package:getx_starter/src/config/api_config.dart';
+import '/src/config/api_config.dart';
 
 import '/src/infrastructure/http/api_service.dart';
 import '/src/modules/posts/data/models/post_model.dart';

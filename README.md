@@ -189,6 +189,9 @@ dependencies:
   # Utilities
   intl: ^0.19.0
   jwt_decoder: ^2.0.1
+  sentry: ^8.9.0
+  timeago: ^3.7.0
+
 ```
 
 ### ▶️ Run
