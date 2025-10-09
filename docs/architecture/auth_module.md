@@ -86,13 +86,116 @@ lib/src/modules/auth/
 │   ├── login.dart                    # Login form
 │   ├── sign_up.dart                  # Registration form
 │   └── splash_page.dart              # Loading screen during checks
-├── auth_bindings.dart                # GetX dependency injection
+├── auth_bindings.dart                # GetX DI + feature module registration
 └── auth.dart                         # Barrel export
 
 test/modules/auth/
 ├── auth_view_model_test.dart         # 23 tests for AuthViewModel
 └── auth_service_test.dart            # 8 tests for AuthService
 \`\`\`
+
+
+## Dependency management & callbacks
+
+### State change callbacks
+
+AuthViewModel supports optional callbacks for authentication state changes. This enables better separation of concerns and allows feature modules to be loaded on-demand without circular dependencies.
+
+**Constructor signature:**
+\`\`\`dart
+class AuthViewModel extends GetxController {
+  final AuthService _authService;
+  final VoidCallback? onAuthenticated;
+  final VoidCallback? onNotAuthenticated;
+
+  AuthViewModel(
+    this._authService, {
+    this.onAuthenticated,
+    this.onNotAuthenticated,
+  });
+}
+\`\`\`
+
+**When callbacks are triggered:**
+- `onAuthenticated`: Called when user successfully signs in, signs up, or has a valid session
+- `onNotAuthenticated`: Called when user logs out or session expires
+
+**Why callbacks?**
+- AuthViewModel doesn't need to know about Menu or Posts modules
+- Feature modules registered only when user is authenticated
+- Cleaner dependency graph (no circular dependencies)
+- Better testability (can mock callbacks in tests)
+- Improved performance (smaller initial bundle size)
+
+### AuthBindings pattern
+
+AuthBindings uses state callbacks to register feature modules on-demand:
+
+\`\`\`dart
+class AuthBindings implements Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut(() => AuthService(), fenix: true);
+    Get.lazyPut(
+      () => AuthViewModel(
+        Get.find(),
+        onAuthenticated: _onAuthenticated,
+        onNotAuthenticated: _onNotAuthenticated,
+      ),
+    );
+  }
+
+  /// Register feature modules for authenticated users
+  void _onAuthenticated() {
+    MenuBindings().dependencies();
+    PostsBindings().dependencies();
+    // Add other authenticated-only modules here
+  }
+
+  /// Optional cleanup when user logs out
+  void _onNotAuthenticated() {
+    // Cleanup logic if needed
+  }
+}
+\`\`\`
+
+**Benefits:**
+- Menu and Posts modules only loaded after successful authentication
+- No need to register all modules upfront in InitialBindings
+- Clear separation between core (always-loaded) and feature (on-demand) modules
+- Easy to add new authenticated-only modules
+
+### Dependency lifecycle
+
+\`\`\`
+App Start
+   ↓
+InitialBindings registers:
+   - ConnectionsBindings (permanent)
+   - ThemeBindings (permanent)
+   - LocaleBindings (permanent)
+   ↓
+AuthRoute triggered → AuthBindings registers:
+   - AuthService (fenix: true, survives disposal)
+   - AuthViewModel (with callbacks)
+   ↓
+checkSession() runs on AuthViewModel.onInit()
+   ↓
+   ├─→ authenticated → onAuthenticated() callback
+   │      ↓
+   │   MenuBindings().dependencies()
+   │   PostsBindings().dependencies()
+   │
+   └─→ notAuthenticated → onNotAuthenticated() callback
+          ↓
+       (cleanup if needed)
+\`\`\`
+
+**Key points:**
+- Use `Get.lazyPut()` with `fenix: true` for services that should survive controller disposal
+- Feature modules registered via callbacks, not in InitialBindings
+- Callbacks fired on every state change (login, logout, session refresh)
+- Safe to call `.dependencies()` multiple times (GetX checks if already registered)
 
 
 ## Mock authentication
