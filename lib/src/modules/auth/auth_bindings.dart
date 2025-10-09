@@ -46,11 +46,34 @@ class AuthBindings implements Bindings {
     PostsBindings().dependencies();
   }
 
-  /// Called when user is not authenticated.
+  /// **_onNotAuthenticated**
   ///
-  /// Can be used for cleanup or analytics.
+  /// Called when user is not authenticated (logout or session expiration).
+  ///
+  /// **Why**
+  /// - Cleanup feature modules to free resources
+  /// - Reset state for next authentication
+  /// - Prevent memory leaks from registered dependencies
+  ///
+  /// **What it does:**
+  /// - Calls PostsBindings.destroy() to cleanup posts module
+  /// - Calls MenuBindings.destroy() to cleanup menu module
+  ///
+  /// **Order matters:**
+  /// - Posts module is cleaned up first (feature module)
+  /// - Menu module is cleaned up second (navigation module)
+  ///
+  /// **Side Effects**
+  /// - All feature module dependencies removed from GetX registry
+  /// - State and cached data cleared
+  /// - Next login creates fresh instances
+  ///
+  /// // ────────────────────────────────────────────────
   void _onNotAuthenticated() {
-    // Optional: Add cleanup logic here if needed
-    // Example: Clear cached data, reset state, etc.
+    // Clean up posts module (reverse order of registration)
+    PostsBindings.destroy();
+
+    // Clean up menu module
+    MenuBindings.destroy();
   }
 }

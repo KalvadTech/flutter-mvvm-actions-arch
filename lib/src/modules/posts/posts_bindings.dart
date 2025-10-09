@@ -38,4 +38,50 @@ class PostsBindings implements Bindings {
       Get.put<PostViewModel>(PostViewModel(Get.find()), permanent: true);
     }
   }
+
+  /// **destroy**
+  ///
+  /// Cleans up and removes posts module dependencies from GetX.
+  ///
+  /// **Why**
+  /// - Called when user logs out to free resources and reset state
+  /// - Ensures clean slate for next authentication
+  /// - Prevents memory leaks from registered dependencies
+  ///
+  /// **What it does:**
+  /// - Removes [PostViewModel] from GetX dependency injection
+  /// - Removes [PostService] from GetX dependency injection
+  /// - Resets posts state for next login
+  ///
+  /// **Order matters:**
+  /// - ViewModel is deleted first (depends on Service)
+  /// - Service is deleted second (has no dependencies)
+  ///
+  /// **Usage**
+  /// ```dart
+  /// // Called in AuthBindings._onNotAuthenticated()
+  /// PostsBindings.destroy();
+  /// ```
+  ///
+  /// **Side Effects**
+  /// - PostViewModel and PostService will be deleted from GetX registry
+  /// - Posts state and cached data will be cleared
+  /// - Next login will create fresh instances
+  ///
+  /// **Notes**
+  /// - Uses `force: true` because PostViewModel has `permanent: true`
+  /// - Safe to call multiple times (checks if registered first)
+  ///
+  /// // ────────────────────────────────────────────────
+  static void destroy() {
+    // Delete ViewModel first (depends on Service)
+    if (Get.isRegistered<PostViewModel>()) {
+      Get.delete<PostViewModel>(force: true);
+    }
+
+    // Delete Service second (independent)
+    if (Get.isRegistered<PostService>()) {
+      Get.delete<PostService>(force: true);
+    }
+  }
 }

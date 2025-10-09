@@ -90,4 +90,35 @@ class MenuBindings implements Bindings {
       ),
     ];
   }
+
+  /// **destroy**
+  ///
+  /// Cleans up and removes menu dependencies from GetX.
+  ///
+  /// **Why**
+  /// - Called when user logs out to free resources and reset state
+  /// - Ensures clean slate for next authentication
+  /// - Prevents memory leaks from registered dependencies
+  ///
+  /// **What it does:**
+  /// - Removes [MenuViewModel] from GetX dependency injection
+  /// - Resets menu state for next login
+  ///
+  /// **Usage**
+  /// ```dart
+  /// // Called in AuthBindings._onNotAuthenticated()
+  /// MenuBindings.destroy();
+  /// ```
+  ///
+  /// **Side Effects**
+  /// - MenuViewModel will be deleted from GetX registry
+  /// - Menu state will be reset
+  /// - Next login will create fresh MenuViewModel instance
+  ///
+  /// // ────────────────────────────────────────────────
+  static void destroy() {
+    if (Get.isRegistered<MenuViewModel>()) {
+      Get.delete<MenuViewModel>(force: true);
+    }
+  }
 }
