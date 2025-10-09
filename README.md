@@ -37,6 +37,7 @@ Think of it as **architecture-as-a-library** rather than architecture-as-a-frame
 - [🧩 Modules](#-modules)
 - [🔌 API Integration Pattern](#-api-integration-pattern)
 - [⚙️ Infrastructure Overview](#️-infrastructure-overview)
+- [🛠️ Utilities & Helpers](#️-utilities--helpers)
 - [❓ FAQ](#-faq)
 - [📚 Documentation](#-documentation)
 - [✅ Quick Start Checklist](#-quick-start-checklist)
@@ -158,10 +159,10 @@ You'll be prompted for:
 4. Update `pubspec.yaml` with required dependencies (see below)
 
 **⚠️ Note**: If copying only specific modules, ensure you also copy:
-- `lib/src/core/` - Core abstractions
+- `lib/src/core/` - Core framework (bindings, routing, errors, presentation)
 - `lib/src/infrastructure/` - HTTP, storage, cache services
 - `lib/src/config/` - API configuration
-- `lib/src/utils/` - Bindings and utilities
+- `lib/src/utils/` - Utilities and helpers
 
 ### 📦 Required Packages
 
@@ -322,6 +323,55 @@ class APIConfiguration {
 ---
 
 ## 📁 Template Structure
+
+### Overall Organization
+
+```
+lib/src/
+├── app.dart                      # 🎯 Main app widget
+├── main.dart                     # 🚀 Entry point
+├── config/
+│   ├── api_config.dart          # 🌐 API endpoints
+│   ├── assets.dart              # 🖼️ Asset paths
+│   ├── colors.dart              # 🎨 Color constants
+│   ├── styles.dart              # 📐 Text styles
+│   ├── themes.dart              # 🎨 Theme definitions
+│   └── config.dart              # ⚙️ Config barrel export
+├── core/                        # 🏛️ Framework-level code
+│   ├── errors/                  # ❌ Exception classes
+│   ├── presentation/            # 🎨 ApiResponse, ActionPresenter
+│   ├── bindings/
+│   │   └── bindings.dart        # 💉 Global DI
+│   └── routing/
+│       └── route_manager.dart   # 🧭 Navigation & routing
+├── infrastructure/              # 🔧 Concrete adapters
+│   ├── http/                    # 🌐 ApiService
+│   ├── cache/                   # 💾 Caching system
+│   └── storage/                 # 💿 AppStorageService
+├── presentation/                # 🎨 Shared UI components
+│   ├── custom/                  # 🧱 Custom reusable widgets
+│   │   ├── custom_button.dart
+│   │   ├── custom_card.dart
+│   │   ├── custom_form_field.dart
+│   │   ├── custom_text.dart
+│   │   └── customs.dart         # Barrel export
+│   └── widgets/                 # 🔧 Core widgets
+│       └── api_handler.dart     # ApiResponse UI handler
+├── utils/                       # 🛠️ Utilities and helpers
+│   ├── date_time_extensions.dart # 📅 DateTime/Duration extensions
+│   ├── form_validators.dart     # ✅ Form input validators
+│   ├── responsive_utils.dart    # 📱 Responsive design helpers
+│   └── themes.dart              # 🎨 Theme configurations
+└── modules/                     # 📦 Feature modules
+    ├── auth/                    # 🔐 Authentication
+    ├── connections/             # 📡 Connectivity
+    ├── locale/                  # 🌍 Localization
+    ├── theme/                   # 🎨 Theme switching
+    ├── posts/                   # 📝 API example
+    └── menu/                    # 🍔 Navigation menu
+```
+
+### Feature Module Structure
 
 Each feature module follows a consistent structure:
 
@@ -798,6 +848,215 @@ final value = AppStorageService.instance.preferences.read('key');
 
 ---
 
+## 🛠️ Utilities & Helpers
+
+This template provides a comprehensive set of utilities to simplify common tasks, located in `/src/utils/` and `/src/core/`.
+
+### 🧭 RouteManager - Centralized Navigation
+
+**Location:** `lib/src/core/routing/route_manager.dart`
+
+Centralized navigation management wrapping GetX routing. **Always use `RouteManager` instead of direct `Get.*` calls** for consistency across the app.
+
+**Navigation Helpers:**
+```dart
+// Specific routes
+RouteManager.toAuth();           // Navigate to login
+RouteManager.toRegister();       // Navigate to registration
+RouteManager.toMenu();           // Navigate to menu
+
+// Auth flow helpers
+RouteManager.logout();           // Clear stack, go to auth
+RouteManager.loginSuccess();     // Clear stack, go to menu
+
+// Generic navigation
+RouteManager.to('/custom-route', arguments: data);
+RouteManager.off('/custom-route');      // Replace current
+RouteManager.offAll('/custom-route');   // Clear stack
+RouteManager.back(result: data);        // Go back
+
+// Utilities
+String current = RouteManager.currentRoute;
+bool isOnAuth = RouteManager.isCurrentRoute(RouteManager.authRoute);
+dynamic args = RouteManager.arguments;
+```
+
+**Benefits:**
+- Centralized navigation logic
+- Type-safe route constants
+- Consistent patterns across app
+- Easier testing and debugging
+
+### ✅ FormValidators - Input Validation
+
+**Location:** `lib/src/utils/form_validators.dart`
+
+Static validator methods for form inputs with built-in i18n error messages.
+
+**Usage:**
+```dart
+TextFormField(
+  validator: FormValidators.email,      // Email validation
+)
+
+TextFormField(
+  validator: FormValidators.phone,      // Phone validation
+)
+
+TextFormField(
+  validator: FormValidators.password,   // Password strength
+)
+
+// Combine multiple validators
+TextFormField(
+  validator: FormValidators.combine([
+    FormValidators.required,
+    FormValidators.email,
+  ]),
+)
+
+// Custom validation
+TextFormField(
+  validator: FormValidators.custom(
+    regex: RegExp(r'^[A-Z]{2}\d{4}$'),
+    errorMessage: 'Invalid format (e.g., AB1234)',
+  ),
+)
+```
+
+**Configurable Regex:**
+```dart
+// Override default patterns globally
+FormValidators.emailRegex = RegExp(r'your-custom-pattern');
+FormValidators.phoneRegex = RegExp(r'your-phone-pattern');
+```
+
+### 📱 ResponsiveUtils - Responsive Design
+
+**Location:** `lib/src/utils/responsive_utils.dart`
+
+Complete responsive design system with breakpoint-based layouts.
+
+**Device Type Detection:**
+```dart
+if (ResponsiveUtils.isMobile(context)) {
+  // Mobile: width < 600
+}
+
+if (ResponsiveUtils.isTablet(context)) {
+  // Tablet: 600 <= width < 1024
+}
+
+if (ResponsiveUtils.isDesktop(context)) {
+  // Desktop: 1024 <= width < 1440
+}
+
+if (ResponsiveUtils.isWideDesktop(context)) {
+  // Wide Desktop: width >= 1440
+}
+```
+
+**Responsive Values:**
+```dart
+// Type-safe responsive values
+double padding = ResponsiveUtils.valueByDevice<double>(
+  context,
+  mobile: 16,
+  tablet: 24,
+  desktop: 32,
+  wide: 40,
+);
+
+// Scaled font sizes
+double fontSize = ResponsiveUtils.scaledFontSize(context, 16);
+// mobile: 16, tablet: 17.6, desktop: 18.4, wide: 19.2
+
+// Responsive padding/margin
+double padding = ResponsiveUtils.padding(context);
+
+// Grid columns
+int columns = ResponsiveUtils.gridColumns(context);
+// mobile: 1, tablet: 2, desktop: 3, wide: 4
+```
+
+**Custom Breakpoints:**
+```dart
+// Override defaults globally
+ResponsiveUtils.mobileBreakpoint = 640;
+ResponsiveUtils.tabletBreakpoint = 1024;
+ResponsiveUtils.desktopBreakpoint = 1536;
+```
+
+### 📅 DateTime Extensions - Fluent Date API
+
+**Location:** `lib/src/utils/date_time_extensions.dart`
+
+Fluent API for DateTime and Duration operations using Dart extensions.
+
+**Date Comparisons:**
+```dart
+final date = DateTime.now();
+
+if (date.isToday) {
+  // Same calendar day as today
+}
+
+if (date.isYesterday) {
+  // Calendar day before today
+}
+
+if (date.isSameDay(otherDate)) {
+  // Same calendar day
+}
+```
+
+**Date Manipulation:**
+```dart
+final start = date.startOfDay;    // 00:00:00
+final end = date.endOfDay;        // 23:59:59
+int days = date.daysBetween(otherDate);
+```
+
+**Formatting:**
+```dart
+String formatted = date.format();                // 'dd/MM/yyyy'
+String formatted = date.format('yyyy-MM-dd');    // Custom pattern
+
+String time = date.formatTime();                 // 'HH:mm'
+String datetime = date.formatDateTime();         // 'dd/MM/yyyy HH:mm'
+
+String relative = date.timeAgo();
+// "just now", "5 minutes ago", "2 hours ago", "yesterday",
+// "3 days ago", "in 5 minutes", "in 2 days"
+```
+
+**Duration Extensions:**
+```dart
+final duration = Duration(hours: 2, minutes: 5, seconds: 30);
+String formatted = duration.format();  // "02:05:30"
+```
+
+**Why Extensions?**
+More idiomatic than static utility methods (`date.isToday` vs `DateTimeUtils.isToday(date)`), fluent and discoverable API.
+
+### 🧩 Core vs Utils
+
+**`/src/core/` - Framework-level code:**
+- Bindings (dependency injection)
+- Routing (navigation management)
+- Errors (exception classes)
+- Presentation (ApiResponse, ActionPresenter)
+
+**`/src/utils/` - Helper functions and extensions:**
+- Form validators
+- Responsive utilities
+- DateTime extensions
+- Theme configurations
+
+This separation provides clear distinction between framework concerns and helpers, making the codebase more organized and maintainable.
+
+---
+
 ## ❓ FAQ
 
 ### ❓ Why Actions instead of putting UX in the ViewModel?
@@ -987,9 +1246,10 @@ apiFetch(_userService.fetchUsers).listen((state) => _users.value = state);
 1. Copy `lib/src/core/` (required for all modules)
 2. Copy `lib/src/infrastructure/` (required for API/storage)
 3. Copy `lib/src/config/` (API configuration)
-4. Copy `lib/src/modules/auth/` and `lib/src/modules/theme/`
-5. Remove unused bindings from `lib/src/utils/binding.dart`
-6. Remove unused routes from `lib/src/utils/route_manager.dart`
+4. Copy `lib/src/utils/` (utilities and helpers)
+5. Copy `lib/src/modules/auth/` and `lib/src/modules/theme/`
+6. Remove unused bindings from `lib/src/core/bindings/bindings.dart`
+7. Remove unused routes from `lib/src/core/routing/route_manager.dart`
 
 **Dependency note:** Auth module requires `AppStorageService` from infrastructure.
 
@@ -1086,15 +1346,29 @@ Pattern stays the same: Service → ViewModel → View.
 Comprehensive documentation is available in the `docs/` directory:
 
 ### 🏛️ Architecture
-- **`docs/architecture/coding_guidelines.md`** - Naming conventions, MVVM pattern, documentation style, module structure
-- **`docs/architecture/auth_module.md`** - Authentication flow, state machine, testing guide
+- **`docs/architecture/coding_guidelines.md`** - Naming conventions, MVVM pattern, documentation style, module structure, utilities documentation
+- **`docs/architecture/auth_module.md`** - Authentication flow, state machine, dependency management with callbacks, testing guide
 - **`docs/architecture/connectivity_module.md`** - Connectivity states, reachability, configuration
 
 ### 📖 Examples
 - **`docs/examples/api_pattern_example.md`** - Complete API integration guide with step-by-step implementation, architecture flow diagram, POST request examples, and migration guide
 
+### 🔄 Migration
+- **`MIGRATION_GUIDE.md`** - Complete migration guide for v0.3.0+ with breaking changes, file structure updates, API changes, step-by-step instructions, and troubleshooting
+
 ### 📝 Changelog
 - **`CHANGELOG.md`** - Full log of changes, migrations, and deprecations
+
+### 🆕 What's New in v0.3.0?
+Major refactoring focused on better organization and cleaner APIs:
+- **Core directory created** - Framework code moved to `/src/core/` (bindings, routing)
+- **DateTime extensions** - Fluent API replacing static utilities (`date.isToday` vs `DateTimeUtils.isToday(date)`)
+- **Enhanced ResponsiveUtils** - Complete responsive system with device detection and `valueByDevice<T>()`
+- **RouteManager helpers** - Navigation helpers (`toAuth()`, `logout()`, `loginSuccess()`)
+- **AuthViewModel callbacks** - State callbacks for on-demand feature loading
+- **Simplified APIs** - Removed redundant methods (`emailValidator` → `email`)
+
+📖 **See [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) for upgrade instructions.**
 
 ---
 

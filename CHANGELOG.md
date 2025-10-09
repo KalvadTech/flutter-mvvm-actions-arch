@@ -4,6 +4,78 @@ All notable changes to this project template will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres loosely to Semantic Versioning for the template itself.
 
+## [0.3.0] - 2025-01-08
+
+### 🎯 Major Refactoring - Better Organization & Cleaner APIs
+
+This release focuses on improving code organization, simplifying APIs, and enhancing developer experience through better separation of concerns.
+
+### Added
+- **Core directory structure**: Created `/src/core/` for framework-level code
+  - `core/bindings/` - Dependency injection configuration
+  - `core/routing/` - Route management and navigation
+- **DateTime extensions**: New `date_time_extensions.dart` with fluent API
+  - Extension methods: `date.isToday`, `date.format()`, `date.timeAgo()`
+  - Duration extensions: `duration.format()`
+- **Enhanced ResponsiveUtils**: Complete responsive design system
+  - Device type detection: `isMobile()`, `isTablet()`, `isDesktop()`, `isWideDesktop()`
+  - `valueByDevice<T>()` helper for responsive values
+  - Helper methods: `padding()`, `margin()`, `gridColumns()`
+- **RouteManager navigation helpers**:
+  - Specific routes: `toAuth()`, `toRegister()`, `toMenu()`
+  - Auth flows: `logout()`, `loginSuccess()`
+  - Generic navigation: `to()`, `off()`, `offAll()`, `back()`, `until()`
+  - Utilities: `currentRoute`, `isCurrentRoute()`, `arguments`
+- **AuthViewModel state callbacks**: Support for `onAuthenticated` and `onNotAuthenticated` callbacks
+- **MIGRATION_GUIDE.md**: Comprehensive migration guide for breaking changes
+
+### Changed
+- **File relocations**:
+  - `utils/route_manager.dart` → `core/routing/route_manager.dart`
+  - `utils/binding.dart` → `core/bindings/bindings.dart`
+- **File renames**:
+  - `utils/validator.dart` → `utils/form_validators.dart`
+  - `utils/screen_utils.dart` → `utils/responsive_utils.dart`
+  - `utils/date_time_utils.dart` → `utils/date_time_extensions.dart`
+- **Class renames**:
+  - `InputsValidator` → `FormValidators`
+  - `ScreenUtils` → `ResponsiveUtils`
+  - `DateTimeUtils` → DateTime extensions
+- **API simplifications**:
+  - FormValidators: Removed redundant `*Validator` methods, kept short names
+    - `emailValidator()` → `email()`
+    - `phoneValidator()` → `phone()`
+    - `passwordValidator()` → `password()`
+  - ResponsiveUtils: Improved method names
+    - `getFontSize()` → `scaledFontSize()`
+    - `getScreenHeight()` → `screenHeight()`
+  - DateTime: Changed from static utils to extensions
+    - `DateTimeUtils.isToday(date)` → `date.isToday`
+    - `DateTimeUtils.formatDate(date)` → `date.format()`
+- **Binding architecture**:
+  - `InitialBindings` now only registers core dependencies (Connections, Theme, Locale)
+  - `AuthBindings` registers Menu and Posts modules via `onAuthenticated` callback
+  - Feature modules loaded on-demand instead of upfront
+- **Navigation consistency**: Replaced direct `Get.*` calls with `RouteManager.*` throughout codebase
+- **Matrix4 deprecation fix**: Updated `custom_card.dart` to use `diagonal3Values()` instead of deprecated `scale()`
+
+### Improved
+- **Developer experience**: More intuitive APIs with better autocomplete
+- **Performance**: Feature modules loaded only when needed
+- **Testability**: Better separation between state management and dependency registration
+- **Code organization**: Clear distinction between core framework code and utilities
+- **Documentation**: Updated inline docs to reflect new patterns
+
+### Migration Required
+**⚠️ Breaking Changes** - See [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) for detailed migration steps.
+
+Key changes:
+1. Update imports: `utils/route_manager.dart` → `core/core.dart`
+2. Update validators: `FormValidators.emailValidator` → `FormValidators.email`
+3. Update responsive: `ScreenUtils` → `ResponsiveUtils`
+4. Convert DateTime utils to extensions: `DateTimeUtils.isToday(date)` → `date.isToday`
+5. Update navigation: `Get.back()` → `RouteManager.back()`
+
 ## [0.2.0] - 2025-10-02
 
 ### Added
