@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_starter/src/core/presentation/actions/action_presenter.dart';
-import 'package:getx_starter/src/core/route_manager.dart';
+import 'package:getx_starter/src/core/routing/route_manager.dart';
 import '/src/modules/locale/data/keys.dart';
 import '../controllers/auth_view_model.dart';
 

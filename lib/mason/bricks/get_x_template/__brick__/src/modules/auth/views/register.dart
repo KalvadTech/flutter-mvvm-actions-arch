@@ -45,22 +45,22 @@ class RegisterPage extends GetWidget<AuthViewModel> {
             CustomFormField(
               label: tkUsername,
               onSaved: (value) => controller.newUser.username = value,
-              validator: FormValidators.usernameValidator,
+              validator: FormValidators.username,
             ),
             CustomFormField(
               label: tkPhone,
               onSaved: (value) => controller.newUser.phone = value,
-              validator: FormValidators.phoneValidator,
+              validator: FormValidators.phone,
             ),
             CustomFormField(
               label: tkEmail,
               onSaved: (value) => controller.newUser.email = value,
-              validator: FormValidators.emailValidator,
+              validator: FormValidators.email,
             ),
             CustomFormField(
               label: tkPassword,
               onSaved: (value) => controller.newUser.password = value,
-              validator: FormValidators.passwordValidator,
+              validator: FormValidators.password,
             ),
             CustomButton(
               text: tkRegisterBtn,

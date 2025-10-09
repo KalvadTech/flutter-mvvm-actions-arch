@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '/src/config/config.dart';
-import '/src/core/route_manager.dart';
+import '../../../core/routing/route_manager.dart';
 import '/src/presentation/custom/customs.dart';
 import '../controllers/localization_view_model.dart';
 import '../data/models/language_model.dart';

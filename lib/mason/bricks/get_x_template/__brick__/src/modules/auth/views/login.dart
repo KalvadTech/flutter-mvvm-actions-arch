@@ -54,13 +54,13 @@ class LoginPage extends GetWidget<AuthViewModel> {
                   label: tkUsername,
                   onSaved: (value) => controller.username = value,
                   maxLines: 1,
-                  validator: FormValidators.usernameValidator,
+                  validator: FormValidators.username,
                 ),
                 PasswordFormField(
                   label: tkPassword,
                   onSaved: (value) => controller.password = value,
                   maxLines: 1,
-                  validator: FormValidators.passwordValidator,
+                  validator: FormValidators.password,
                 ),
                 CustomButton(text: tkLoginBtn, onPressed: () => _login(context)),
                 Row(

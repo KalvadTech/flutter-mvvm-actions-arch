@@ -206,7 +206,7 @@ class _FloatSurfaceCardState extends State<FloatSurfaceCard> {
       margin: widget.margin,
       padding: widget.padding ?? theme.padding,
       transform: _isPressed && isInteractive
-          ? (Matrix4.identity()..scale(0.98))
+          ? Matrix4.diagonal3Values(0.98, 0.98, 1.0)
           : Matrix4.identity(),
       decoration: BoxDecoration(
         color: widget.disabled

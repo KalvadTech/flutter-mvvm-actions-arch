@@ -67,16 +67,16 @@ class CustomTextDivider extends StatelessWidget {
 
 
   const CustomTextDivider(
-      this.text, {
-        super.key,
-        this.height = 16.0,
-        this.thickness = 1.0,
-        this.color,
-        this.spacing = 16.0,
-        this.icon,
-        this.fontSize,
-        this.fontWeight,
-      });
+    this.text, {
+    super.key,
+    this.height = 16.0,
+    this.thickness = 1.0,
+    this.color,
+    this.spacing = 16.0,
+    this.icon,
+    this.fontSize,
+    this.fontWeight,
+  });
 
   @override
   Widget build(BuildContext context) {

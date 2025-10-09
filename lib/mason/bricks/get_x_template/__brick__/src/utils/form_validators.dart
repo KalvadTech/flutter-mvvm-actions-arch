@@ -15,8 +15,6 @@ import '/src/config/config.dart';
 /// ```dart
 /// TextFormField(
 ///   validator: FormValidators.email,
-///   // or with custom message
-///   validator: (value) => FormValidators.emailValidator(value),
 /// )
 /// ```
 ///
@@ -67,10 +65,7 @@ class FormValidators {
   ///   validator: FormValidators.email,
   /// )
   /// ```
-  static String? email(String? value) => emailValidator(value);
-
-  /// Email validator with full implementation.
-  static String? emailValidator(String? value) {
+  static String? email(String? value) {
     if (value == null || value.isEmpty) {
       return tkEmailEmptyMsg.tr;
     } else if (!emailRegex.hasMatch(value)) {
@@ -93,10 +88,7 @@ class FormValidators {
   ///   validator: FormValidators.phone,
   /// )
   /// ```
-  static String? phone(String? value) => phoneValidator(value);
-
-  /// Phone validator with full implementation.
-  static String? phoneValidator(String? value) {
+  static String? phone(String? value) {
     if (value == null || value.isEmpty) {
       return tkPhoneEmptyMsg.tr;
     } else if (!phoneRegex.hasMatch(value)) {
@@ -120,10 +112,7 @@ class FormValidators {
   ///   obscureText: true,
   /// )
   /// ```
-  static String? password(String? value) => passwordValidator(value);
-
-  /// Password validator with full implementation.
-  static String? passwordValidator(String? value) {
+  static String? password(String? value) {
     if (value == null || value.isEmpty) {
       return tkPasswordEmptyMsg.tr;
     } else if (!passwordRegex.hasMatch(value)) {
@@ -144,10 +133,7 @@ class FormValidators {
   ///   validator: FormValidators.name,
   /// )
   /// ```
-  static String? name(String? value) => nameValidator(value);
-
-  /// Name validator with full implementation.
-  static String? nameValidator(String? value) {
+  static String? name(String? value) {
     if (value == null || value.isEmpty) {
       return tkNameEmptyMsg.tr;
     }
@@ -162,10 +148,7 @@ class FormValidators {
   ///   validator: FormValidators.username,
   /// )
   /// ```
-  static String? username(String? value) => usernameValidator(value);
-
-  /// Username validator with full implementation.
-  static String? usernameValidator(String? value) {
+  static String? username(String? value) {
     if (value == null || value.isEmpty) {
       return tkUsernameMsg.tr;
     }

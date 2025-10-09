@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import '../../../core/presentation/actions/action_presenter.dart';
-import '../../../core/route_manager.dart';
+import '../../../core/routing/route_manager.dart';
 import '../controllers/connection_view_model.dart';
 
 /// Singleton class to manage connection-related actions.
