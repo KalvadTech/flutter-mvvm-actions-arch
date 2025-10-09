@@ -85,10 +85,10 @@ This template embraces **separation of concerns** at every level. Traditional MV
 Quick reference for architectural boundaries:
 
 - **🧼 Views**: Pure Flutter widgets, zero business logic, delegate everything to Actions/ViewModels
-- **🎛️ Actions**: Handle UX concerns (loaders, toasts, error surfaces), wrap ViewModel calls, never fetch data directly
+- **🎛️ Actions**: Handle UX concerns (loaders, toasts, error surfaces, navigation), wrap ViewModel calls, never fetch data directly
 - **🧠 Controllers**: Orchestrate services, expose reactive state, contain business logic, manage lifecycles
 - **🌍 Services**: Data layer only (HTTP, storage, external APIs), return domain models, no state management
-- **📦 Models**: Immutable, JSON serialization only, no methods beyond `fromJson`/`toJson`, all fields `final`
+- **📦 Models**: Immutable, JSON serialization only, no methods beyond `fromJson`/`toJson`, all fields `final` (use extensions for logic)
 - **⏲️ State Management**: Prefer `ApiResponse<T>` over scattered boolean flags (`isLoading`, `hasError`)
 - **🔗 Bindings**: File names must match module names (`posts_bindings.dart` for `posts/` module)
 - **📁 Naming**: Use plural for collections (`models/`, `posts/`, `connections/`), singular for individual concepts
@@ -122,13 +122,13 @@ dart pub global activate mason_cli
 
 **2. Add the template:**
 ```sh
-mason add -g --source git https://github.com/KalvadTech/flutter-mvvm-actions-arch --path lib/mason/bricks/get_x_template
+mason add -g --source git https://github.com/KalvadTech/flutter-mvvm-actions-arch --path lib/mason/bricks/flutter_mvvm_actions
 ```
 
 **3. Verify installation:**
 ```sh
 mason list
-# Output: get_x_template - A Flutter application template using getX...
+# Output: flutter_mvvm_actions - A Flutter application template using GetX...
 ```
 
 **4. Create a new Flutter project:**
@@ -139,7 +139,7 @@ cd my_app/lib
 
 **5. Generate from template:**
 ```sh
-mason make get_x_template
+mason make flutter_mvvm_actions
 ```
 
 You'll be prompted for:
@@ -1334,6 +1334,52 @@ class GraphQLService {
 ```
 
 Pattern stays the same: Service → ViewModel → View.
+
+### 🎯 Where do I put model logic/computed properties?
+
+**Short answer:** Use extensions, not methods in the model class.
+
+**Why:** Models should be pure data containers for JSON serialization. Adding logic violates single responsibility and makes serialization complex.
+
+**Example:**
+```dart
+// ❌ Bad - Logic in model
+class UserModel {
+  final String firstName;
+  final String lastName;
+
+  String get fullName => '$firstName $lastName'; // Don't do this
+
+  factory UserModel.fromJson(Map<String, dynamic> json) => ...
+}
+
+// ✅ Good - Pure model + Extension
+class UserModel {
+  final String firstName;
+  final String lastName;
+
+  factory UserModel.fromJson(Map<String, dynamic> json) => ...
+  Map<String, dynamic> toJson() => ...
+}
+
+extension UserModelExtensions on UserModel {
+  String get fullName => '$firstName $lastName';
+  bool get isValid => firstName.isNotEmpty && lastName.isNotEmpty;
+  String initials() => '${firstName[0]}${lastName[0]}'.toUpperCase();
+}
+```
+
+**Usage:**
+```dart
+final user = UserModel.fromJson(json);
+Text(user.fullName); // Extension method works seamlessly
+```
+
+**Benefits:**
+- ✅ Models stay serializable and focused
+- ✅ Extensions are discoverable (autocomplete works)
+- ✅ Can add multiple extension files for different concerns
+- ✅ Follows single responsibility principle
 
 ---
 

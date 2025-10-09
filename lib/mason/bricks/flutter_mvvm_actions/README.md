@@ -68,17 +68,17 @@ mason --version
 
 **Global installation (recommended):**
 ```sh
-mason add -g get_x_template --git-url https://github.com/KalvadTech/flutter-mvvm-actions-arch --git-path lib/mason/bricks/get_x_template
+mason add -g flutter_mvvm_actions --git-url https://github.com/KalvadTech/flutter-mvvm-actions-arch --git-path lib/mason/bricks/flutter_mvvm_actions
 ```
 
 **Or add to your project's Mason file:**
 ```yaml
 # mason.yaml
 bricks:
-  get_x_template:
+  flutter_mvvm_actions:
     git:
       url: https://github.com/KalvadTech/flutter-mvvm-actions-arch
-      path: lib/mason/bricks/get_x_template
+      path: lib/mason/bricks/flutter_mvvm_actions
 ```
 
 Then run:
@@ -96,7 +96,7 @@ mason ls
 
 You should see:
 ```
-get_x_template - A Flutter application template using getX for state management...
+flutter_mvvm_actions - A Flutter application template using GetX for state management...
 ```
 
 ---
@@ -113,7 +113,7 @@ cd my_awesome_app/lib
 
 **2. Generate from template:**
 ```sh
-mason make get_x_template
+mason make flutter_mvvm_actions
 ```
 
 **3. Answer the prompts:**
@@ -129,7 +129,7 @@ mason make get_x_template
 
 ```sh
 $ cd my_flutter_project/lib
-$ mason make get_x_template
+$ mason make flutter_mvvm_actions
 
 ✓ What is your project name? awesome_app
 ✓ What is your project description? My awesome Flutter app
@@ -508,7 +508,7 @@ class MyApiService extends ApiService {
 ### 🔄 Can I update the template after generation?
 
 **Yes, but with caveats:**
-- Re-running `mason make get_x_template` will overwrite files
+- Re-running `mason make flutter_mvvm_actions` will overwrite files
 - Best practice: Generate once, customize, commit to version control
 - For updates: Use git to merge template changes selectively
 
