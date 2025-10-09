@@ -51,11 +51,7 @@ Think of it as **architecture-as-a-library** rather than architecture-as-a-frame
 ## 💭 Philosophy
 **Why MVVM + Actions Layer?**
 
-***The Origin Story***
-
 Real talk—I was tired of choosing between messy MVVM code and over-engineered MVPVM setups that take forever to implement. I wanted that clean **single responsibility** vibe from MVPVM without the headache. So I built this template as the perfect middle ground: powerful enough for production apps, simple enough to actually enjoy using.
-
-***The Solution***
 
 This template embraces **separation of concerns** at every level. Traditional MVVM often mixes UX concerns (loading overlays, error toasts, navigation) with business logic in ViewModels. By introducing an **Actions layer**, we achieve:
 
