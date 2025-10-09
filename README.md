@@ -209,7 +209,7 @@ User Interaction
     ↓
 🧼 View (Flutter Widgets)
     ↓
-🎛️ Actions (ActionPresenter) ← Loader, Error Handling, Feedback
+🎛️ Actions (ActionPresenter) ← Loader, Error Handling, Feedback, Navigation
     ↓
 🧠 ViewModel (GetxController) ← Business Logic, State Management
     ↓
@@ -542,10 +542,8 @@ Real-time connectivity monitoring with offline/online detection and reachability
 
 **Global Overlay** (shows connectivity status app-wide):
 ```dart
-GlobalLoaderOverlay(
-  child: ConnectionOverlay(
-    child: GetMaterialApp(...),
-  ),
+ConnectionOverlay(
+  child: GetMaterialApp(...),
 )
 ```
 
