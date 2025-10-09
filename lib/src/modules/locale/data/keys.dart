@@ -47,6 +47,9 @@ const String tkLogoutBtn = 'buttons.logout';
 /// auth messages
 const String tkDontHaveAccount = 'auth.messages.dontHaveAccount';
 const String tkRegisterNow = 'auth.messages.registerNow';
+const String tkAlreadyHaveAccount = 'auth.messages.alreadyHaveAccount';
+const String tkLoginNow = 'auth.messages.loginNow';
+const String tkCreateAccount = 'auth.messages.createAccount';
 const String tkSignInSuccess = 'auth.messages.signInSuccess';
 const String tkSignUpSuccess = 'auth.messages.signUpSuccess';
 const String tkLogoutConfirmTitle = 'auth.messages.logoutConfirmTitle';
